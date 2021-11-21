@@ -4,21 +4,44 @@
  */
 package UI.ChucNang;
 
-import UI.KhachHang1.KhachHangHome;
+import Dao.TaiKhoanDAO;
+import Helper.MsgBox;
+import Model.TaiKhoan;
+import UI.NguoiDung.NguoiDungHome;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+import java.util.Random;
+import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Admin
  */
 public class DangKy extends javax.swing.JFrame {
-
+    int randomCode;
+    private int index;
+    private TaiKhoanDAO dao;
+    private DefaultTableModel model;
+    private List<TaiKhoan> list = new ArrayList<>();
     /**
      * Creates new form DangKy
      */
     public DangKy() {
-        this.setUndecorated(true);
+//        this.setUndecorated(true);
         initComponents();
         setLocationRelativeTo(null);
+        this.dao = new TaiKhoanDAO();
+        
     }
 
     /**
@@ -33,7 +56,6 @@ public class DangKy extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        txtUsername = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel3 = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
@@ -42,7 +64,6 @@ public class DangKy extends javax.swing.JFrame {
         txtFullName = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jSeparator4 = new javax.swing.JSeparator();
-        txtEmail = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jSeparator5 = new javax.swing.JSeparator();
         txtPhoneNumber = new javax.swing.JTextField();
@@ -50,11 +71,12 @@ public class DangKy extends javax.swing.JFrame {
         jSeparator6 = new javax.swing.JSeparator();
         btnRegister = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
-        txtPass2 = new javax.swing.JPasswordField();
+        txtRe_Pass = new javax.swing.JPasswordField();
         txtPass = new javax.swing.JPasswordField();
-        jButton1 = new javax.swing.JButton();
+        txtEmail = new javax.swing.JTextField();
+        txtTK = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(84, 141, 251));
         jPanel1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -70,18 +92,7 @@ public class DangKy extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Tài khoản");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 74, -1, -1));
-
-        txtUsername.setBackground(new java.awt.Color(84, 141, 251));
-        txtUsername.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        txtUsername.setForeground(new java.awt.Color(255, 255, 255));
-        txtUsername.setBorder(null);
-        txtUsername.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtUsernameActionPerformed(evt);
-            }
-        });
-        jPanel1.add(txtUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 94, 248, 29));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, -1, -1));
 
         jSeparator1.setBackground(new java.awt.Color(84, 141, 251));
         jSeparator1.setForeground(java.awt.Color.white);
@@ -107,7 +118,6 @@ public class DangKy extends javax.swing.JFrame {
 
         txtFullName.setBackground(new java.awt.Color(84, 141, 251));
         txtFullName.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        txtFullName.setForeground(new java.awt.Color(255, 255, 255));
         txtFullName.setBorder(null);
         jPanel1.add(txtFullName, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 270, 248, 29));
 
@@ -119,17 +129,6 @@ public class DangKy extends javax.swing.JFrame {
         jSeparator4.setBackground(new java.awt.Color(84, 141, 251));
         jSeparator4.setForeground(java.awt.Color.white);
         jPanel1.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 300, 248, 10));
-
-        txtEmail.setBackground(new java.awt.Color(84, 141, 251));
-        txtEmail.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        txtEmail.setForeground(new java.awt.Color(255, 255, 255));
-        txtEmail.setBorder(null);
-        txtEmail.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtEmailActionPerformed(evt);
-            }
-        });
-        jPanel1.add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 330, 248, 29));
 
         jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
@@ -160,33 +159,47 @@ public class DangKy extends javax.swing.JFrame {
         btnRegister.setForeground(new java.awt.Color(9, 65, 174));
         btnRegister.setText("Đăng ký");
         btnRegister.setBorder(null);
+        btnRegister.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegisterActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnRegister, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 460, 140, 30));
 
         btnBack.setBackground(new java.awt.Color(84, 141, 251));
-        btnBack.setBorder(null);
-        jPanel1.add(btnBack, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 40, -1));
-
-        txtPass2.setBackground(new java.awt.Color(84, 141, 251));
-        txtPass2.setBorder(null);
-        txtPass2.addActionListener(new java.awt.event.ActionListener() {
+        btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/back.png"))); // NOI18N
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtPass2ActionPerformed(evt);
+                btnBackActionPerformed(evt);
             }
         });
-        jPanel1.add(txtPass2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 210, 250, 30));
+        jPanel1.add(btnBack, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 50, 20));
+
+        txtRe_Pass.setBackground(new java.awt.Color(84, 141, 251));
+        txtRe_Pass.setBorder(null);
+        txtRe_Pass.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtRe_PassActionPerformed(evt);
+            }
+        });
+        jPanel1.add(txtRe_Pass, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 210, 250, 30));
 
         txtPass.setBackground(new java.awt.Color(84, 141, 251));
         txtPass.setBorder(null);
-        jPanel1.add(txtPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, 250, 30));
-
-        jButton1.setBackground(new java.awt.Color(84, 141, 251));
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/back.png"))); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        txtPass.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                txtPassActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 50, 20));
+        jPanel1.add(txtPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, 250, 30));
+
+        txtEmail.setBackground(new java.awt.Color(84, 141, 251));
+        txtEmail.setBorder(null);
+        jPanel1.add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 330, 250, 30));
+
+        txtTK.setBackground(new java.awt.Color(84, 141, 251));
+        txtTK.setBorder(null);
+        jPanel1.add(txtTK, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 90, 250, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -204,24 +217,114 @@ public class DangKy extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtUsernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsernameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtUsernameActionPerformed
-
-    private void txtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmailActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtEmailActionPerformed
-
-    private void txtPass2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPass2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtPass2ActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         this.dispose();
-        KhachHangHome main = new KhachHangHome();
-        main.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+//    TaiKhoan tk = this.getForm();
+//        System.out.println("TK: "+tk.getTenTK());
+//        System.out.println("MK: "+tk.getMatKhau());
+    }//GEN-LAST:event_btnBackActionPerformed
 
+    private void txtRe_PassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRe_PassActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtRe_PassActionPerformed
+
+    private void txtPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPassActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPassActionPerformed
+
+    private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
+        // TODO add your handling code here:
+        check();
+//        insert();
+    }//GEN-LAST:event_btnRegisterActionPerformed
+
+    public void check() {
+        if (txtTK.getText().trim().length() == 0) {
+            MsgBox.alert(this, "Tài khoản không được để trống!");
+            txtTK.requestFocus();
+        } else if (txtTK.getText().trim().length() > 20) {
+            MsgBox.alert(this, "Tài khoản không được quá 20 kí tự!");
+            txtTK.requestFocus();
+        } else if (txtPass.getText().trim().length() == 0) {
+            MsgBox.alert(this, "Mật khẩu không được để trống!");
+            txtPass.requestFocus();
+        } else if (txtRe_Pass.getText().trim().length() == 0) {
+            MsgBox.alert(this, "Xác nhận mật khẩu không được để trống!");
+            txtRe_Pass.requestFocus();
+        } else if (!txtRe_Pass.getText().matches(txtPass.getText())) {
+            MsgBox.alert(this, "Xác nhận mật khẩu không trùng với mật khảu!");
+            txtRe_Pass.requestFocus();
+        } else if (txtPhoneNumber.getText().trim().length() == 0) {
+            MsgBox.alert(this, "Số điện thoại không được để trống!");
+            txtPhoneNumber.requestFocus();
+        } else if (!txtPhoneNumber.getText().matches("(84|0[3|5|7|8|9])+([0-9]{8})")) {
+            MsgBox.alert(this, "Số điện thoại không hợp lệ!");
+            txtPhoneNumber.requestFocus();
+        } else if (txtEmail.getText().trim().length() == 0) {
+            MsgBox.alert(this, "Email không được để trống!");
+            txtEmail.requestFocus();
+        } else if (!txtEmail.getText().matches("\\w+@\\w+(\\.\\w+){1,2}")) {
+            MsgBox.alert(this, "Email không hợp lệ!");
+            txtEmail.requestFocus();
+        } else {
+            guiMaCode();
+            this.dispose();
+            TaiKhoan tk = getForm();
+            KichHoatTK kichhoat = new KichHoatTK(tk);
+            kichhoat.setVisible(true);
+        }
+    }
+    
+    public void guiMaCode(){
+        try {
+                    Random rand = new Random();
+                    randomCode = rand.nextInt(899999) + 100000;
+                    String host = "smtp.gmail.com";
+                    String user = "trantuyetnhi185@gmail.com";
+                    String pass = "Maihuong123225";
+                    String to = txtEmail.getText();
+                    String subject = "Reseting Code";
+                    String message = "Your reset code is " + randomCode;
+                    boolean sessionDebug = false;
+                    Properties props = System.getProperties();
+                    props.put("mail.smtp.starttls.enable", "true");
+                    props.put("mail.smtp.host", "host");
+                    props.put("mail.smtp.port", "587");
+                    props.put("mail.smtp.auth", "true");
+                    props.put("mail.smtp.starttls.required", "true");
+                    java.security.Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
+                    Session mailSession = Session.getDefaultInstance(props, null);
+                    mailSession.setDebug(sessionDebug);
+                    Message msg = new MimeMessage(mailSession);
+                    msg.setFrom(new InternetAddress(user));
+                    InternetAddress[] address = {new InternetAddress(to)};
+                    msg.setRecipients(Message.RecipientType.TO, address);
+                    msg.setSubject(subject);
+                    msg.setText(message);
+                    Transport transport = mailSession.getTransport("smtp");
+                    transport.connect(host, user, pass);
+                    transport.sendMessage(msg, msg.getAllRecipients());
+                    transport.close();
+                    MsgBox.alert(this, "Code đã được gửi về email");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+    }
+
+    public TaiKhoan getForm(){
+        TaiKhoan tk = new TaiKhoan();
+        tk.setTenTK(txtTK.getText());
+        tk.setMatKhau(new String(txtPass.getPassword()));
+        tk.setVaiTro(3);
+        tk.setTrangThai("Hoạt động");
+        return tk;
+    }
+    public void setForm(TaiKhoan tk){
+        this.txtTK.setText(tk.getTenTK());
+        this.txtPass.setText(tk.getMatKhau());
+    }
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -248,6 +351,7 @@ public class DangKy extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(DangKy.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -260,7 +364,6 @@ public class DangKy extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnRegister;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -278,8 +381,8 @@ public class DangKy extends javax.swing.JFrame {
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtFullName;
     private javax.swing.JPasswordField txtPass;
-    private javax.swing.JPasswordField txtPass2;
     private javax.swing.JTextField txtPhoneNumber;
-    private javax.swing.JTextField txtUsername;
+    private javax.swing.JPasswordField txtRe_Pass;
+    private javax.swing.JTextField txtTK;
     // End of variables declaration//GEN-END:variables
 }

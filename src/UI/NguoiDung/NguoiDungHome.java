@@ -183,7 +183,7 @@ public class NguoiDungHome extends javax.swing.JFrame {
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 10)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("Quản lý: ");
+        jLabel4.setText("Người Dùng");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 170, -1, -1));
 
         jLabel3.setBackground(new java.awt.Color(255, 255, 255));

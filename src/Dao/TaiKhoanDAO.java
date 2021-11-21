@@ -23,10 +23,21 @@ public class TaiKhoanDAO extends BarberDAO<TaiKhoan, Object> {
     String INSERT_SQL = "INSERT INTO TaiKhoan(TenTK,MatKhau)"
             + "values(?,?)";
     String UPDATE_SQL = "UPDATE TaiKhoan set TenTK=?,MatKhau=?,VaiTro=?,TrangThai=?"
-            + "where Id=? ";
+            + "where Id=? "; 
     String DELETE_SQL = "DELETE FROM TaiKhoan";
     String SELECT_ALL_SQL = "SELECT*FROM TaiKhoan";
     String SELECT_BY_ID_SQL = "SELECT*FROM TaiKhoan where Id=?";
+    String SELECT_BY_tenTK = "Select * form TaiKhoan where tenTK = ?";
+    String SELECT_BY_MATKHAU = " Select * from TaiKhoan where MATKHAU=?";
+    
+    public TaiKhoan select(String tentk) {
+       String sql = "Select * from TaiKhoan where TenTK = ?";
+       List<TaiKhoan> list = this.selectBySql(sql, tentk);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
+    }
 
     @Override
     public void insert(TaiKhoan entity) {
@@ -42,8 +53,8 @@ public class TaiKhoanDAO extends BarberDAO<TaiKhoan, Object> {
     @Override
     public void update(TaiKhoan entity) {
         try {
-            JDBCHelper.update(UPDATE_SQL, entity.getTenTK(),entity.getMatKhau(),entity.getVaiTro(),
-                    entity.getTrangThai(),entity.getId()
+            JDBCHelper.update("update TaiKhoan set MatKhau = ? where TenTK = ?",entity.getMatKhau(),
+                     entity.getTenTK()
             );
                     } catch (SQLException ex) {
             Logger.getLogger(TaiKhoanDAO.class.getName()).log(Level.SEVERE, null, ex);

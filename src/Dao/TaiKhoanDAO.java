@@ -20,8 +20,8 @@ import java.util.logging.Logger;
  * @author Administrator
  */
 public class TaiKhoanDAO extends BarberDAO<TaiKhoan, Object> {
-    String INSERT_SQL = "INSERT INTO TaiKhoan(TenTK,MatKhau)"
-            + "values(?,?)";
+    String INSERT_SQL = "INSERT INTO TaiKhoan(TenTK,MatKhau,VaiTro,TrangThai)"
+            + "values(?,?,?,?)";
     String UPDATE_SQL = "UPDATE TaiKhoan set TenTK=?,MatKhau=?,VaiTro=?,TrangThai=?"
             + "where Id=? "; 
     String DELETE_SQL = "DELETE FROM TaiKhoan";
@@ -42,7 +42,7 @@ public class TaiKhoanDAO extends BarberDAO<TaiKhoan, Object> {
     @Override
     public void insert(TaiKhoan entity) {
         try {
-            JDBCHelper.update(INSERT_SQL,entity.getTenTK(),entity.getMatKhau()
+            JDBCHelper.update(INSERT_SQL,entity.getTenTK(),entity.getMatKhau(), entity.getVaiTro(), entity.getTrangThai()
                    
             );
                     } catch (SQLException ex) {

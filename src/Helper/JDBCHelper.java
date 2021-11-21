@@ -18,7 +18,7 @@ import java.sql.Statement;
  */
 public class JDBCHelper {
      static String driver="com.microsoft.sqlserver.jdbc.SQLServerDriver";
-    static String dburl="jdbc:sqlserver://localhost:1433;databaseName=DATLICHCATTOC1";
+    static String dburl="jdbc:sqlserver://localhost:1433;databaseName=DATLICHCATTOC";
     static String user="sa";
     static String pass="12345";
     Connection conn;

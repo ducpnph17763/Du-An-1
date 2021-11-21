@@ -5,17 +5,83 @@
  */
 package UI.ChucNang;
 
+import Dao.TaiKhoanDAO;
+import Helper.XAuth;
+import Model.TaiKhoan;
+import UI.KhachHang1.KhachHangHome;
+import UI.QuanLy.QuanLyHome;
+import java.awt.Color;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author dell
  */
 public class DoiMatKhau extends javax.swing.JInternalFrame {
 
-    /**
-     * Creates new form DoiMatKhau
-     */
+    Model.TaiKhoan tk = XAuth.user;
+
     public DoiMatKhau() {
         initComponents();
+        setVisible(true);
+        txtTen.setText(XAuth.user.getTenTK());
+        this.txtTen.setEditable(false);
+
+    }
+
+    void Clear() {
+        txtTen.setText("");
+        txtMkCu.setText("");
+        txtMkMoi.setText("");
+        txtXacNhanMK.setText("");
+    }
+
+    void DoiMatKhau() {
+        String tenTK = XAuth.user.getTenTK();
+        String mkCu = String.valueOf(txtMkCu.getPassword());
+        if (mkCu.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui long nhap mat khau cu");
+            return;
+        }
+        if (!mkCu.equals(tk.getMatKhau())) {
+            JOptionPane.showMessageDialog(this, "Sai mat khau cu");
+            return;
+        }
+        String mkMoi = String.valueOf(txtMkMoi.getPassword());
+        if (mkCu.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui long nhap mat khau moi");
+            return;
+        }
+        String mkMoi1 = String.valueOf(txtXacNhanMK.getPassword());
+        if (mkMoi1.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui long nhap mat khau xac nhan");
+            return;
+        }
+        if (!mkMoi.equals(mkMoi1)) {
+            JOptionPane.showMessageDialog(this, "Mat khau xac nhạn khong trung vơi mat khau moi");
+            return;
+        }
+        if (mkCu.equals(tk.getMatKhau()) && mkMoi.equals(mkMoi1)) {
+            TaiKhoan tk = this.getForm();
+            TaiKhoanDAO tkdao = new TaiKhoanDAO();
+            tkdao.update(tk);
+            tk.setMatKhau(mkMoi);
+            JOptionPane.showMessageDialog(this, "Đổi mật khẩu thành công!");
+            this.dispose();
+
+        }
+    }
+
+    TaiKhoan getForm() {
+        TaiKhoan tk = new TaiKhoan();
+        tk.setTenTK(XAuth.user.getTenTK());
+        tk.setMatKhau(String.valueOf(txtMkMoi.getPassword()));
+        tk.setId(XAuth.user.getId());
+        tk.setTrangThai(XAuth.user.getTrangThai());
+        tk.setVaiTro(XAuth.user.getVaiTro());
+
+        return tk;
+
     }
 
     /**
@@ -30,12 +96,14 @@ public class DoiMatKhau extends javax.swing.JInternalFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jPasswordField2 = new javax.swing.JPasswordField();
+        txtMkCu = new javax.swing.JPasswordField();
         jLabel3 = new javax.swing.JLabel();
-        jPasswordField3 = new javax.swing.JPasswordField();
+        txtMkMoi = new javax.swing.JPasswordField();
         jLabel4 = new javax.swing.JLabel();
-        jPasswordField4 = new javax.swing.JPasswordField();
-        jButton1 = new javax.swing.JButton();
+        txtXacNhanMK = new javax.swing.JPasswordField();
+        btnDoiMK = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        txtTen = new javax.swing.JTextField();
 
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -46,17 +114,18 @@ public class DoiMatKhau extends javax.swing.JInternalFrame {
 
         jLabel2.setText("Mật khẩu cũ:");
 
-        jPasswordField2.setText("jPasswordField2");
-
         jLabel3.setText("Mật khẩu mới:");
-
-        jPasswordField3.setText("jPasswordField3");
 
         jLabel4.setText("Xác nhận mật khẩu mới:");
 
-        jPasswordField4.setText("jPasswordField4");
+        btnDoiMK.setText("Đổi mật khẩu");
+        btnDoiMK.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDoiMKActionPerformed(evt);
+            }
+        });
 
-        jButton1.setText("Đổi mật khẩu");
+        jLabel5.setText("Ten ");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -65,20 +134,22 @@ public class DoiMatKhau extends javax.swing.JInternalFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(148, 148, 148)
-                        .addComponent(jLabel1))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(22, 22, 22)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel4)
                             .addComponent(jLabel2)
-                            .addComponent(jPasswordField2, javax.swing.GroupLayout.DEFAULT_SIZE, 385, Short.MAX_VALUE)
+                            .addComponent(txtMkCu, javax.swing.GroupLayout.DEFAULT_SIZE, 385, Short.MAX_VALUE)
                             .addComponent(jLabel3)
-                            .addComponent(jPasswordField3)
-                            .addComponent(jPasswordField4)))
+                            .addComponent(txtMkMoi)
+                            .addComponent(txtXacNhanMK)
+                            .addComponent(jLabel5)
+                            .addComponent(txtTen)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(142, 142, 142)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(144, 144, 144)
+                        .addComponent(jLabel1))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(145, 145, 145)
+                        .addComponent(btnDoiMK, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(33, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -86,21 +157,25 @@ public class DoiMatKhau extends javax.swing.JInternalFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtTen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
+                .addGap(6, 6, 6)
+                .addComponent(txtMkCu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPasswordField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
                 .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPasswordField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtMkMoi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPasswordField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(38, 38, 38)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(56, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtXacNhanMK, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(34, 34, 34)
+                .addComponent(btnDoiMK, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(35, 35, 35))
         );
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 440, 350));
@@ -108,16 +183,24 @@ public class DoiMatKhau extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnDoiMKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDoiMKActionPerformed
+        // TODO add your handling code here:
+        DoiMatKhau();
+    }//GEN-LAST:event_btnDoiMKActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnDoiMK;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPasswordField jPasswordField2;
-    private javax.swing.JPasswordField jPasswordField3;
-    private javax.swing.JPasswordField jPasswordField4;
+    private javax.swing.JPasswordField txtMkCu;
+    private javax.swing.JPasswordField txtMkMoi;
+    private javax.swing.JTextField txtTen;
+    private javax.swing.JPasswordField txtXacNhanMK;
     // End of variables declaration//GEN-END:variables
+
 }

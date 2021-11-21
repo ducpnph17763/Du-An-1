@@ -5,10 +5,21 @@
  */
 package UI.ChucNang;
 
+import Dao.NhanVienDAO;
+import Dao.TaiKhoanDAO;
+import Helper.XAuth;
+import Model.NhanVien;
 import UI.QuanLy.QuanLyHome;
 import UI.KhachHang1.*;
 import UI.*;
+import UI.LeTan.LeTanHome;
+import UI.NguoiDung.NguoiDungHome;
+import UI.ThoCat.ThoCatHome;
 import java.awt.Font;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 /**
@@ -16,6 +27,8 @@ import javax.swing.JTextField;
  * @author dell
  */
 public class DangNhap extends javax.swing.JFrame {
+
+    Connection con;
 
     /**
      * Creates new form DangNhap
@@ -42,6 +55,8 @@ public class DangNhap extends javax.swing.JFrame {
 
     }
 
+    TaiKhoanDAO dao = new TaiKhoanDAO();
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -61,7 +76,7 @@ public class DangNhap extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         ckcHienPass = new javax.swing.JCheckBox();
         jLabel4 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        btnDangKy = new javax.swing.JButton();
         lblQuenMK = new javax.swing.JLabel();
         btnDangNhap = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
@@ -84,7 +99,6 @@ public class DangNhap extends javax.swing.JFrame {
 
         txtPass.setText("Nhập mật khẩu của bạn");
         txtPass.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        txtPass.setEchoChar('\u0000');
         txtPass.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 txtPassFocusGained(evt);
@@ -184,14 +198,14 @@ public class DangNhap extends javax.swing.JFrame {
         jLabel4.setText("Tài khoản");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 150, -1, -1));
 
-        jButton2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jButton2.setText("Đăng ký");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnDangKy.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnDangKy.setText("Đăng ký");
+        btnDangKy.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnDangKyActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 320, 80, 30));
+        getContentPane().add(btnDangKy, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 320, 80, 30));
 
         lblQuenMK.setText("Quên mật khẩu?");
         lblQuenMK.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -245,7 +259,7 @@ public class DangNhap extends javax.swing.JFrame {
 
     private void txtPassFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPassFocusGained
         // TODO add your handling code here:
-        if (String.valueOf(txtPass.getPassword()).equals("Nhập mật khẩu của bạn")) {
+        if (txtPass.getText().equals("Nhập mật khẩu của bạn")) {
             txtPass.setText(null);
             txtPass.requestFocus();
             txtPass.setEchoChar('*');
@@ -263,7 +277,7 @@ public class DangNhap extends javax.swing.JFrame {
 
     private void txtPassFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPassFocusLost
         // TODO add your handling code here:
-        if (String.valueOf(txtPass.getPassword()).length() == 0) {
+        if (txtPass.getText().length() == 0) {
             addPlacehodelStyle(txtPass);
             txtPass.setText("Nhập mật khẩu của bạn");
             txtPass.setEchoChar('\u0000');
@@ -276,11 +290,28 @@ public class DangNhap extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowGainedFocus
 
     private void btnDangNhapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangNhapActionPerformed
-        QuanLyHome main1 = new QuanLyHome();
-        main1.setVisible(true);
-        this.setVisible(false);
-        KhachHangHome main = new KhachHangHome();
-        main.setVisible(false);
+        String tenTK = txtTK.getText();
+        String pass = new String(txtPass.getPassword());
+        Model.TaiKhoan tk = dao.select(tenTK);
+//        System.out.println(tk.toString());
+        if (tk.getVaiTro() == 0) {
+            QuanLyHome qly = new QuanLyHome();
+            qly.setVisible(true);
+        } else if (tk.getVaiTro() == 1) {
+            LeTanHome lt = new LeTanHome();
+            lt.setVisible(true);
+
+        } else if (tk.getVaiTro() == 2) {
+            ThoCatHome tc = new ThoCatHome();
+            tc.setVisible(true);
+        }else if(tk.getVaiTro() == 3){
+            NguoiDungHome nd = new NguoiDungHome();
+            nd.setVisible(true);
+        }
+        XAuth.user = tk ;
+        this.dispose();
+
+
     }//GEN-LAST:event_btnDangNhapActionPerformed
 
     private void ckcHienPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ckcHienPassActionPerformed
@@ -292,17 +323,18 @@ public class DangNhap extends javax.swing.JFrame {
     }//GEN-LAST:event_ckcHienPassActionPerformed
 
     private void lblQuenMKMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblQuenMKMouseClicked
-        //Code quen mk
+        QuenMatKhau qmk = new QuenMatKhau(this, true);
+         qmk.setVisible(true);
     }//GEN-LAST:event_lblQuenMKMouseClicked
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnDangKyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangKyActionPerformed
         try {
             DangKy main = new DangKy();
             main.setVisible(true);
         } catch (Exception e) {
         }
 
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnDangKyActionPerformed
 
     private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
         KhachHangHome main = new KhachHangHome();
@@ -353,9 +385,9 @@ public class DangNhap extends javax.swing.JFrame {
 //    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDangKy;
     private javax.swing.JButton btnDangNhap;
     private javax.swing.JCheckBox ckcHienPass;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -1,20 +1,49 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
 package UI;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import UI.KhachHang1.KhachHangHome;
+
 /**
  *
- * @author Admin
+ * @author DELL
  */
 public class ManHinhChao extends javax.swing.JFrame {
 
     /**
-     * Creates new form ManHinhChao1
+     * Creates new form ManHinhChao
      */
     public ManHinhChao() {
+        this.setUndecorated(true);
         initComponents();
+    }
+
+    public void ChayPhanTram() {
+        int i = 0;
+        while (i <= 100) {
+            try {
+                ProgressBar.setValue(i);
+                Thread.sleep(100);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(ManHinhChao.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            i += 10;
+            if (i > 2) {
+                lblTrangThai.setText("Loading...");
+            }
+            if (i > 99) {
+                lblTrangThai.setText("Successful connection..");
+            }
+        }
+        if (ProgressBar.getValue() == 100) {
+            this.dispose();
+            KhachHangHome main = new KhachHangHome();
+            main.setVisible(true);
+        }
     }
 
     /**
@@ -32,7 +61,7 @@ public class ManHinhChao extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         ProgressBar = new javax.swing.JProgressBar();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -83,42 +112,16 @@ public class ManHinhChao extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ManHinhChao.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ManHinhChao.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ManHinhChao.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ManHinhChao.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ManHinhChao().setVisible(true);
-            }
-        });
+        ManHinhChao mh = new ManHinhChao();
+        mh.setVisible(true);
+        mh.ChayPhanTram();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

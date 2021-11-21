@@ -5,6 +5,10 @@
  */
 package UI.LeTan;
 
+import Dao.HoaDonDAO;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author dell
@@ -14,6 +18,7 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
     /**
      * Creates new form DatLich
      */
+   
     public DatLichLeTan() {
         initComponents();
     }

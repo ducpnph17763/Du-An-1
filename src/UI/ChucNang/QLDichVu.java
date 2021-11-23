@@ -4,21 +4,31 @@
  */
 package UI.ChucNang;
 
+import Dao.DichVuDAO;
+import Model.DichVu;
+import java.util.List;
+import javax.swing.ImageIcon;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author DELL
  */
 public class QLDichVu extends javax.swing.JInternalFrame {
-
-    /**
+    DichVuDAO dvdao = new DichVuDAO();
+    /** 
      * Creates new form QLDichVu
      */
     public QLDichVu() {
         initComponents();
         BasicInternalFrameUI bui=(BasicInternalFrameUI)this.getUI();
         bui.setNorthPane(null);
+        this.init();
+    }
+    
+    public void init(){
+        this.FillTableDichVu();
     }
 
     /**
@@ -33,7 +43,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblDichVu = new javax.swing.JTable();
         jPanel4 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -45,7 +55,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
         jTextField3 = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane();
-        jLabel11 = new javax.swing.JLabel();
+        lblHinh = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
@@ -60,7 +70,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 51, 255), 2), "Bảng dịch vụ", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Arial", 0, 14))); // NOI18N
         jPanel3.setLayout(new java.awt.CardLayout());
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblDichVu.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -71,7 +81,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
                 "Mã dịch vụ", "Tên dịch vụ", "Giá tiền", "Hình ảnh", "Giới thiệu"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblDichVu);
 
         jPanel3.add(jScrollPane1, "card2");
 
@@ -89,7 +99,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
 
         jScrollPane2.setViewportView(jTextPane1);
 
-        jLabel11.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
+        lblHinh.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
 
         jButton2.setBackground(new java.awt.Color(57, 70, 138));
         jButton2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -160,7 +170,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
                                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(1, 1, 1)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 310, Short.MAX_VALUE)
-                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblHinh, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(49, 49, 49)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -205,7 +215,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
                         .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(36, 36, 36)
                         .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(lblHinh, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -252,7 +262,8 @@ public class QLDichVu extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
-
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -260,7 +271,6 @@ public class QLDichVu extends javax.swing.JInternalFrame {
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -270,10 +280,32 @@ public class QLDichVu extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextPane jTextPane1;
+    private javax.swing.JLabel lblHinh;
+    private javax.swing.JTable tblDichVu;
     // End of variables declaration//GEN-END:variables
+
+    private void FillTableDichVu() {
+        List<DichVu> ls = dvdao.selectAll();
+        DefaultTableModel mol = (DefaultTableModel)tblDichVu.getModel();
+        mol.setRowCount(0);
+        
+        for (DichVu l : ls) {
+            mol.addRow(new Object[] {l.getId(), l.getTenDV(), l.getGiaTien(), l.getHinh(), l.getGiaTien()});
+        }
+        
+        
+    }
+    
+    private void UpHinh(String hinh) {
+        ImageIcon icon = new ImageIcon("/Image/" + hinh );
+        lblHinh.setIcon(icon);
+    }
+    
+    private void XuLyHinhAnh() {
+        
+    }
 }

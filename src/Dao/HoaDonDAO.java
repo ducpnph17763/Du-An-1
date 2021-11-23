@@ -10,6 +10,7 @@ import Model.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,10 +23,19 @@ public class HoaDonDAO extends BarberDAO<HoaDon, String> {
     String UPDATE_SQL = "UPDATE HoaDon set TrangThaiTT=?,TrangThai=? where Id=?";
     String SELECT_ALL_SQL = "select*from HoaDon";
     String SELECT_BY_ID_SQL = "select*from HoaDon where Id=?";
+    String Insert = "Insert into HoaDon(Id_KH,Id_NV,Id_TC,NgayHen,GioHen,NgayTao,DatCoc,ThanhToan,TrangThaiTT,TrangThai,DanhGia,PhanHoi)"
+            + "values(?,?,?,?,?,?,?,?,?,?,?,?)";
 
     @Override
     public void insert(HoaDon entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            JDBCHelper.update(Insert, entity.getId_KH(),
+                    entity.getId_NV(), entity.getId_TC(), entity.getNgayHen(),entity.getGioHen(),
+                    entity.getNgayTao(), entity.getDatCoc(), entity.getThanhToan(),
+                    entity.getTrangThaiTT(), entity.getTrangThai(), entity.getDanhGia(), entity.getPhanHoi());
+        } catch (SQLException ex) {
+            Logger.getLogger(NhanVienDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -64,19 +74,23 @@ public class HoaDonDAO extends BarberDAO<HoaDon, String> {
         try {
             ResultSet rs = JDBCHelper.query(sql, args);
             while (rs.next()) {
+                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                Date ngayhen = rs.getDate("NgayHen");
+                String ngay = sdf.format(ngayhen);
                 HoaDon entity = new HoaDon();
                 entity.setId(rs.getInt("Id"));
                 entity.setId_KH(rs.getInt("Id_KH"));
                 entity.setId_TC(rs.getInt("Id_TC"));
                 entity.setId_NV(rs.getInt("Id_NV"));
-                entity.setNgayHen(rs.getDate("NgayHen"));
-                entity.setNgayTao(rs.getString("NgayTao"));
+                entity.setNgayHen(sdf.parse(ngay));
+                entity.setNgayTao(rs.getDate("NgayTao"));
                 entity.setDatCoc(rs.getInt("DatCoc"));
                 entity.setThanhToan(rs.getInt("ThanhToan"));
                 entity.setDanhGia(rs.getString("DanhGia"));
                 entity.setPhanHoi(rs.getString("PhanHoi"));
                 entity.setTrangThaiTT(rs.getString("TrangThaiTT"));
                 entity.setTrangThai(rs.getString("TrangThai"));
+                entity.setGioHen(rs.getString("GioHen"));
                 list.add(entity);
             }
             rs.getStatement().getConnection().close();
@@ -102,6 +116,19 @@ public class HoaDonDAO extends BarberDAO<HoaDon, String> {
         }
     
     }
+    public List<HoaDon> selectByThoCat(NhanVien tc) {
+        return this.selectBySql("Select * from HoaDon where Id_TC = ?", tc.getId());
+
+    }
+    
+    public HoaDon SelectHoaDonByGioHen(HoaDon hd) {
+        List<HoaDon> list = this.selectBySql("Select * from HoaDon where Id_TC = ? and NgayHen = ? and GioHen = ?",hd.getId_TC(), hd.getNgayHen(), hd.getGioHen() );
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
+    }
+   
 }
     
 

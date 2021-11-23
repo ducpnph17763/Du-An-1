@@ -87,6 +87,13 @@ public class QLDichVu extends javax.swing.JInternalFrame {
 
         jLabel10.setText("Giới thiệu");
 
+        jTextField1.setName(""); // NOI18N
+
+        jTextField2.setName("Tên dịch vụ"); // NOI18N
+
+        jTextField3.setName("Giá tiền"); // NOI18N
+
+        jTextPane1.setName("Giới thiệu"); // NOI18N
         jScrollPane2.setViewportView(jTextPane1);
 
         jLabel11.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));

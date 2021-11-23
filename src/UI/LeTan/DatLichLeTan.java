@@ -5,9 +5,14 @@
  */
 package UI.LeTan;
 
+import Dao.DichVuDAO;
 import Dao.HoaDonDAO;
+import Helper.MsgBox;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -18,9 +23,56 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
     /**
      * Creates new form DatLich
      */
-   
+    DichVuDAO dvdao = new DichVuDAO();
+    List<Model.DichVu> ls = new ArrayList<>();
     public DatLichLeTan() {
         initComponents();
+        fillComboboxDichVu();
+    }
+    
+    
+     private void kiemTra() {
+        DefaultComboBoxModel model = (DefaultComboBoxModel) cboDicVu.getModel();
+        Model.DichVu cbodv = (Model.DichVu) model.getSelectedItem();
+        if (ls.size() == 0) {
+            ls.add(cbodv);
+            fillTable1();
+        } else {
+            for (int i = 0; i < ls.size(); i++) {
+                System.out.println("dv:" + ls.get(i));
+                if (ls.get(i).equals(cbodv)) {
+                    JOptionPane.showMessageDialog(this, "Dịch vụ này đã được thêm vào rồi!");
+                    return;
+                }
+            }
+            ls.add(cbodv);
+            fillTable1();
+            
+        }
+    }
+     
+     private void fillTable1() {
+        DefaultTableModel mol = (DefaultTableModel) tblLichDat.getModel();
+        mol.setRowCount(0);
+        try {
+            Model.DichVu dichVu = (Model.DichVu) cboDicVu.getSelectedItem();
+            for (Model.DichVu dv : ls) {
+                Object[] row = {
+                    dv.getId(), dv.getTenDV(), dv.getGiaTien()
+                };
+                mol.addRow(row);
+            }
+        } catch (Exception e) {
+        }
+    }
+     
+     private void fillComboboxDichVu() {
+        DefaultComboBoxModel mol = (DefaultComboBoxModel) cboDicVu.getModel();
+        mol.removeAllElements();
+        List<Model.DichVu> list = dvdao.selectAll();
+        for (Model.DichVu dv : list) {
+            mol.addElement(dv);
+        }
     }
 
     /**
@@ -241,10 +293,21 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
 
     private void btnThemDVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemDVActionPerformed
         // TODO add your handling code here:
+        kiemTra();
     }//GEN-LAST:event_btnThemDVActionPerformed
 
     private void btnHuyDicVuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHuyDicVuActionPerformed
         // TODO add your handling code here:
+        int index=tblLichDat.getSelectedRow();
+        if(index>=0){
+            for (int i = 0; i < ls.size(); i++) {
+                if(index==i){
+                    ls.remove(index);
+                    fillTable1();
+                    MsgBox.alert(this, "Huỷ dịch vụ thành công!");
+                }
+            }
+        }
     }//GEN-LAST:event_btnHuyDicVuActionPerformed
 
     private void tblLichDatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLichDatMouseClicked

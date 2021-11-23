@@ -267,14 +267,35 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
 
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:      
+        // TODO add your handling code here:  
+       
+        try {
+            int row = tblLichDat.getSelectedRow();
+            String mahd = tblLichDat.getValueAt(row, 0).toString();
+           
+                System.out.println("mã hóa đơn hủy dịch vụ:" + mahd);
+                boolean kt1 = MsgBox.confirm(this, "Bạn có chắc chắn huỷ lịch không?");
+                if (kt1 == true) {
+                    String cautruyvan1 = "delete from HoaDonChiTiet where Id_HD=" + mahd;
+                    JDBCHelper.update(cautruyvan1);
+                    String sql = "update HoaDon set ThanhToan=0,TrangThai=N'Đã hủy lịch' where Id=" + mahd;
+                    JDBCHelper.update(sql);
+                    System.out.println("mã hoá đơn bị xoá:" + mahd);
+                    layThongTinLichDat();
+                }
+                LayTTBangCTLichDat();
+                MsgBox.alert(this, "Hủy lịch thành công!");
+                
+            
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void btnHuyDVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHuyDVActionPerformed
-        // TODO add your handling code here:  
-        
-        int index1=tblCTLichDat.getSelectedRow();
-        
+        // TODO add your handling code here:         
+        int index1=tblCTLichDat.getSelectedRow();        
         String mahdct=tblCTLichDat.getValueAt(index1, 1).toString();
         String mahd=tblCTLichDat.getValueAt(index1, 2).toString();
         if (index1 == 0) {
@@ -289,30 +310,24 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
                     LayTTBangCTLichDat();
                     MsgBox.alert(this, "Huỷ lịch thành công!");
                 }
-
             } catch (SQLException e) {
                 System.out.println(e);
             }
         } 
-            if(index1>0){
+        if(index1>0){
                 try {
                 boolean kt = MsgBox.confirm(this, "Bạn có muốn huỷ dịch vụ không?\nHuỷ dịch vụ bạn sẽ mất cọc");
                 if (kt == true) {
                     String sql = "delete from HoaDonChiTiet where Id=" + mahdct;
                     JDBCHelper.update(sql);
                     TinhTongTien();
-                    LayTTBangCTLichDat();
-                    
+                    LayTTBangCTLichDat();                    
                     MsgBox.alert(this, "Huỷ dịch vụ thành công!");
                 }
-
             } catch (SQLException e) {
                 System.out.println(e);
             }
-            }
-            
-        
-       
+            }      
     }//GEN-LAST:event_btnHuyDVActionPerformed
 
     void TinhTongTien(){

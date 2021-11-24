@@ -70,13 +70,14 @@ public class HoaDonDAO extends BarberDAO<HoaDon, String> {
                 entity.setId_TC(rs.getInt("Id_TC"));
                 entity.setId_NV(rs.getInt("Id_NV"));
                 entity.setNgayHen(rs.getDate("NgayHen"));
-                entity.setNgayTao(rs.getString("NgayTao"));
+                entity.setNgayTao(rs.getDate("NgayTao"));
                 entity.setDatCoc(rs.getInt("DatCoc"));
                 entity.setThanhToan(rs.getInt("ThanhToan"));
                 entity.setDanhGia(rs.getString("DanhGia"));
                 entity.setPhanHoi(rs.getString("PhanHoi"));
                 entity.setTrangThaiTT(rs.getString("TrangThaiTT"));
                 entity.setTrangThai(rs.getString("TrangThai"));
+                entity.setGioHen(rs.getString("GioHen"));
                 list.add(entity);
             }
             rs.getStatement().getConnection().close();
@@ -100,10 +101,23 @@ public class HoaDonDAO extends BarberDAO<HoaDon, String> {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    
+
+    }
+
+    public HoaDon SelectHoaDonByGioHen(HoaDon hd) {
+        List<HoaDon> list = this.selectBySql("Select * from HoaDon where Id_TC = ? and NgayHen = ? and GioHen = ?", hd.getId_TC(), hd.getNgayHen(), hd.getGioHen());
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
+    }
+
+    public List<Model.HoaDon> SelectHoaDonNguoiDung(String tentk) {
+        List<Model.HoaDon> list = this.selectBySql("select * from HoaDon join KhachHang on KhachHang.Id = HoaDon.Id_KH \n"
+                + "join TaiKhoan on TaiKhoan.Id = KhachHang.Id_TK where TenTK = ?", tentk);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list;
     }
 }
-    
-
-
-

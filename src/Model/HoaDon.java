@@ -15,11 +15,12 @@ import java.util.Date;
  */
 public class HoaDon {
     private int id;
-    private int id_KH;
-    private int id_TC;
-    private int id_NV;
+    private Integer id_KH;
+    private Integer id_TC;
+    private Integer id_NV;
     private Date ngayHen;
-    private String ngayTao;
+    private String GioHen;
+    private Date ngayTao;
     private int datCoc;
     private int thanhToan;
     private String danhGia;
@@ -30,12 +31,13 @@ public class HoaDon {
     public HoaDon() {
     }
 
-    public HoaDon(int id, int id_KH, int id_TC, int id_NV, Date ngayHen, String ngayTao, int datCoc, int thanhToan, String danhGia, String phanHoi, String trangThaiTT, String trangThai) {
+    public HoaDon(int id, Integer id_KH, Integer id_TC, Integer id_NV, Date ngayHen, String GioHen, Date ngayTao, int datCoc, int thanhToan, String danhGia, String phanHoi, String trangThaiTT, String trangThai) {
         this.id = id;
         this.id_KH = id_KH;
         this.id_TC = id_TC;
         this.id_NV = id_NV;
         this.ngayHen = ngayHen;
+        this.GioHen = GioHen;
         this.ngayTao = ngayTao;
         this.datCoc = datCoc;
         this.thanhToan = thanhToan;
@@ -44,6 +46,7 @@ public class HoaDon {
         this.trangThaiTT = trangThaiTT;
         this.trangThai = trangThai;
     }
+    
 
     public int getId() {
         return id;
@@ -53,29 +56,31 @@ public class HoaDon {
         this.id = id;
     }
 
-    public int getId_KH() {
+    public Integer getId_KH() {
         return id_KH;
     }
 
-    public void setId_KH(int id_KH) {
+    public void setId_KH(Integer id_KH) {
         this.id_KH = id_KH;
     }
 
-    public int getId_TC() {
+    public Integer getId_TC() {
         return id_TC;
     }
 
-    public void setId_TC(int id_TC) {
+    public void setId_TC(Integer id_TC) {
         this.id_TC = id_TC;
     }
 
-    public int getId_NV() {
+    public Integer getId_NV() {
         return id_NV;
     }
 
-    public void setId_NV(int id_NV) {
+    public void setId_NV(Integer id_NV) {
         this.id_NV = id_NV;
     }
+
+   
 
     public Date getNgayHen() {
         return ngayHen;
@@ -85,13 +90,15 @@ public class HoaDon {
         this.ngayHen = ngayHen;
     }
 
-    public String getNgayTao() {
+    public Date getNgayTao() {
         return ngayTao;
     }
 
-    public void setNgayTao(String ngayTao) {
+    public void setNgayTao(Date ngayTao) {
         this.ngayTao = ngayTao;
     }
+
+
 
     public int getDatCoc() {
         return datCoc;
@@ -140,6 +147,23 @@ public class HoaDon {
     public void setTrangThai(String trangThai) {
         this.trangThai = trangThai;
     }
+
+    public String getGioHen() {
+        return GioHen;
+    }
+
+    public void setGioHen(String GioHen) {
+        this.GioHen = GioHen;
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "HoaDon{" + "id=" + id + ", id_KH=" + id_KH + ", id_TC=" + id_TC + ", id_NV=" + id_NV + ", ngayHen=" + ngayHen + ", GioHen=" + GioHen + ", ngayTao=" + ngayTao + ", datCoc=" + datCoc + ", thanhToan=" + thanhToan + ", danhGia=" + danhGia + ", phanHoi=" + phanHoi + ", trangThaiTT=" + trangThaiTT + ", trangThai=" + trangThai + '}';
+    }
+    
+    
     
     
     

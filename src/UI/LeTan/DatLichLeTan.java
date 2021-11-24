@@ -307,6 +307,8 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
                     MsgBox.alert(this, "Huỷ dịch vụ thành công!");
                 }
             }
+        }else{
+            MsgBox.alert(this, "Bạn chưa chọn dịch vụ để huỷ!");
         }
     }//GEN-LAST:event_btnHuyDicVuActionPerformed
 

@@ -22,10 +22,19 @@ public class HoaDonDAO extends BarberDAO<HoaDon, String> {
     String UPDATE_SQL = "UPDATE HoaDon set TrangThaiTT=?,TrangThai=? where Id=?";
     String SELECT_ALL_SQL = "select*from HoaDon";
     String SELECT_BY_ID_SQL = "select*from HoaDon where Id=?";
+    String Insert = "Insert into HoaDon(Id_KH,Id_NV,Id_TC,NgayHen,GioHen,NgayTao,DatCoc,ThanhToan,TrangThaiTT,TrangThai,DanhGia,PhanHoi)"
+            + "values(?,?,?,?,?,?,?,?,?,?,?,?)";
 
     @Override
     public void insert(HoaDon entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       try {
+            JDBCHelper.update(Insert, entity.getId_KH(),
+                    entity.getId_NV(), entity.getId_TC(), entity.getNgayHen(), entity.getGioHen(),
+                    entity.getNgayTao(), entity.getDatCoc(), entity.getThanhToan(),
+                    entity.getTrangThaiTT(), entity.getTrangThai(), entity.getDanhGia(), entity.getPhanHoi());
+        } catch (SQLException ex) {
+            Logger.getLogger(NhanVienDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override

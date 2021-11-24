@@ -23,9 +23,10 @@ public class DichVuDAO extends BarberDAO<DichVu, String>{
 
     String INSERT_SQL ="INSERT INTO DichVu(TenDV,GiaTien,Hinh,MoTa) Values(?,?,?,?)";
     String UPDATE_SQL ="UPDATE DichVu set TenDV=?,GiaTien=?,Hinh=?,MoTa=? WHERE Id=?"  ;
-    String DELETE_SQL ="DELETE FROM DichVu";
+    String DELETE_SQL ="DELETE FROM DichVu where Id=?";
     String SELECT_ALL_SQL ="Select*from DichVu" ;
     String SELECT_BY_ID_SQL ="select*from DichVu where Id=?" ;
+    String SELECT_BY_TEN="select*from DichVu where TenDV=?";
     
     public void insert1(DichVu entity){
         String sql="insert into DichVu(TenDV,GiaTien) values(?,?)";
@@ -68,6 +69,14 @@ public class DichVuDAO extends BarberDAO<DichVu, String>{
     @Override
     public DichVu selectById(String id) {
         List<DichVu>list=this.selectBySql(SELECT_BY_ID_SQL,id);
+        if(list.isEmpty()){
+            return null;
+        }
+        return list.get(0);
+    }
+    
+     public DichVu selectByTen(String id) {
+        List<DichVu>list=this.selectBySql(SELECT_BY_TEN,id);
         if(list.isEmpty()){
             return null;
         }

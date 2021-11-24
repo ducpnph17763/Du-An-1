@@ -122,9 +122,9 @@ public class NhanVienDAO extends BarberDAO<NhanVien, Object>{
         return this.selectBySql(sql,hd.getId()).get(0);
     }
 
-    public NhanVien selectByNgayHen(UI.ChucNang.HoaDon hd) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+
+    
+    
    
     
 }

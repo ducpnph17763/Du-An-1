@@ -30,7 +30,7 @@ public class HoaDonDAO extends BarberDAO<HoaDon, String> {
     public void insert(HoaDon entity) {
         try {
             JDBCHelper.update(Insert, entity.getId_KH(),
-                    entity.getId_NV(), entity.getId_TC(), entity.getNgayHen(),entity.getGioHen(),
+                    entity.getId_NV(), entity.getId_TC(), entity.getNgayHen(), entity.getGioHen(),
                     entity.getNgayTao(), entity.getDatCoc(), entity.getThanhToan(),
                     entity.getTrangThaiTT(), entity.getTrangThai(), entity.getDanhGia(), entity.getPhanHoi());
         } catch (SQLException ex) {
@@ -114,23 +114,29 @@ public class HoaDonDAO extends BarberDAO<HoaDon, String> {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    
+
     }
+
     public List<HoaDon> selectByThoCat(NhanVien tc) {
         return this.selectBySql("Select * from HoaDon where Id_TC = ?", tc.getId());
 
     }
-    
+
     public HoaDon SelectHoaDonByGioHen(HoaDon hd) {
-        List<HoaDon> list = this.selectBySql("Select * from HoaDon where Id_TC = ? and NgayHen = ? and GioHen = ?",hd.getId_TC(), hd.getNgayHen(), hd.getGioHen() );
+        List<HoaDon> list = this.selectBySql("Select * from HoaDon where Id_TC = ? and NgayHen = ? and GioHen = ?", hd.getId_TC(), hd.getNgayHen(), hd.getGioHen());
         if (list.isEmpty()) {
             return null;
         }
         return list.get(0);
     }
-   
+
+    public List<Model.HoaDon> SelectHoaDonNguoiDung(String tentk){
+        List<Model.HoaDon> list = this.selectBySql("select * from HoaDon join KhachHang on KhachHang.Id = HoaDon.Id_KH \n" +
+"join TaiKhoan on TaiKhoan.Id = KhachHang.Id_TK where TenTK = ?",tentk);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list;
+    }
+
 }
-    
-
-
-

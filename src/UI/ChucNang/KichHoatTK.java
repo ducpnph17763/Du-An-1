@@ -19,6 +19,7 @@ public class KichHoatTK extends javax.swing.JFrame {
     TaiKhoanDAO tkd = new TaiKhoanDAO();
     public KichHoatTK(TaiKhoan tk) {
         initComponents();
+        this.setLocationRelativeTo(null);
         this.tk =tk;
     }
     public KichHoatTK() {

@@ -5,9 +5,17 @@
  */
 package UI.ChucNang;
 
+import Dao.HoaDonDAO;
+import Helper.JDBCHelper;
+import Helper.MsgBox;
 import java.awt.Font;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JTextField;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -18,14 +26,97 @@ public class HoaDon extends javax.swing.JInternalFrame {
     /**
      * Creates new form HoaDon
      */
+     HoaDonDAO hddao=new HoaDonDAO();
+     List<Model.DichVu>list=new ArrayList<>();
     public HoaDon() {
         initComponents();
         this.setBorder(null);
         BasicInternalFrameUI bui = (BasicInternalFrameUI) this.getUI();
         bui.setNorthPane(null);
-        
+        init();
     }
 
+     void init(){
+        LayDuLieuHoaDon();
+    }
+    
+     void timKiemHoaDon(String id){
+        System.out.println("id"+id);
+         String sql = "select HoaDon.Id,KhachHang.id,HoaDon.Id_TC,NhanVien.HoTen,NgayHen,ThanhToan,DanhGia \n"
+                + "from HoaDon\n"
+                + "join KhachHang on KhachHang.Id=HoaDon.Id_KH\n"
+                + "Join NhanVien on NhanVien.Id=HoaDon.Id_TC\n"
+                + "where NhanVien.Id=HoaDon.Id_TC and HoaDon.TrangThai=N'Đã xử lý' and HoaDon.TrangThaiTT=N'Đã thanh toán' and HoaDon.id="+id;
+        ResultSet rs=JDBCHelper.query(sql);
+        DefaultTableModel model=(DefaultTableModel)tblHoaDon.getModel();
+        model.setRowCount(0);
+        try {
+            while(rs.next()){
+                Object[] item=new Object[7];
+                item[0]=rs.getString("Id");
+                item[1]=rs.getString("Id");
+                item[2]=rs.getString("Id_TC");
+                item[3]=rs.getString("HoTen");
+                item[4]=rs.getString("NgayHen");
+                item[5]=rs.getString("ThanhToan");
+                item[6]=rs.getString("DanhGia");
+                model.addRow(item);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+    
+    void LayDuLieuHoaDon(){
+        String sql = "select HoaDon.Id,KhachHang.id,HoaDon.Id_TC,NhanVien.HoTen,NgayHen,ThanhToan,DanhGia \n"
+                + "from HoaDon\n"
+                + "join KhachHang on KhachHang.Id=HoaDon.Id_KH\n"
+                + "Join NhanVien on NhanVien.Id=HoaDon.Id_TC\n"
+                + "where NhanVien.Id=HoaDon.Id_TC and HoaDon.TrangThai=N'Đã xử lý' and HoaDon.TrangThaiTT=N'Đã thanh toán' ";
+        ResultSet rs=JDBCHelper.query(sql);
+        DefaultTableModel model=(DefaultTableModel)tblHoaDon.getModel();
+        model.setRowCount(0);
+        try {
+            while(rs.next()){
+                Object[] item=new Object[7];
+                item[0]=rs.getString("Id");
+                item[1]=rs.getString("Id");
+                item[2]=rs.getString("Id_TC");
+                item[3]=rs.getString("HoTen");
+                item[4]=rs.getString("NgayHen");
+                item[5]=rs.getString("ThanhToan");
+                item[6]=rs.getString("DanhGia");
+                model.addRow(item);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        
+    }
+    
+    void LayDuLieuHoaDonChiTiet(){
+        int row=tblHoaDon.getSelectedRow();
+        String mahd=tblHoaDon.getValueAt(row, 0).toString();
+        String sql = "select DichVu.Id,TenDV,DichVu.GiaTien from DichVu join HoaDonChiTiet on DichVu.Id=HoaDonChiTiet.Id_DV\n"
+                + "  where HoaDonChiTiet.Id_HD=" + mahd;
+        ResultSet rs=JDBCHelper.query(sql);
+        DefaultTableModel mol=(DefaultTableModel)tblHDCT.getModel();
+        mol.setRowCount(0);
+        try {
+            while (rs.next()) {
+                Object[] item = new Object[3];
+                item[0] = rs.getString("Id");
+                item[1] = rs.getString("TenDV");
+                item[2] = rs.getInt("GiaTien");
+                mol.addRow(item);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+    
+    
+     
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -37,14 +128,15 @@ public class HoaDon extends javax.swing.JInternalFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblHDCT = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tblHoaDon = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         txtTimKiem = new javax.swing.JTextField();
         btnTim = new javax.swing.JButton();
+        btnReset = new javax.swing.JButton();
 
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
             public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
@@ -66,7 +158,7 @@ public class HoaDon extends javax.swing.JInternalFrame {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblHDCT.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -77,9 +169,9 @@ public class HoaDon extends javax.swing.JInternalFrame {
                 "Mã DV", "Tên DV", "Giá Tiền"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblHDCT);
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tblHoaDon.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null},
@@ -90,7 +182,12 @@ public class HoaDon extends javax.swing.JInternalFrame {
                 "Mã Hóa Đơn", "Mã KH", "Mã TC", "Tên TC", "Ngày đặt ", "Thanh Toán", "Đánh Giá"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        tblHoaDon.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblHoaDonMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tblHoaDon);
 
         jLabel1.setText("Bảng hóa đơn:");
 
@@ -113,6 +210,18 @@ public class HoaDon extends javax.swing.JInternalFrame {
         });
 
         btnTim.setText("Tìm");
+        btnTim.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTimActionPerformed(evt);
+            }
+        });
+
+        btnReset.setText("Reset");
+        btnReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResetActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -129,7 +238,9 @@ public class HoaDon extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 551, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnTim, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnTim, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnReset))
                     .addComponent(jScrollPane1))
                 .addContainerGap(19, Short.MAX_VALUE))
         );
@@ -140,7 +251,8 @@ public class HoaDon extends javax.swing.JInternalFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnTim))
+                    .addComponent(btnTim)
+                    .addComponent(btnReset))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -181,9 +293,43 @@ public class HoaDon extends javax.swing.JInternalFrame {
     private void formInternalFrameActivated(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
         this.setSize(1340, 810);
     }//GEN-LAST:event_formInternalFrameActivated
+
+    private void btnTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimActionPerformed
+        // TODO add your handling code here:
+        String tk=txtTimKiem.getText();
+        String rxgS="\\d+";
+        if(tk.equals("")){
+            MsgBox.alert(this, "Vui lòng nhập mã hoá đơn tìm kiếm!");
+            txtTimKiem.requestFocus();
+            return;
+        }if(tk.matches(rxgS)==false){
+            MsgBox.alert(this, "Mã hoá đơn không đúng định dạng!");
+            txtTimKiem.requestFocus();
+            return;
+        }else{
+           timKiemHoaDon(tk);
+           DefaultTableModel mol=(DefaultTableModel)tblHDCT.getModel();
+           mol.setRowCount(0);
+           MsgBox.alert(this, "Đã tìm thấy hoá đơn!");
+        }
+        
+      
+    }//GEN-LAST:event_btnTimActionPerformed
+
+    private void tblHoaDonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonMouseClicked
+        // TODO add your handling code here:
+        LayDuLieuHoaDonChiTiet();
+    }//GEN-LAST:event_tblHoaDonMouseClicked
+
+    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
+        // TODO add your handling code here:
+        txtTimKiem.setText("");
+        LayDuLieuHoaDon();
+    }//GEN-LAST:event_btnResetActionPerformed
   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnReset;
     private javax.swing.JButton btnTim;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -191,8 +337,8 @@ public class HoaDon extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
+    private javax.swing.JTable tblHDCT;
+    private javax.swing.JTable tblHoaDon;
     private javax.swing.JTextField txtTimKiem;
     // End of variables declaration//GEN-END:variables
 }

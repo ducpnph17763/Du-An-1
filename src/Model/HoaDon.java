@@ -141,7 +141,10 @@ public class HoaDon {
         this.trangThai = trangThai;
     }
     
-    
+    @Override
+    public String toString() {
+        return this.danhGia;
+    }
     
    
     

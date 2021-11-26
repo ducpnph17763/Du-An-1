@@ -165,7 +165,10 @@ public class HoaDon {
     
     
     
-    
+    @Override
+    public String toString() {
+        return this.danhGia;
+    }
     
    
     

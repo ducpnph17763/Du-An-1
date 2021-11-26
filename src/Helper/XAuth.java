@@ -4,31 +4,31 @@
  */
 package Helper;
 
-
 import Model.TaiKhoan;
 
-
-
 public class XAuth {
-      public static TaiKhoan user =null;
-    public static void clear(){
-         XAuth.user = null;
+
+    public static TaiKhoan user = null;
+
+    public static void clear() {
+        XAuth.user = null;
     }
-    public static int isLogin(){
-//        return XAuth.user!=0;
-        if(XAuth.user!= null){
+
+    public static int isLogin() {
+        if (XAuth.user != null) {
             return 1;
-        }else{
+        } else {
             return 0;
         }
     }
-    public static boolean isManager(){
-       if(isLogin() == 1){
-           XAuth.user.getVaiTro();
-           return true;
-       }else{
-           return false;
-       }
-        
+
+    public static boolean isManager() {
+        if (isLogin() == 1) {
+            XAuth.user.getVaiTro();
+            return true;
+        } else {
+            return false;
+        }
+
     }
 }

@@ -23,7 +23,7 @@ public class DichVuDAO extends BarberDAO<DichVu, String>{
 
     String INSERT_SQL ="INSERT INTO DichVu(TenDV,GiaTien,Hinh,MoTa) Values(?,?,?,?)";
     String UPDATE_SQL ="UPDATE DichVu set TenDV=?,GiaTien=?,Hinh=?,MoTa=? WHERE Id=?"  ;
-    String DELETE_SQL ="DELETE FROM DichVu";
+    String DELETE_SQL ="DELETE FROM DichVu where Id=?";
     String SELECT_ALL_SQL ="Select*from DichVu" ;
     String SELECT_BY_ID_SQL ="select*from DichVu where Id=?" ;
     

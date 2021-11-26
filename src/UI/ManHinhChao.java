@@ -41,8 +41,7 @@ public class ManHinhChao extends javax.swing.JFrame {
         }
         if (ProgressBar.getValue() == 100) {
             this.dispose();
-            KhachHangHome main = new KhachHangHome();
-            main.setVisible(true);
+            KhachHangHome.main(null);
         }
     }
 

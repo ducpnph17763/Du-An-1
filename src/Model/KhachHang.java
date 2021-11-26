@@ -10,7 +10,62 @@ package Model;
  * @author dell
  */
 public class KhachHang {
+
+    private int id;
+    private int id_TK;
     private String hoTen;
     private String hinh;
     private String trangThai;
+
+    public KhachHang() {
+    }
+
+    public KhachHang(int id, int id_TK, String hoTen, String hinh, String trangThai) {
+        this.id = id;
+        this.id_TK = id_TK;
+        this.hoTen = hoTen;
+        this.hinh = hinh;
+        this.trangThai = trangThai;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId_TK() {
+        return id_TK;
+    }
+
+    public void setId_TK(int id_TK) {
+        this.id_TK = id_TK;
+    }
+
+    public String getHoTen() {
+        return hoTen;
+    }
+
+    public void setHoTen(String hoTen) {
+        this.hoTen = hoTen;
+    }
+
+    public String getHinh() {
+        return hinh;
+    }
+
+    public void setHinh(String hinh) {
+        this.hinh = hinh;
+    }
+
+    public String getTrangThai() {
+        return trangThai;
+    }
+
+    public void setTrangThai(String trangThai) {
+        this.trangThai = trangThai;
+    }
+
 }

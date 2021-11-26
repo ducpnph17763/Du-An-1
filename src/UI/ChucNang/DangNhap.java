@@ -293,7 +293,6 @@ public class DangNhap extends javax.swing.JFrame {
         String tenTK = txtTK.getText();
         String pass = new String(txtPass.getPassword());
         Model.TaiKhoan tk = dao.select(tenTK);
-//        System.out.println(tk.toString());
         if (tk.getVaiTro() == 0) {
             QuanLyHome qly = new QuanLyHome();
             qly.setVisible(true);

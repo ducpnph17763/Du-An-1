@@ -38,11 +38,12 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
     }
     
     void layThongTinLichDat() {
-        String sql = "select HoaDon.Id,HoaDon.NgayHen,KhachHang.HoTen,HoaDon.Id_TC,HoaDon.DatCoc,\n"
+         String sql = "select HoaDon.Id,HoaDon.NgayHen,KhachHang.HoTen,HoaDon.Id_TC,HoaDon.DatCoc,\n"
                 + "HoaDon.ThanhToan,HoaDon.TrangThaiTT,HoaDon.TrangThai\n"
                 + "from HoaDon join KhachHang on HoaDon.Id_KH=KhachHang.Id\n"
                 + "join NhanVien on HoaDon.Id_TC=NhanVien.Id\n"
-                + "where HoaDon.Id=KhachHang.Id and NhanVien.Id=HoaDon.Id_TC";
+                + "where HoaDon.Id=KhachHang.Id and NhanVien.Id=HoaDon.Id_TC and HoaDon.TrangThai=N'Đang xử lý' "
+                + "and HoaDon.TrangThaiTT=N'Chưa thanh toán'";
         ResultSet rs=JDBCHelper.query(sql);
         Object[]row=new Object[]{
           "Mã lịch đặt","Ngày hẹn","Khách hàng","Id Thợ cắt","Đặt cọc","Tổng tiền","Trạng thái TT","Trạng thái hoá đơn"  
@@ -379,12 +380,15 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
                 MsgBox.alert(this, "Lịch đặt này đã thanh toán rồi!");
             }else{
                 if (row>=0) {
-                String sql = "update HoaDon set TrangThaiTT=N'Đã thanh toán lý',TrangThai=N'Đã xử lý' where HoaDon.Id=" + mahd;
+                String sql = "update HoaDon set TrangThaiTT=N'Đã thanh toán',TrangThai=N'Đã xử lý' where HoaDon.Id=" + mahd;
                 JDBCHelper.update(sql);
                 layThongTinLichDat();
-                MsgBox.alert(this, "Thanh toán thành công!");
+                DefaultTableModel mol=(DefaultTableModel)tblCTLichDat.getModel();
+                mol.setRowCount(0);
+                MsgBox.alert(this, "Thanh toán thành công!");  
+               
             }
-            }           
+            }            
         } catch (Exception e) {
             MsgBox.alert(this, "Bạn chưa chọn hoá đơn thanh toán!");
         }

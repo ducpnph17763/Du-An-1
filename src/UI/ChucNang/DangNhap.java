@@ -323,7 +323,7 @@ public class DangNhap extends javax.swing.JFrame {
     }//GEN-LAST:event_ckcHienPassActionPerformed
 
     private void lblQuenMKMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblQuenMKMouseClicked
-        QuenMatKhau qmk = new QuenMatKhau(this, true);
+        QuenMatKhau qmk = new QuenMatKhau();
          qmk.setVisible(true);
     }//GEN-LAST:event_lblQuenMKMouseClicked
 

@@ -5,24 +5,47 @@
  */
 package UI.ChucNang;
 
+import Dao.KhachHangDAO;
 import Dao.TaiKhoanDAO;
 import Helper.MsgBox;
 import Model.TaiKhoan;
 import UI.NguoiDung.NguoiDungHome;
+import Model.KhachHang;
+import Model.ThongTinKhachHang;
+import java.util.List;
 
 /**
  *
  * @author Huong
  */
 public class KichHoatTK extends javax.swing.JFrame {
+
+    List<TaiKhoan> listTK;
+    List<KhachHang> listKH;
+    KhachHangDAO khDAO = new KhachHangDAO();
+    int randomCode;
+    String tentk, mk,hoten, email, sdt;
     TaiKhoan tk = new TaiKhoan();
+    KhachHang kh = new KhachHang();
+    ThongTinKhachHang tt = new ThongTinKhachHang();
     TaiKhoanDAO tkd = new TaiKhoanDAO();
-    public KichHoatTK(TaiKhoan tk) {
+
+    public KichHoatTK(int code, String tenTK, String MK, String hoten, String email, String sdt) {
         initComponents();
-        this.tk =tk;
+        this.tk = tk;
+        this.randomCode = code;
+        this.tt = tt;
+        this.tentk = tenTK;
+        this.mk = MK;
+        this.hoten = hoten;
+        this.email = email;
+        this.sdt = sdt;
+
     }
+
     public KichHoatTK() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -126,7 +149,7 @@ public class KichHoatTK extends javax.swing.JFrame {
         // TODO add your handling code here:
         try {
             int maCode = Integer.parseInt(txtMaCode.getText().trim());
-            if (txtMaCode.getText().length()==0) {
+            if (txtMaCode.getText().length() == 0) {
                 MsgBox.alert(this, "Vui lòng nhập code");
                 this.txtMaCode.requestFocus();
                 return;
@@ -134,13 +157,9 @@ public class KichHoatTK extends javax.swing.JFrame {
                 MsgBox.alert(this, "Mã code chỉ có 6 số");
                 this.txtMaCode.requestFocus();
                 return;
-            }
+            } //            e
             else {
-                tkd.insert(tk);
-                MsgBox.alert(this, "Đăng ký tài khoản thành công!");
-                this.dispose();
-                NguoiDungHome ngdung = new NguoiDungHome();
-                ngdung.setVisible(true);
+                xacNhan();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -184,6 +203,87 @@ public class KichHoatTK extends javax.swing.JFrame {
                 new KichHoatTK().setVisible(true);
             }
         });
+    }
+
+    public void xacNhan() {
+        try {
+            if (Integer.valueOf(txtMaCode.getText()) == randomCode) {
+                TaiKhoan tk2 = getForm();
+                
+                tkd.insert(tk2);
+                
+                KhachHang kh2 = getFormKH();
+                khDAO.insert(kh2);
+                
+                ThongTinKhachHang tt2 = getFormTT();
+                tkd.insertTTKH(tt2);
+                
+                MsgBox.alert(this, "Đăng ký tài khoản thành công!");
+                this.dispose();
+                NguoiDungHome ngdung = new NguoiDungHome();
+                ngdung.setVisible(true);
+            } else {
+                MsgBox.alert(this, "Mã code sai");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
+    }
+
+    public TaiKhoan getForm() {
+        TaiKhoan tk = new TaiKhoan();
+        tk.setTenTK(tentk);
+        tk.setMatKhau(mk);
+        tk.setVaiTro(3);
+        tk.setTrangThai("Hoạt động");
+        return tk;
+    }
+//    public void setForm(TaiKhoan tk){
+//        this.txtTK.setText(tk.getTenTK());
+//        this.txtPass.setText(tk.getMatKhau());
+//    }
+
+    public KhachHang getFormKH() {
+        KhachHang kh = new KhachHang();
+        kh.setId_tk(getMaTK());
+        kh.setHoTen(hoten);
+        kh.setHinh("");
+        kh.setTrangThai("Hoạt động");
+        return kh;
+    }
+
+//    public void setFormKH(KhachHang kh){
+//        this.txtFullName.setText(kh.getHoTen());
+//    }
+    public ThongTinKhachHang getFormTT() {
+        ThongTinKhachHang tt = new ThongTinKhachHang();
+        tt.setIdKH(getMaKH());
+        tt.setEmail(email);
+        tt.setSdt(sdt);
+        return tt;
+    }
+
+    int getMaTK() {
+//        li
+        listTK = tkd.selectByVaiTro(3, tentk);
+
+        for (Model.TaiKhoan taiKhoan : listTK) {
+            return taiKhoan.getId();
+        }
+        return 0;
+    }
+    
+    int getMaKH() {
+//        li
+        listKH = khDAO.selectAll();
+
+        for (KhachHang kh: listKH) {
+            if(kh.getId_tk()==getMaTK()){
+                return kh.getId();
+            }
+        }
+        return 0;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

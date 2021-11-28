@@ -22,6 +22,8 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.swing.table.DefaultTableModel;
+import Model.KhachHang;
+import Model.ThongTinKhachHang;
 
 /**
  *
@@ -269,8 +271,10 @@ public class DangKy extends javax.swing.JFrame {
         } else {
             guiMaCode();
             this.dispose();
-            TaiKhoan tk = getForm();
-            KichHoatTK kichhoat = new KichHoatTK(tk);
+//            TaiKhoan tk = getForm();
+//            KhachHang kh = getFormKH();
+//            ThongTinKhachHang tt = getFormTT();
+            KichHoatTK kichhoat = new KichHoatTK(randomCode, txtTK.getText(),txtPass.getText(), txtFullName.getText(), txtEmail.getText(), txtPhoneNumber.getText());            
             kichhoat.setVisible(true);
         }
     }
@@ -310,20 +314,48 @@ public class DangKy extends javax.swing.JFrame {
                 e.printStackTrace();
             }
     }
-
-    public TaiKhoan getForm(){
-        TaiKhoan tk = new TaiKhoan();
-        tk.setTenTK(txtTK.getText());
-        tk.setMatKhau(new String(txtPass.getPassword()));
-        tk.setVaiTro(3);
-        tk.setTrangThai("Hoạt động");
-        return tk;
-    }
-    public void setForm(TaiKhoan tk){
-        this.txtTK.setText(tk.getTenTK());
-        this.txtPass.setText(tk.getMatKhau());
-    }
+//
+//    public TaiKhoan getForm(){
+//        TaiKhoan tk = new TaiKhoan();
+//        tk.setTenTK(txtTK.getText());
+//        tk.setMatKhau(new String(txtPass.getPassword()));
+//        tk.setVaiTro(3);
+//        tk.setTrangThai("Hoạt động");
+//        return tk;
+//    }
+//    public void setForm(TaiKhoan tk){
+//        this.txtTK.setText(tk.getTenTK());
+//        this.txtPass.setText(tk.getMatKhau());
+//    }
     
+//    public KhachHang getFormKH(){
+//        KhachHang kh = new KhachHang();
+//        kh.setHoTen(txtFullName.getText());
+//        kh.setHinh("");
+//        kh.setTrangThai("Hoạt động");
+//        return kh;
+//    }
+    
+//    public void setFormKH(KhachHang kh){
+//        this.txtFullName.setText(kh.getHoTen());
+//    }
+//    
+//    public ThongTinKhachHang getFormTT(int idKH){
+//        ThongTinKhachHang tt = new ThongTinKhachHang();
+//        tt.setIdKH(idKH);
+//        tt.setEmail(txtEmail.getText());
+//        tt.setSdt(txtPhoneNumber.getText());
+//        return tt;
+//    }
+    
+//    public void setFormTT(ThongTinKhachHang tt){
+//        this.txtEmail.setText(tt.getEmail());
+//        this.txtPhoneNumber.setText(tt.getSdt());
+//    }
+    
+    
+    
+
     
     /**
      * @param args the command line arguments

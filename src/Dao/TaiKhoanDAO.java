@@ -6,8 +6,10 @@
 package Dao;
 
 import Helper.JDBCHelper;
+import Model.KhachHang;
 import Model.NhanVien;
 import Model.TaiKhoan;
+import Model.ThongTinKhachHang;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -22,13 +24,15 @@ import java.util.logging.Logger;
 public class TaiKhoanDAO extends BarberDAO<TaiKhoan, Object> {
     String INSERT_SQL = "INSERT INTO TaiKhoan(TenTK,MatKhau,VaiTro,TrangThai)"
             + "values(?,?,?,?)";
-    String UPDATE_SQL = "UPDATE TaiKhoan set TenTK=?,MatKhau=?,VaiTro=?,TrangThai=?"
+    String UPDATE_SQL = "UPDATE TaiKhoan set TenTK=?,MatKhau=?,TrangThai=?"
             + "where Id=? "; 
     String DELETE_SQL = "DELETE FROM TaiKhoan";
     String SELECT_ALL_SQL = "SELECT*FROM TaiKhoan";
     String SELECT_BY_ID_SQL = "SELECT*FROM TaiKhoan where Id=?";
     String SELECT_BY_tenTK = "Select * form TaiKhoan where tenTK = ?";
     String SELECT_BY_MATKHAU = " Select * from TaiKhoan where MATKHAU=?";
+    String INSERT_KH_SQL = "INSERT INTO KhachHang (HoTen)"+ "values(?)";
+    String INSERT_TT_KH_SQL = "INSERT INTO ThongTinKhachHang (Id_KH,SoDienThoai,Email)"+ "values(?,?,?)";
     
     public TaiKhoan select(String tentk) {
        String sql = "Select * from TaiKhoan where TenTK = ?";
@@ -53,11 +57,13 @@ public class TaiKhoanDAO extends BarberDAO<TaiKhoan, Object> {
     @Override
     public void update(TaiKhoan entity) {
         try {
-            JDBCHelper.update("update TaiKhoan set MatKhau = ? where TenTK = ?",entity.getMatKhau(),
-                     entity.getTenTK()
+            JDBCHelper.update(UPDATE_SQL, entity.getTenTK(),entity.getMatKhau(),entity.getTrangThai(), entity.getId()
+//                    "update TaiKhoan set MatKhau = ? where TenTK = ?",entity.getMatKhau(),
+//                     entity.getTenTK()
             );
                     } catch (SQLException ex) {
-            Logger.getLogger(TaiKhoanDAO.class.getName()).log(Level.SEVERE, null, ex);
+//            Logger.getLogger(TaiKhoanDAO.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
     }
 
@@ -115,5 +121,46 @@ public class TaiKhoanDAO extends BarberDAO<TaiKhoan, Object> {
     public TaiKhoan selectById_TK(TaiKhoan nv){
         String sql="select top 1 * from TaiKhoan order by Id desc";
         return this.selectBySql(sql, nv.getId()).get(0);
+    }
+    
+    public void insertKH(KhachHang entity) {
+        try {
+            JDBCHelper.update(INSERT_KH_SQL,entity.getId_tk(),entity.getHoTen());
+                    } catch (SQLException ex) {
+            Logger.getLogger(TaiKhoanDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    public void insertTTKH(ThongTinKhachHang entity) {
+        try {
+            JDBCHelper.update(INSERT_TT_KH_SQL,entity.getIdKH(),entity.getSdt(), entity.getEmail());
+                    } catch (SQLException ex) {
+            Logger.getLogger(TaiKhoanDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public TaiKhoan selectByTenTK(Object id) {
+        List<TaiKhoan>list=this.selectBySql(SELECT_BY_tenTK);
+        if(list.isEmpty()){
+            return null;
+        }
+        return list.get(0);
+    }
+    
+    public List<TaiKhoan> selectByVaiTro(int vaiTro, String tenTK) {
+        String sql = "SELECT*FROM TaiKhoan where VaiTro=? and TenTK=?";
+        return this.selectBySql(sql, vaiTro,tenTK);
+    }
+    
+//    public List<TaiKhoan> selectByIdNv(int idNV){
+//        String sql = "SELECT TAIKHOAN.ID,TENTK,MATKHAU,TAIKHOAN.TRANGTHAI FROM TAIKHOAN JOIN NHANVIEN ON TAIKHOAN.ID = NHANVIEN.ID_TK WHERE NHANVIEN.ID=?";
+//        return  this.selectBySql(sql, idNV);
+//    }
+    String sql = "SELECT TAIKHOAN.ID,TENTK,MATKHAU,TAIKHOAN.VAITRO,TAIKHOAN.TRANGTHAI FROM TAIKHOAN JOIN NHANVIEN ON TAIKHOAN.ID = NHANVIEN.ID_TK WHERE NHANVIEN.ID=?";
+    public TaiKhoan selectByIdNv(String idNV) {
+        List<TaiKhoan>list=this.selectBySql(sql, idNV);
+        if(list.isEmpty()){
+            return null;
+        }
+        return list.get(0);
     }
 }

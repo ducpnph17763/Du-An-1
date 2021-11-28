@@ -7,6 +7,7 @@ package UI.ChucNang;
 
 import Dao.*;
 import Helper.XAuth;
+import Model.NhanVien;
 import Model.TTKhachHang;
 import java.util.*;
 import javax.swing.JOptionPane;
@@ -24,10 +25,11 @@ public class TaiKhoan extends javax.swing.JInternalFrame {
      */
     QLTaiKhoanDAO qldao = new QLTaiKhoanDAO();
     KhachHangDAO dao = new KhachHangDAO();
-    String idTK = String.valueOf(XAuth.user.getTenTK());
-    List<TTKhachHang> list = qldao.selectTT(idTK);
-    int id_tk = XAuth.user.getId();
-    int id_kh = dao.selectById(id_tk + "").getId();
+    NhanVienDAO nvdao = new NhanVienDAO();
+    String tenTK = String.valueOf(XAuth.user.getTenTK());
+    List<TTKhachHang> list = qldao.selectTT(tenTK);
+    List<NhanVien> listNV = nvdao.selectTT(tenTK);
+
     int index;
 
     public TaiKhoan() {
@@ -36,7 +38,6 @@ public class TaiKhoan extends javax.swing.JInternalFrame {
         BasicInternalFrameUI bui = (BasicInternalFrameUI) this.getUI();
         bui.setNorthPane(null);
         fillTable();
-
     }
 
     /**
@@ -380,12 +381,23 @@ public class TaiKhoan extends javax.swing.JInternalFrame {
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
         index = tblBang.getSelectedRow();
-        if (index < 0) {
-            qldao.delete(txtSDT.getText());
-            DefaultTableModel mol = (DefaultTableModel) tblBang.getModel();
-            mol.removeRow(index);
+        DefaultTableModel mol = (DefaultTableModel) tblBang.getModel();
+        if (XAuth.user.getVaiTro() == 3) {
+            if (index >= 0) {
+                qldao.delete(txtSDT.getText());
+                mol.removeRow(index);
+                JOptionPane.showMessageDialog(this, "Xóa thành công");
+            } else {
+                JOptionPane.showMessageDialog(this, "Chọn trước khi xóa");
+            }
         } else {
-            JOptionPane.showMessageDialog(this, "Chọn trước khi xóa");
+            if (index >= 0) {
+                nvdao.delete(txtSDT.getText());
+                mol.removeRow(index);
+                JOptionPane.showMessageDialog(this, "Xóa thành công");
+            } else {
+                JOptionPane.showMessageDialog(this, "Chọn trước khi xóa");
+            }
         }
     }//GEN-LAST:event_btnXoaActionPerformed
 
@@ -396,50 +408,104 @@ public class TaiKhoan extends javax.swing.JInternalFrame {
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         DefaultTableModel mol = (DefaultTableModel) tblBang.getModel();
         mol.setRowCount(0);
-        TTKhachHang tam = getForm();
-        qldao.insert(tam);
-        fillTable();
+        if (XAuth.user.getVaiTro() == 3) {
+            TTKhachHang tamKH = getFormKH();
+            qldao.insert(tamKH);
+            fillTable();
+            JOptionPane.showMessageDialog(this, "Thêm thành công");
+        } else {
+            NhanVien tamNV = getFormNV();
+            nvdao.insert(tamNV);
+            fillTable();
+            JOptionPane.showMessageDialog(this, "Thêm thành công");
+        }
     }//GEN-LAST:event_btnThemActionPerformed
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
         index = tblBang.getSelectedRow();
-        if (index < 0) {
-            DefaultTableModel mol = (DefaultTableModel) tblBang.getModel();
-            mol.setRowCount(0);
-            TTKhachHang tam = getForm();
-            list.set(index, tam);
-            qldao.update(tam);
-            fillTable();
+        DefaultTableModel mol = (DefaultTableModel) tblBang.getModel();
+        mol.setRowCount(0);
+        if (XAuth.user.getVaiTro() == 3) {
+            if (index >= 0) {
+                TTKhachHang tam = getFormKH();
+                list.set(index, tam);
+                qldao.update(tam);
+                fillTable();
+                JOptionPane.showMessageDialog(this, "Sửa thành công");
+            } else {
+                JOptionPane.showMessageDialog(this, "Chọn trước khi sửa");
+            }
         } else {
-            JOptionPane.showMessageDialog(this, "Chọn trước khi sửa");
+            if (index >= 0) {
+                NhanVien tam = getFormNV();
+                listNV.set(index, tam);
+                nvdao.update(tam);
+                fillTable();
+                JOptionPane.showMessageDialog(this, "Sửa thành công");
+            } else {
+                JOptionPane.showMessageDialog(this, "Chọn trước khi sửa");
+            }
         }
+
     }//GEN-LAST:event_btnSuaActionPerformed
 
-    TTKhachHang getForm() {
+    TTKhachHang getFormKH() {
+        int id_tk = XAuth.user.getId();
+        int id_kh = dao.selectById(id_tk).getId();
         String email = txtEmail.getText();
         String sdt = txtSDT.getText();
         String trangThai = "Đang hoạt động";
         return new TTKhachHang(id_kh, sdt, email, trangThai);
     }
 
+    NhanVien getFormNV() {
+        int id = listNV.get(0).getId();
+        String hoTen = listNV.get(0).getHoTen();
+        boolean gioiTinh = listNV.get(0).getGioiTinh();
+        String diaChi = listNV.get(0).getDiaChi();
+        String email = txtEmail.getText();
+        String sdt = txtSDT.getText();
+        String vaitro = listNV.get(0).getVaiTro();
+        String trangThai = "Đang hoạt động";
+        return new NhanVien(id, hoTen, gioiTinh, diaChi, email, sdt, vaitro, trangThai);
+    }
+
     void setForm() {
         index = tblBang.getSelectedRow();
-        txtEmail.setText(tblBang.getValueAt(index, 0) + "");
-        txtSDT.setText(tblBang.getValueAt(index, 1) + "");
-        String id = String.valueOf(XAuth.user.getId());
-        txtTen.setText(dao.selectById(id).getHoTen());
+        if (XAuth.user.getVaiTro() == 3) {
+            txtEmail.setText(tblBang.getValueAt(index, 0) + "");
+            txtSDT.setText(tblBang.getValueAt(index, 1) + "");
+            String id = String.valueOf(XAuth.user.getId());
+            txtTen.setText(dao.selectById(id).getHoTen());
+        } else {
+            txtEmail.setText(tblBang.getValueAt(index, 0) + "");
+            txtSDT.setText(tblBang.getValueAt(index, 1) + "");
+            String id = String.valueOf(XAuth.user.getId());
+            txtTen.setText(nvdao.selectById(id).getHoTen());
+        }
     }
 
     void fillTable() {
         DefaultTableModel mol = (DefaultTableModel) tblBang.getModel();
         mol.setRowCount(0);
-        for (TTKhachHang x : list) {
-            Object[] data = new Object[]{
-                x.getEmail(),
-                x.getSdt()
-            };
-            mol.addRow(data);
+        if (XAuth.user.getVaiTro() == 3) {
+            for (TTKhachHang x : list) {
+                Object[] data = new Object[]{
+                    x.getEmail(),
+                    x.getSdt()
+                };
+                mol.addRow(data);
+            }
+        } else {
+            for (NhanVien x : listNV) {
+                Object[] data = new Object[]{
+                    x.getEmail(),
+                    x.getSdt()
+                };
+                mol.addRow(data);
+            }
         }
+
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDoiMK;

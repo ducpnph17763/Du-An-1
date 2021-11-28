@@ -14,8 +14,17 @@ import java.util.List;
  *
  * @author Admin
  */
-public class KhachHangDAO extends BarberDAO<KhachHang, Object>{
-    
+public class KhachHangDAO extends BarberDAO<KhachHang, Object> {
+
+    public KhachHang selectByIdTK(int id) {
+        String sql = "Select * from KhachHang where Id_TK = ?";
+        List<KhachHang> list = this.selectBySql(sql, id);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
+    }
+
     @Override
     public void insert(KhachHang entity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -33,7 +42,7 @@ public class KhachHangDAO extends BarberDAO<KhachHang, Object>{
 
     @Override
     public KhachHang selectById(Object id) {
-        String sql = "Select * from KhachHang where Id_TK = ?";
+        String sql = "Select * from KhachHang where Id = ?";
         List<KhachHang> list = this.selectBySql(sql, id);
         if (list.isEmpty()) {
             return null;
@@ -63,5 +72,5 @@ public class KhachHangDAO extends BarberDAO<KhachHang, Object>{
             throw new RuntimeException(e);
         }
     }
-    
+
 }

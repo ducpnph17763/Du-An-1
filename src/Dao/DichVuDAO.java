@@ -113,6 +113,15 @@ public class DichVuDAO extends BarberDAO<DichVu, String>{
         return this.selectBySql(sql, hd.getId_DV()).get(0);
     }
     
+    public List<DichVu> SelectHoaDon(String id){
+        String sql="select DichVu.* from DichVu \n" +
+"join HoaDonChiTiet on HoaDonChiTiet.Id_DV = DichVu.Id \n" +
+"join HoaDon on HoaDon.id = HoaDonChiTiet.Id_HD where HoaDon.Id = ?";
+        return this.selectBySql(sql, id);
+    }
+    
+    
+    
     
     
     

@@ -5,6 +5,7 @@
 package Dao;
 
 import Helper.JDBCHelper;
+import Model.HoaDon;
 import Model.KhachHang;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -72,5 +73,7 @@ public class KhachHangDAO extends BarberDAO<KhachHang, Object> {
             throw new RuntimeException(e);
         }
     }
+    
+
 
 }

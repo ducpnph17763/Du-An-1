@@ -129,4 +129,14 @@ public class HoaDonDAO extends BarberDAO<HoaDon, String> {
         }
         return list;
     }
+    
+    public Model.HoaDon TimKiemHoaDonNguoiDung(String tk, String id) {
+        List<Model.HoaDon> ls = this.selectBySql("Select * from HoaDon join KhachHang on KhachHang.Id = HoaDon.Id_KH join TaiKhoan on KhachHang.Id_TK = TaiKhoan.Id where TaiKhoan.TenTK = ? and HoaDon.Id = ?", tk , id);
+        if(ls.size() == 0) {
+            return null;
+        }else {
+            return ls.get(0);
+        }
+    }
+    
 }

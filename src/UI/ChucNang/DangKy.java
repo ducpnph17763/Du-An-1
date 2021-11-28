@@ -347,12 +347,23 @@ public class DangKy extends javax.swing.JFrame {
 //        tt.setSdt(txtPhoneNumber.getText());
 //        return tt;
 //    }
+<<<<<<< Updated upstream
+=======
+    
+//    public void setFormTT(ThongTinKhachHang tt){
+//        this.txtEmail.setText(tt.getEmail());
+//        this.txtPhoneNumber.setText(tt.getSdt());
+//    }
+>>>>>>> Stashed changes
     
 //    public void setFormTT(ThongTinKhachHang tt){
 //        this.txtEmail.setText(tt.getEmail());
 //        this.txtPhoneNumber.setText(tt.getSdt());
 //    }
     
+    
+    
+
     
     
 
@@ -382,6 +393,8 @@ public class DangKy extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(DangKy.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 

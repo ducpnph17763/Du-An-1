@@ -4,11 +4,13 @@
  */
 package Helper;
 
+import Model.HoaDon;
 import Model.TaiKhoan;
 
 public class XAuth {
 
     public static TaiKhoan user = null;
+   
 
     public static void clear() {
         XAuth.user = null;

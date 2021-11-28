@@ -139,7 +139,7 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
         tblCTLichDat = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblLichDat = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        btnHuyLich = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         btnHuyDV = new javax.swing.JButton();
@@ -189,11 +189,11 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
         });
         jScrollPane2.setViewportView(tblLichDat);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/cancel.png"))); // NOI18N
-        jButton1.setText("Hủy lịch");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnHuyLich.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/cancel.png"))); // NOI18N
+        btnHuyLich.setText("Hủy lịch");
+        btnHuyLich.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnHuyLichActionPerformed(evt);
             }
         });
 
@@ -232,7 +232,7 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
                             .addComponent(jLabel2))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnHuyLich, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(373, 373, 373)
                         .addComponent(btnHuyDV, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 414, Short.MAX_VALUE)
@@ -256,7 +256,7 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
                         .addComponent(btnHuyDV, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(btnThanhToan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnHuyLich, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -266,32 +266,44 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:  
-       
+    private void btnHuyLichActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHuyLichActionPerformed
+        // TODO add your handling code here:              
         try {
-            int row = tblLichDat.getSelectedRow();
-            String mahd = tblLichDat.getValueAt(row, 0).toString();
-           
-                System.out.println("mã hóa đơn hủy dịch vụ:" + mahd);
+
+            index = tblLichDat.getSelectedRow();
+            String mahd = tblLichDat.getValueAt(this.index, 0).toString();
+            String trangThai = tblLichDat.getValueAt(this.index, 7).toString();
+            String trangThaiTT = tblLichDat.getValueAt(this.index, 6).toString();
+            if (this.index >= 0) {
                 boolean kt1 = MsgBox.confirm(this, "Bạn có chắc chắn huỷ lịch không?");
                 if (kt1 == true) {
-                    String cautruyvan1 = "delete from HoaDonChiTiet where Id_HD=" + mahd;
-                    JDBCHelper.update(cautruyvan1);
-                    String sql = "update HoaDon set ThanhToan=0,TrangThai=N'Đã hủy lịch' where Id=" + mahd;
-                    JDBCHelper.update(sql);
-                    System.out.println("mã hoá đơn bị xoá:" + mahd);
-                    layThongTinLichDat();
-                }
-                LayTTBangCTLichDat();
-                MsgBox.alert(this, "Hủy lịch thành công!");
-                
-            
+                    if (trangThai.equalsIgnoreCase("Đã hủy lịch")) {
+                        MsgBox.alert(this, "Lịch đặt này đã bị huỷ trước đó!");
+                        return;
+                    } else if (trangThaiTT.equals("Đã thanh toán") && trangThai.equals("Đã xử lý")) {
+                        MsgBox.alert(this, "Lịch đặt này đã thanh toán!");
+                        return;
+                    } else if (trangThai.equals("Đang xử lý") && trangThaiTT.equals("Chưa thanh toán")) {
+                        String cautruyvan1 = "delete from HoaDonChiTiet where Id_HD=" + mahd;
+                        JDBCHelper.update(cautruyvan1);
+                        String sql = "update HoaDon set ThanhToan=0,TrangThai=N'Đã hủy lịch' where Id=" + mahd;
+                        JDBCHelper.update(sql);
+                        layThongTinLichDat();
+                        DefaultTableModel mol = (DefaultTableModel) tblCTLichDat.getModel();
+                        mol.setRowCount(0);
+                        MsgBox.alert(this, "Hủy lịch thành công!");
 
+                    }
+
+                }
+
+            }
         } catch (Exception e) {
-            System.out.println(e);
+            MsgBox.alert(this, "Bạn chưa chọn lịch đặt để huỷ!");
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+      
+        
+    }//GEN-LAST:event_btnHuyLichActionPerformed
 
     private void btnHuyDVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHuyDVActionPerformed
         // TODO add your handling code here:         
@@ -394,8 +406,8 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnHuyDV;
+    private javax.swing.JButton btnHuyLich;
     private javax.swing.JButton btnThanhToan;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;

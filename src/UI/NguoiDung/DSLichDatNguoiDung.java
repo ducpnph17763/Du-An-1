@@ -5,7 +5,17 @@
  */
 package UI.NguoiDung;
 
+import Dao.DichVuDAO;
+import Dao.HoaDonDAO;
+import Helper.JDBCHelper;
+import Helper.MsgBox;
+import Helper.XAuth;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -16,13 +26,148 @@ public class DSLichDatNguoiDung extends javax.swing.JInternalFrame {
     /**
      * Creates new form DSLichDat
      */
+    int index=0;
+    HoaDonDAO hddao=new HoaDonDAO();
+    DichVuDAO dvdao=new DichVuDAO();
+    List<Model.DichVu>listDV=new ArrayList<>();
+    String tenTK=XAuth.user.getTenTK();
     public DSLichDatNguoiDung() {
         initComponents();
         this.setBorder(null);
         BasicInternalFrameUI bui = (BasicInternalFrameUI) this.getUI();
         bui.setNorthPane(null);
+        init();
     }
 
+    void init(){
+        layThongTinLichDat();
+    }
+    
+    void layThongTinLichDat() {
+        System.out.println("tên TK:"+tenTK);
+        String sql = "select HoaDon.Id,HoaDon.NgayHen,KhachHang.HoTen,HoaDon.Id_TC,HoaDon.DatCoc,\n"
+                + "   HoaDon.ThanhToan,HoaDon.TrangThaiTT,HoaDon.TrangThai\n"
+                + "   from HoaDon join KhachHang on HoaDon.Id_KH=KhachHang.Id\n"
+                + "   join NhanVien on HoaDon.Id_TC=NhanVien.Id		\n"
+                + "   join TaiKhoan on TaiKhoan.Id=KhachHang.Id_TK\n"
+                + "   where HoaDon.Id_KH=KhachHang.Id and NhanVien.Id=HoaDon.Id_TC \n"
+                + "   and HoaDon.TrangThaiTT LIKE N'Chưa thanh toán' \n"
+                + "   and (HoaDon.TrangThai LIKE N'Đang xử lý' or HoaDon.TrangThai LIKE N'Đã huỷ lịch') and TaiKhoan.TenTK=N'"+tenTK+"'";
+        ResultSet rs=JDBCHelper.query(sql);
+        Object[]row=new Object[]{
+          "Mã lịch đặt","Ngày hẹn","Khách hàng","Id Thợ cắt","Đặt cọc","Tổng tiền","Trạng thái TT","Trạng thái hoá đơn"  
+        };
+        DefaultTableModel mol=new DefaultTableModel(row,0);
+        tblLichDat.setModel(mol);
+        try {
+            while (rs.next()) {                
+                Object[] item=new Object[8];
+                item[0]=rs.getInt("Id");
+                item[1]=rs.getString("NgayHen");
+                item[2]=rs.getString("HoTen");
+                item[3]=rs.getString("Id_TC");
+                item[4]=rs.getInt("DatCoc");
+                item[5]=rs.getString("ThanhToan");
+                item[6]=rs.getString("TrangThaiTT");
+                item[7]=rs.getString("TrangThai");
+                mol.addRow(item);
+                
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        
+    }
+     void TinhTongTien(){
+        int index=tblCTLichDat.getSelectedRow();
+        String mahd=tblCTLichDat.getValueAt(index, 2).toString();
+        System.out.println("mã hoá đơn:"+mahd);
+        String sql = "select sum(HoaDonChiTiet.GiaTien) as TongTienHienTai from HoaDon\n"
+                + "join HoaDonChiTiet on HoaDon.Id=HoaDonChiTiet.Id_HD\n"
+                + "where HoaDon.Id="+mahd;
+        ResultSet rs=JDBCHelper.query(sql);
+        System.out.println("ResultSet:"+rs);
+        try {
+            if(rs.next()){
+                String tongTien;
+                tongTien=rs.getString("TongTienHienTai");
+                System.out.println("Tổng tiền:"+tongTien);
+                if(tongTien==null){
+                    String update="update HoaDon set ThanhToan=0,TrangThai=N'Đã huỷ lịch' where Id="+mahd;
+                    JDBCHelper.update(update);
+                    layThongTinLichDat();
+                    DefaultTableModel mol =(DefaultTableModel)tblCTLichDat.getModel();
+                    mol.setRowCount(0);
+                    MsgBox.alert(this, "Lịch này đã bị huỷ!");
+                    LayTTBangCTLichDat();
+                }
+                String update="update HoaDon set ThanhToan="+tongTien+" where Id="+mahd;
+                JDBCHelper.update(update);
+                layThongTinLichDat();
+            }
+        } catch (SQLException e) {
+            
+        }
+
+    }
+     
+     
+    void LayTTBangCTLichDat(){
+        String mahd = tblCTLichDat.getValueAt(this.index, 2).toString();
+        String sql = "select HoaDonChiTiet.Id,HoaDonChiTiet.Id_HD,HoaDonChiTiet.Id_DV,DichVu.TenDV,DichVu.GiaTien from HoaDonChiTiet join DichVu\n"
+                + "on HoaDonChiTiet.Id_DV=DichVu.Id where HoaDonChiTiet.Id_HD="+mahd;
+        ResultSet rs=JDBCHelper.query(sql);
+        Object[]row=new Object[]{
+          "STT","mã hoá đơn chi tiết","mã hoá đơn","mã dịch vụ","Tên dịch vụ","Giá tiền"
+        };
+        DefaultTableModel mol=new DefaultTableModel(row,0);
+        tblCTLichDat.setModel(mol);
+        int c=0;
+        try {
+            while (rs.next()) {                
+                Object[]item=new Object[6];
+                item[0]=c;
+                item[1]=rs.getString("Id");
+                item[2]=rs.getString("Id_HD");
+                item[3]=rs.getString("Id_DV");
+                item[4]=rs.getString("TenDV");
+                item[5]=rs.getString("GiaTien");
+                mol.addRow(item);
+                
+            }
+        } catch (Exception e) {
+        }
+    }
+
+    void LayTTBangCTLichDat1(){
+        int row1=tblLichDat.getSelectedRow();
+        String mahd = tblLichDat.getValueAt(row1, 0).toString();
+        String sql = "select HoaDonChiTiet.Id,HoaDonChiTiet.Id_HD,HoaDonChiTiet.Id_DV,DichVu.TenDV,DichVu.GiaTien from HoaDonChiTiet join DichVu\n"
+                + "on HoaDonChiTiet.Id_DV=DichVu.Id where HoaDonChiTiet.Id_HD="+mahd;
+        ResultSet rs=JDBCHelper.query(sql);
+        Object[]row=new Object[]{
+          "STT","mã hoá đơn chi tiết","Mã hoá đơn","mã dịch vụ","Tên dịch vụ","Giá tiền"
+        };
+        DefaultTableModel mol=new DefaultTableModel(row,0);
+        tblCTLichDat.setModel(mol);
+        int c=0;
+        try {
+            while (rs.next()) {
+                c++;
+                Object[]item=new Object[6];
+                item[0]=c;
+                item[1]=rs.getString("Id");
+                item[2]=rs.getString("Id_HD");
+                item[3]=rs.getString("Id_DV");
+                item[4]=rs.getString("TenDV");
+                item[5]=rs.getInt("GiaTien");
+                mol.addRow(item);
+                
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -37,11 +182,11 @@ public class DSLichDatNguoiDung extends javax.swing.JInternalFrame {
         tblCTLichDat = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblLichDat = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        btnHuyLich = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         btnHuyDV = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        btnDatCoc = new javax.swing.JButton();
 
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -87,11 +232,11 @@ public class DSLichDatNguoiDung extends javax.swing.JInternalFrame {
         });
         jScrollPane2.setViewportView(tblLichDat);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/cancel.png"))); // NOI18N
-        jButton1.setText("Hủy lịch");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnHuyLich.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/cancel.png"))); // NOI18N
+        btnHuyLich.setText("Hủy lịch");
+        btnHuyLich.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnHuyLichActionPerformed(evt);
             }
         });
 
@@ -107,11 +252,11 @@ public class DSLichDatNguoiDung extends javax.swing.JInternalFrame {
             }
         });
 
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/receipt.png"))); // NOI18N
-        jButton4.setText("Đặt lịch (Đặt cọc)");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        btnDatCoc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/receipt.png"))); // NOI18N
+        btnDatCoc.setText("Đặt lịch (Đặt cọc)");
+        btnDatCoc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                btnDatCocActionPerformed(evt);
             }
         });
 
@@ -130,11 +275,11 @@ public class DSLichDatNguoiDung extends javax.swing.JInternalFrame {
                             .addComponent(jLabel2))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnHuyLich, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(373, 373, 373)
                         .addComponent(btnHuyDV, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 414, Short.MAX_VALUE)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnDatCoc, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -153,8 +298,8 @@ public class DSLichDatNguoiDung extends javax.swing.JInternalFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btnHuyDV, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnDatCoc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnHuyLich, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -163,17 +308,82 @@ public class DSLichDatNguoiDung extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnHuyLichActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHuyLichActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+        try {
+            index = tblLichDat.getSelectedRow();
+            String mahd = tblLichDat.getValueAt(this.index, 0).toString();
+            String trangThai = tblLichDat.getValueAt(this.index, 7).toString();
+            String trangThaiTT = tblLichDat.getValueAt(this.index, 6).toString();
+            if (this.index >= 0) {
+                boolean kt1 = MsgBox.confirm(this, "Bạn có chắc chắn huỷ lịch không?");
+                if (kt1 == true) {
+                    if (trangThai.equalsIgnoreCase("Đã huỷ lịch")) {
+                        MsgBox.alert(this, "Lịch đặt này đã bị huỷ trước đó!");
+                        return;
+                    } else if (trangThaiTT.equals("Đã thanh toán") && trangThai.equals("Đã xử lý")) {
+                        MsgBox.alert(this, "Lịch đặt này đã thanh toán!");
+                        return;
+                    } else if (trangThai.equals("Đang xử lý") && trangThaiTT.equals("Chưa thanh toán")) {
+                        String cautruyvan1 = "delete from HoaDonChiTiet where Id_HD=" + mahd;
+                        JDBCHelper.update(cautruyvan1);
+                        String sql = "update HoaDon set ThanhToan=0,TrangThai=N'Đã huỷ lịch' where Id=" + mahd;
+                        JDBCHelper.update(sql);
+                        layThongTinLichDat();
+                        System.out.println("index:" + this.index);
+                        DefaultTableModel mol = (DefaultTableModel) tblCTLichDat.getModel();
+                        mol.setRowCount(0);
+                        MsgBox.alert(this, "Hủy lịch thành công!");
+                       
+                    }
+                }
+                layThongTinLichDat();
+            }
+        } catch (Exception e) {
+            MsgBox.alert(this, "Bạn chưa chọn lịch đặt để huỷ!");
+        }
+    }//GEN-LAST:event_btnHuyLichActionPerformed
 
     private void btnHuyDVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHuyDVActionPerformed
         // TODO add your handling code here:
+        int index = -1;
+        int row = tblLichDat.getSelectedRow();
+        if (row == -1 && index == -1) {
+            MsgBox.alert(this, "Bạn chưa chọn dịch vụ!");
+            System.out.println("index:" + row);
+        }if(index==-1){
+              MsgBox.alert(this, "Chi tiết lịch đặt trống!");
+        }
+        try {
+            index = tblCTLichDat.getSelectedRow();
+            String mahdct = tblCTLichDat.getValueAt(index, 1).toString();
+            String mahd = tblCTLichDat.getValueAt(index, 2).toString();
+            if (index >= 0) {
+                try {
+                    boolean kt = MsgBox.confirm(this, "Bạn có muốn huỷ dịch vụ không?\nHuỷ dịch vụ bạn sẽ mất cọc!");
+                    if (kt == true) {
+                        String sql = "delete from HoaDonChiTiet where Id=" + mahdct;
+                        JDBCHelper.update(sql);
+                        TinhTongTien();
+//                        LayTTBangCTLichDat();
+                        DefaultTableModel mol =(DefaultTableModel)tblCTLichDat.getModel();
+                        mol.setRowCount(0);
+                        MsgBox.alert(this, "Huỷ dịch vụ thành công!");
+//                        tblLichDat.setRowSelectionInterval(this.index, this.index);
+                    }
+                } catch (SQLException e) {
+                    System.out.println(e);
+                }
+            }
+        } catch (Exception e) {
+
+            System.out.println("index:" + index);
+        }
     }//GEN-LAST:event_btnHuyDVActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void btnDatCocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDatCocActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_btnDatCocActionPerformed
 
     private void tblLichDatMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLichDatMousePressed
         // TODO add your handling code here:   
@@ -182,6 +392,7 @@ public class DSLichDatNguoiDung extends javax.swing.JInternalFrame {
 
     private void tblLichDatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLichDatMouseClicked
         // TODO add your handling code here:
+        LayTTBangCTLichDat1();
     }//GEN-LAST:event_tblLichDatMouseClicked
 
 
@@ -191,9 +402,9 @@ public class DSLichDatNguoiDung extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDatCoc;
     private javax.swing.JButton btnHuyDV;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton btnHuyLich;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;

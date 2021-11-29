@@ -43,7 +43,7 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
                 + "from HoaDon join KhachHang on HoaDon.Id_KH=KhachHang.Id\n"
                 + "join NhanVien on HoaDon.Id_TC=NhanVien.Id\n"
                 + "where HoaDon.Id=KhachHang.Id and NhanVien.Id=HoaDon.Id_TC and HoaDon.TrangThai=N'Đang xử lý' "
-                + "and HoaDon.TrangThaiTT=N'Chưa thanh toán'";
+                + "and HoaDon.TrangThaiTT=N'Chưa thanh toán'or HoaDon.TrangThai=N'Đã huỷ lịch'";
         ResultSet rs=JDBCHelper.query(sql);
         Object[]row=new Object[]{
           "Mã lịch đặt","Ngày hẹn","Khách hàng","Id Thợ cắt","Đặt cọc","Tổng tiền","Trạng thái TT","Trạng thái hoá đơn"  
@@ -308,42 +308,39 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
 
     private void btnHuyDVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHuyDVActionPerformed
         // TODO add your handling code here:         
-        int index1=tblCTLichDat.getSelectedRow();        
-        String mahdct=tblCTLichDat.getValueAt(index1, 1).toString();
-        String mahd=tblCTLichDat.getValueAt(index1, 2).toString();
-        if (index1 == 0) {
+        int index = -1;
+        int row = tblLichDat.getSelectedRow();
+        if (row == -1 && index == -1) {
+            MsgBox.alert(this, "Bạn chưa chọn lịch đặt!");           
+        }
+        try {
+            index = tblCTLichDat.getSelectedRow();
+            String mahdct = tblCTLichDat.getValueAt(index, 1).toString();
+            String mahd = tblCTLichDat.getValueAt(index, 2).toString();
+            if (index >= 0) {
                 try {
-                boolean kt = MsgBox.confirm(this, "Huỷ dịch vụ này bạn sẽ bị huỷ lịch!");
-                if (kt == true) {
-                    String sql = "delete from HoaDonChiTiet where Id=" + mahdct;
-                    JDBCHelper.update(sql);
-                    String sql1="update HoaDon set ThanhToan=0,TrangThai=N'Đã huỷ lịch' where Id="+mahd;
-                    JDBCHelper.update(sql1);
-                    layThongTinLichDat();
-                    LayTTBangCTLichDat();
-                    MsgBox.alert(this, "Huỷ lịch thành công!");
+                    boolean kt = MsgBox.confirm(this, "Bạn có muốn huỷ dịch vụ không?\nHuỷ dịch vụ bạn sẽ mất cọc!");
+                    if (kt == true) {
+                        String sql = "delete from HoaDonChiTiet where Id=" + mahdct;
+                        JDBCHelper.update(sql);
+                        TinhTongTien();
+                        DefaultTableModel mol =(DefaultTableModel)tblCTLichDat.getModel();
+                        mol.setRowCount(0);
+                        MsgBox.alert(this, "Huỷ dịch vụ thành công!");
+                    }
+                } catch (SQLException e) {
+                    System.out.println(e);
                 }
-            } catch (SQLException e) {
-                System.out.println(e);
             }
-        } 
-        if(index1>0){
-                try {
-                boolean kt = MsgBox.confirm(this, "Bạn có muốn huỷ dịch vụ không?\nHuỷ dịch vụ bạn sẽ mất cọc");
-                if (kt == true) {
-                    String sql = "delete from HoaDonChiTiet where Id=" + mahdct;
-                    JDBCHelper.update(sql);
-                    TinhTongTien();
-                    LayTTBangCTLichDat();                    
-                    MsgBox.alert(this, "Huỷ dịch vụ thành công!");
-                }
-            } catch (SQLException e) {
-                System.out.println(e);
-            }
-            }      
+        } catch (Exception e) {
+
+            
+        }
+
+
     }//GEN-LAST:event_btnHuyDVActionPerformed
 
-    void TinhTongTien(){
+     void TinhTongTien(){
         int index=tblCTLichDat.getSelectedRow();
         String mahd=tblCTLichDat.getValueAt(index, 2).toString();
         System.out.println("mã hoá đơn:"+mahd);
@@ -354,16 +351,24 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
         System.out.println("ResultSet:"+rs);
         try {
             if(rs.next()){
-                String tongTien=rs.getString("TongTienHienTai");
-                System.out.println("Tổng tiền:"+tongTien);
+                String tongTien;
+                tongTien=rs.getString("TongTienHienTai");
+                if(tongTien==null){
+                    String update="update HoaDon set ThanhToan=0,TrangThai=N'Đã huỷ lịch' where Id="+mahd;
+                    JDBCHelper.update(update);
+                    layThongTinLichDat();
+                    DefaultTableModel mol =(DefaultTableModel)tblCTLichDat.getModel();
+                    mol.setRowCount(0);
+                    MsgBox.alert(this, "Lịch này đã bị huỷ!");
+                }
                 String update="update HoaDon set ThanhToan="+tongTien+" where Id="+mahd;
                 JDBCHelper.update(update);
                 layThongTinLichDat();
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            
         }
-        
+
     }
     
     private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToanActionPerformed

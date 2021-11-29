@@ -286,7 +286,7 @@ public class NguoiDungHome extends javax.swing.JFrame {
 
     private void lblHoaDonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblHoaDonMouseClicked
         PNchinh.removeAll();
-        HoaDon main = new HoaDon();
+        HoaDonNguoiDung main = new HoaDonNguoiDung();
         PNchinh.add(main);
         main.show();
     }//GEN-LAST:event_lblHoaDonMouseClicked

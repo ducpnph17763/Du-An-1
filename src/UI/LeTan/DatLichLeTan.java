@@ -7,11 +7,13 @@ package UI.LeTan;
 
 import Dao.DichVuDAO;
 import Dao.HoaDonDAO;
+import Dao.KhachHangDAO;
 import Dao.NhanVienDAO;
 import Helper.MsgBox;
 import Model.DichVu;
 import Model.HoaDon;
 import Model.NhanVien;
+import UI.ChucNang.KhachHang;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,6 +37,7 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
     DichVuDAO dvdao = new DichVuDAO();
     NhanVienDAO nvdao = new NhanVienDAO();
     HoaDonDAO hddao = new HoaDonDAO();
+    KhachHangDAO khdao = new KhachHangDAO();
     List<Model.DichVu> ls = new ArrayList<>();
 
     public DatLichLeTan() {
@@ -177,6 +180,12 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
 
         jLabel5.setText("Số điện thoại:");
 
+        txtSDT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSDTActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -297,6 +306,10 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_btnTaoLichDatActionPerformed
 
+    private void txtSDTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSDTActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSDTActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDatLich;
     private javax.swing.JButton btnHuyDicVu;
@@ -413,8 +426,16 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
         String gioHen = (String) cboThoiGian.getSelectedItem();
         DefaultComboBoxModel mol = (DefaultComboBoxModel) cboThoCat.getModel();
         NhanVien nv = (NhanVien) mol.getSelectedItem();
+        Model.KhachHang kh = this.LayKhachHang();
+        Integer idkh;
+        if(kh==null) {
+           idkh = null;
+        }else {
+           idkh = kh.getId();
+        }
+        
         hd.setId(0);
-        hd.setId_KH(null);
+        hd.setId_KH(idkh);
         hd.setId_NV(null);
         hd.setId_TC(nv.getId());
         hd.setNgayHen(sdf.parse(part));
@@ -508,6 +529,11 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
         }else{
             MsgBox.alert(this, "Bạn chưa chọn dịch vụ để huỷ!");
         }
+    }
+    private Model.KhachHang LayKhachHang() {
+        String sdt = txtSDT.getText();
+        Model.KhachHang kh = khdao.SelectBySDT(sdt);
+        return kh;
     }
 
 }

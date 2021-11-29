@@ -11,7 +11,7 @@ package Model;
  */
 public class KhachHang {
 
-    private int id;
+    private Integer id;
     private int id_TK;
     private String hoTen;
     private String hinh;
@@ -20,7 +20,7 @@ public class KhachHang {
     public KhachHang() {
     }
 
-    public KhachHang(int id, int id_TK, String hoTen, String hinh, String trangThai) {
+    public KhachHang(Integer id, int id_TK, String hoTen, String hinh, String trangThai) {
         this.id = id;
         this.id_TK = id_TK;
         this.hoTen = hoTen;
@@ -28,11 +28,11 @@ public class KhachHang {
         this.trangThai = trangThai;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

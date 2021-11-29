@@ -72,5 +72,13 @@ public class KhachHangDAO extends BarberDAO<KhachHang, Object> {
             throw new RuntimeException(e);
         }
     }
+ 
+    public KhachHang SelectBySDT(String sdt) {
+        List<KhachHang> ls =  selectBySql("Select KhachHang.*  from KhachHang join ThongTinKhachHang on KhachHang.id = ThongTinKhachHang.Id_KH where SoDienThoai = ?", sdt);
+        if (ls.isEmpty()) {
+            return null;
+        }
+        return ls.get(0);
+    }
 
 }

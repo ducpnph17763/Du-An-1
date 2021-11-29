@@ -100,6 +100,7 @@ public class TaiKhoanDAO extends BarberDAO<TaiKhoan, Object> {
                 entity.setMatKhau(rs.getString("MatKhau"));
                 entity.setVaiTro(rs.getInt("VaiTro"));
                 entity.setTrangThai(rs.getString("TrangThai"));
+                entity.setHinh(rs.getString("Hinh"));
                 list.add(entity);
             }
             rs.getStatement().getConnection().close();
@@ -119,4 +120,6 @@ public class TaiKhoanDAO extends BarberDAO<TaiKhoan, Object> {
         String sql = "select top 1 * from TaiKhoan order by Id desc";
         return this.selectBySql(sql, nv.getId()).get(0);
     }
+    
+    
 }

@@ -144,5 +144,14 @@ public class NhanVienDAO extends BarberDAO<NhanVien, Object> {
     public NhanVien selectByNgayHen(UI.ChucNang.HoaDon hd) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    public NhanVien SelectByTenTK(String tentk) {
+        List<NhanVien> list = this.selectBySql("select NhanVien.* from NhanVien join TaiKhoan on NhanVien.Id_TK = TaiKhoan.Id where TenTK = ?", tentk);
+        if (list.isEmpty()) {
+            return null;
+        } else {
+            return list.get(0);
+        }
+    }
 
 }

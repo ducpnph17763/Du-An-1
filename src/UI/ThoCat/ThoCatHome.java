@@ -4,10 +4,19 @@
  */
 package UI.ThoCat;
 
+import Avarta.CriBoder;
 import UI.ChucNang.*;
 import Avarta.TestRoundLabel;
+import Dao.NhanVienDAO;
+import Helper.XAuth;
 import UI.KhachHang1.KhachHangHome;
 import java.awt.Color;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 /**
@@ -15,13 +24,21 @@ import javax.swing.JFrame;
  * @author DELL
  */
 public class ThoCatHome extends javax.swing.JFrame {
-
+    CriBoder cri = new CriBoder();
+    NhanVienDAO nvdao = new NhanVienDAO();
     /**
      * Creates new form ThoCat
      */
     public ThoCatHome() {
         this.setLocationRelativeTo(null);
         initComponents();
+        this.init();
+    }
+    public void init() {
+        this.lblHinh.setBorder(cri);
+        this.lblHinh.setForeground(new Color(17, 16, 99));
+        this.lblHinh.setOpaque(true);
+        this.lblHinh.setBackground(new Color(17, 16, 99));
     }
 
     /**
@@ -38,9 +55,9 @@ public class ThoCatHome extends javax.swing.JFrame {
         lblDangXuat = new javax.swing.JLabel();
         lblTaiKhoan = new javax.swing.JLabel();
         lblDichVu = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        lblName = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel3 = new TestRoundLabel(150);
+        lblHinh = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         lblDSLD = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -75,7 +92,7 @@ public class ThoCatHome extends javax.swing.JFrame {
                 lblDangXuatMouseExited(evt);
             }
         });
-        jPanel1.add(lblDangXuat, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 380, 200, 40));
+        jPanel1.add(lblDangXuat, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 430, 200, 40));
 
         lblTaiKhoan.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblTaiKhoan.setForeground(new java.awt.Color(255, 255, 255));
@@ -94,7 +111,7 @@ public class ThoCatHome extends javax.swing.JFrame {
                 lblTaiKhoanMouseExited(evt);
             }
         });
-        jPanel1.add(lblTaiKhoan, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 330, 200, 50));
+        jPanel1.add(lblTaiKhoan, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 380, 200, 50));
 
         lblDichVu.setBackground(new java.awt.Color(255, 0, 51));
         lblDichVu.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -114,23 +131,23 @@ public class ThoCatHome extends javax.swing.JFrame {
                 lblDichVuMouseExited(evt);
             }
         });
-        jPanel1.add(lblDichVu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 230, 200, 50));
+        jPanel1.add(lblDichVu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 280, 200, 50));
 
-        jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("Họ tên");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 190, 110, -1));
+        lblName.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblName.setForeground(new java.awt.Color(255, 255, 255));
+        lblName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblName.setText("Họ tên");
+        jPanel1.add(lblName, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 240, 110, -1));
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 10)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Thợ cắt:");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 170, -1, -1));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 220, -1, -1));
 
-        jLabel3.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, 130, 120));
+        lblHinh.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.add(lblHinh, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, 130, 120));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/logongang.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/LoGo.png"))); // NOI18N
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(3, 3, 190, -1));
 
         lblDSLD.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -150,7 +167,7 @@ public class ThoCatHome extends javax.swing.JFrame {
                 lblDSLDMouseExited(evt);
             }
         });
-        jPanel1.add(lblDSLD, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 280, 200, 50));
+        jPanel1.add(lblDSLD, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 330, 200, 50));
 
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -201,6 +218,18 @@ public class ThoCatHome extends javax.swing.JFrame {
         DichVuInter main = new DichVuInter();
         PNchinh.add(main);
         main.show();
+        Model.TaiKhoan tk = XAuth.user;
+        if (tk == null) {
+            this.setHinh("178831-200.png");
+        } else {
+            Model.NhanVien nv = nvdao.SelectByTenTK(tk.getTenTK());
+            this.lblName.setText(nv.getHoTen());
+            if (tk.getHinh() == null) {
+                this.setHinh("178831-200.png");
+            }
+            this.setHinh(tk.getHinh());
+
+        }
     }//GEN-LAST:event_formWindowOpened
 
     private void lblDichVuMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblDichVuMouseExited
@@ -321,19 +350,31 @@ public class ThoCatHome extends javax.swing.JFrame {
             }
         });
     }
+    
+    public void setHinh(String fileName) {
+        BufferedImage bufferedImage = null;
+        try {
+            bufferedImage = ImageIO.read(new File("src\\Image\\" + fileName));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Image scaledImage = bufferedImage.getScaledInstance(lblHinh.getWidth(), lblHinh.getHeight(), Image.SCALE_SMOOTH);
+        ImageIcon image = new ImageIcon(scaledImage);
+        lblHinh.setIcon(image);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PNchinh;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblDSLD;
     private javax.swing.JLabel lblDangXuat;
     private javax.swing.JLabel lblDichVu;
+    private javax.swing.JLabel lblHinh;
+    private javax.swing.JLabel lblName;
     private javax.swing.JLabel lblTaiKhoan;
     // End of variables declaration//GEN-END:variables
 }

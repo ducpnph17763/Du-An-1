@@ -4,7 +4,10 @@
  */
 package UI.QuanLy;
 
-import Avarta.TestRoundLabel;
+import Avarta.CriBoder;
+import Dao.NhanVienDAO;
+import Helper.XAuth;
+import Model.NhanVien;
 import UI.LeTan.DSLichDatLeTan;
 import UI.ChucNang.HoaDon;
 import UI.ChucNang.KhachHang;
@@ -15,6 +18,13 @@ import UI.ChucNang.ThongKe;
 import java.awt.Color;
 import UI.KhachHang1.*;
 import UI.LeTan.DatLichLeTan;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
 /**
@@ -23,13 +33,20 @@ import javax.swing.JFrame;
  */
 public class QuanLyHome extends javax.swing.JFrame {
 
-    /**
-     * Creates new form QLDichVu
-     */
+    CriBoder cri = new CriBoder();
+    NhanVienDAO nvdao = new NhanVienDAO();
+
     public QuanLyHome() {
-
         initComponents();
+        this.init();
 
+    }
+
+    public void init() {
+        this.lblHinh.setBorder(cri);
+        this.lblHinh.setForeground(new Color(17, 16, 99));
+        this.lblHinh.setOpaque(true);
+        this.lblHinh.setBackground(new Color(17, 16, 99));
     }
 
     /**
@@ -43,6 +60,7 @@ public class QuanLyHome extends javax.swing.JFrame {
 
         jDesktopPane1 = new javax.swing.JDesktopPane();
         jPanel1 = new javax.swing.JPanel();
+        lblHinh = new javax.swing.JLabel();
         lblDangXuat = new javax.swing.JLabel();
         lblTaiKhoan = new javax.swing.JLabel();
         lblNhanVien = new javax.swing.JLabel();
@@ -52,9 +70,8 @@ public class QuanLyHome extends javax.swing.JFrame {
         lblDSLD = new javax.swing.JLabel();
         lblDatLich = new javax.swing.JLabel();
         lblDichVu = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        lblName = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel3 = new TestRoundLabel(150);
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         PNchinh = new javax.swing.JPanel();
@@ -72,6 +89,15 @@ public class QuanLyHome extends javax.swing.JFrame {
 
         jPanel1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(51, 102, 255), 3, true));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        lblHinh.setBackground(new java.awt.Color(17, 16, 99));
+        lblHinh.setAlignmentY(0.0F);
+        lblHinh.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblHinhMouseClicked(evt);
+            }
+        });
+        jPanel1.add(lblHinh, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 60, 120, 120));
 
         lblDangXuat.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblDangXuat.setForeground(new java.awt.Color(255, 255, 255));
@@ -244,19 +270,16 @@ public class QuanLyHome extends javax.swing.JFrame {
         });
         jPanel1.add(lblDichVu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 230, 200, 50));
 
-        jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("Họ tên");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 200, 110, -1));
+        lblName.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblName.setForeground(new java.awt.Color(255, 255, 255));
+        lblName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblName.setText("Họ tên");
+        jPanel1.add(lblName, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 200, 110, -1));
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 10)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Quản lý: ");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, -1, -1));
-
-        jLabel3.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 60, 130, 120));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/LoGo.png"))); // NOI18N
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 200, 50));
@@ -425,6 +448,18 @@ public class QuanLyHome extends javax.swing.JFrame {
         QLDichVu dv = new QLDichVu();
         PNchinh.add(dv);
         dv.show();
+        Model.TaiKhoan tk = XAuth.user;
+        if (tk == null) {
+            this.setHinh("178831-200.png");
+        } else {
+            Model.NhanVien nv = nvdao.SelectByTenTK(tk.getTenTK());
+            this.lblName.setText(nv.getHoTen());
+            if (tk.getHinh() == null) {
+                this.setHinh("178831-200.png");
+            }
+            this.setHinh(tk.getHinh());
+
+        }
     }//GEN-LAST:event_formWindowOpened
 
     private void lblThongKeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblThongKeMouseClicked
@@ -489,6 +524,10 @@ public class QuanLyHome extends javax.swing.JFrame {
         main.setVisible(true);
     }//GEN-LAST:event_lblDangXuatMouseClicked
 
+    private void lblHinhMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblHinhMouseClicked
+
+    }//GEN-LAST:event_lblHinhMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -531,21 +570,33 @@ public class QuanLyHome extends javax.swing.JFrame {
         });
     }
 
+    public void setHinh(String fileName) {
+        BufferedImage bufferedImage = null;
+        try {
+            bufferedImage = ImageIO.read(new File("src\\Image\\" + fileName));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Image scaledImage = bufferedImage.getScaledInstance(lblHinh.getWidth(), lblHinh.getHeight(), Image.SCALE_SMOOTH);
+        ImageIcon image = new ImageIcon(scaledImage);
+        lblHinh.setIcon(image);
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PNchinh;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblDSLD;
     private javax.swing.JLabel lblDangXuat;
     private javax.swing.JLabel lblDatLich;
     private javax.swing.JLabel lblDichVu;
+    private javax.swing.JLabel lblHinh;
     private javax.swing.JLabel lblHoaDon;
     private javax.swing.JLabel lblKhachHang;
+    private javax.swing.JLabel lblName;
     private javax.swing.JLabel lblNhanVien;
     private javax.swing.JLabel lblTaiKhoan;
     private javax.swing.JLabel lblThongKe;

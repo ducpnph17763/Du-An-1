@@ -7,6 +7,7 @@ package UI.LeTan;
 
 import Dao.DichVuDAO;
 import Dao.HoaDonDAO;
+import Dao.KhachHangDAO;
 import Dao.NhanVienDAO;
 import Helper.MsgBox;
 import Model.DichVu;
@@ -36,6 +37,7 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
     NhanVienDAO nvdao = new NhanVienDAO();
     HoaDonDAO hddao = new HoaDonDAO();
     List<Model.DichVu> ls = new ArrayList<>();
+    KhachHangDAO khdao = new KhachHangDAO();
 
     public DatLichLeTan() {
         initComponents();
@@ -396,8 +398,6 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
 
     private HoaDon GetForm() throws ParseException {
         Model.HoaDon hd = new Model.HoaDon();
-        Model.DichVu dv = (Model.DichVu) cboDicVu.getSelectedItem();
-        ls.add(dv);
         int tongtien = 0;
         for (Model.DichVu l : ls) {
             tongtien += l.getGiaTien();
@@ -413,8 +413,15 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
         String gioHen = (String) cboThoiGian.getSelectedItem();
         DefaultComboBoxModel mol = (DefaultComboBoxModel) cboThoCat.getModel();
         NhanVien nv = (NhanVien) mol.getSelectedItem();
+        Model.KhachHang kh = khdao.SelectBySoDienThoai(txtSDT.getText());
+        Integer makh;
+        if (kh == null) {
+            makh = null;
+        } else {
+            makh = kh.getId();
+        }
         hd.setId(0);
-        hd.setId_KH(null);
+        hd.setId_KH(makh);
         hd.setId_NV(null);
         hd.setId_TC(nv.getId());
         hd.setNgayHen(sdf.parse(part));
@@ -479,10 +486,16 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
     private void TaoHoaDon() {
         try {
             HoaDon hd = this.GetForm();
-            System.out.println(hd.toString());
             HoaDon hddb = hddao.SelectHoaDonByGioHen(hd);
             if (hddb == null) {
+
                 hddao.insert(hd);            
+                hddao.insert(hd);
+                this.hddao.insert(hd);
+                Model.HoaDon hdcuoi = hddao.selectHD_CuoiCung();
+                for (Model.DichVu l : ls) {
+                    this.hddao.InsertHDCT(hdcuoi, l);
+                }
                 JOptionPane.showMessageDialog(this, "Bạn đã tạo lịch đặt thành công\nChọn nút đặt lịch để đặt cọc");
                 return;
             }
@@ -496,16 +509,16 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
     }
 
     private void HuyDichVu() {
-        int index=tblLichDat.getSelectedRow();
-        if(index>=0){
+        int index = tblLichDat.getSelectedRow();
+        if (index >= 0) {
             for (int i = 0; i < ls.size(); i++) {
-                if(index==i){
+                if (index == i) {
                     ls.remove(index);
                     fillTable1();
                     MsgBox.alert(this, "Huỷ dịch vụ thành công!");
                 }
             }
-        }else{
+        } else {
             MsgBox.alert(this, "Bạn chưa chọn dịch vụ để huỷ!");
         }
     }

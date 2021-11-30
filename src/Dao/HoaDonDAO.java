@@ -139,4 +139,24 @@ public class HoaDonDAO extends BarberDAO<HoaDon, String> {
         }
     }
     
+    
+    
+    public void InsertHDCT(HoaDon hd, DichVu dv) {
+        try {
+            JDBCHelper.update("insert into HoaDonChiTiet(Id_DV, Id_HD, GiaTien, TrangThai) values (?,?,?,?)", dv.getId(), hd.getId(), dv.getGiaTien(), hd.getTrangThai());
+        } catch (SQLException ex) {
+            Logger.getLogger(NhanVienDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }  
+    }
+    
+    public HoaDon selectHD_CuoiCung() {
+        List<HoaDon> list = this.selectBySql("SELECT TOP 1 * FROM HoaDon ORDER BY Id DESC ");
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
+    }
+    
+     
+    
 }

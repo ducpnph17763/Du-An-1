@@ -78,6 +78,27 @@ String SELECT_ALL_SQL = "SELECT * FROM KHACHHANG WHERE TrangThai = N'Hoạt đ�
         }
     }
     
+<<<<<<< Updated upstream
+=======
+    public KhachHang SelectByTenTK(String tentk) {
+        List<KhachHang>list=this.selectBySql("select KhachHang.* from KhachHang join TaiKhoan on KhachHang.Id_TK = TaiKhoan.Id where TaiKhoan.TenTK = ?", tentk);
+        if(list.isEmpty()){
+            return null;
+        }
+        return list.get(0);
+    }
+    
+    public KhachHang SelectBySoDienThoai(String sdt) {
+        List<KhachHang>list=this.selectBySql("select KhachHang.* from KhachHang join ThongTinKhachHang on KhachHang.Id = ThongTinKhachHang.Id_KH where SoDienThoai = ? ", sdt);
+        if(list.isEmpty()){
+            return null;
+        }
+        return list.get(0);
+    }
+    
+    
+    
+>>>>>>> Stashed changes
 
 
     

@@ -4,7 +4,14 @@
  */
 package UI.QuanLy;
 
+<<<<<<< Updated upstream
 import Avarta.TestRoundLabel;
+=======
+import Avarta.CriBoder;
+
+import Dao.NhanVienDAO;
+import Helper.XAuth;
+>>>>>>> Stashed changes
 import UI.LeTan.DSLichDatLeTan;
 import UI.ChucNang.HoaDon;
 import UI.ChucNang.KhachHang;

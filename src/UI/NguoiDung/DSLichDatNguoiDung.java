@@ -10,6 +10,7 @@ import Dao.HoaDonDAO;
 import Helper.JDBCHelper;
 import Helper.MsgBox;
 import Helper.XAuth;
+import UI.ChucNang.DatCoc;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -177,6 +178,7 @@ public class DSLichDatNguoiDung extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jDesktopPane1 = new javax.swing.JDesktopPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblCTLichDat = new javax.swing.JTable();
@@ -303,7 +305,30 @@ public class DSLichDatNguoiDung extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1330, 800));
+        jDesktopPane1.setLayer(jPanel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
+        jDesktopPane1.setLayout(jDesktopPane1Layout);
+        jDesktopPane1Layout.setHorizontalGroup(
+            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1330, Short.MAX_VALUE)
+            .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+        jDesktopPane1Layout.setVerticalGroup(
+            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 800, Short.MAX_VALUE)
+            .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+
+        getContentPane().add(jDesktopPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1330, 800));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -383,6 +408,24 @@ public class DSLichDatNguoiDung extends javax.swing.JInternalFrame {
 
     private void btnDatCocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDatCocActionPerformed
         // TODO add your handling code here:
+        int index=-1;       
+        try {
+            index=tblLichDat.getSelectedRow();
+            String mahd=tblLichDat.getValueAt(index, 0).toString();
+            String TrangThaiTT=tblLichDat.getValueAt(index, 6).toString();
+            if(TrangThaiTT.equals("Đã đặt cọc(chờ xác nhận)")){
+                MsgBox.alert(this, "Lịch đặt đã đặt cọc rồi!");
+                return;
+            }
+            if(index>=0){
+            DatCoc dc=new DatCoc(mahd);
+            jDesktopPane1.add(dc);
+            dc.setLocation(((jDesktopPane1.getWidth()-dc.getWidth())/2),((jDesktopPane1.getHeight()-dc.getHeight())/2));
+            dc.show();
+        }
+        } catch (Exception e) {
+             MsgBox.alert(this, "Bạn chưa chọn hoá đơn!");
+        }
     }//GEN-LAST:event_btnDatCocActionPerformed
 
     private void tblLichDatMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLichDatMousePressed
@@ -405,6 +448,7 @@ public class DSLichDatNguoiDung extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnDatCoc;
     private javax.swing.JButton btnHuyDV;
     private javax.swing.JButton btnHuyLich;
+    private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;

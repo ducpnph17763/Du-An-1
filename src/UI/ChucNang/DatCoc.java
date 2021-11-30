@@ -4,6 +4,12 @@
  */
 package UI.ChucNang;
 
+import Helper.JDBCHelper;
+import Helper.MsgBox;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author nhatd
@@ -13,8 +19,9 @@ public class DatCoc extends javax.swing.JInternalFrame {
     /**
      * Creates new form DatCoc
      */
-    public DatCoc() {
+    public DatCoc(String contructor) {
         initComponents();
+        this.txtMahd.setText(contructor);
     }
 
     /**
@@ -29,26 +36,65 @@ public class DatCoc extends javax.swing.JInternalFrame {
         jDesktopPane1 = new javax.swing.JDesktopPane();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
+        txtMahd = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        rdbDatCoc = new javax.swing.JRadioButton();
+        btnHoanTat = new javax.swing.JButton();
 
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/maqr.jpg"))); // NOI18N
+
+        txtMahd.setEditable(false);
+
+        jLabel1.setText("Mã hoá đơn:");
+
+        rdbDatCoc.setBackground(new java.awt.Color(255, 255, 255));
+        rdbDatCoc.setText("Yêu cầu xác nhận");
+
+        btnHoanTat.setText("Hoàn tất");
+        btnHoanTat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHoanTatActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(97, 97, 97)
-                .addComponent(jLabel2)
-                .addContainerGap(143, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(167, 167, 167)
+                        .addComponent(rdbDatCoc))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(187, 187, 187)
+                        .addComponent(btnHoanTat))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(64, 64, 64)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtMahd, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1))))
+                .addContainerGap(164, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(56, 56, 56)
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addGap(14, 14, 14)
+                .addComponent(txtMahd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2)
-                .addContainerGap(134, Short.MAX_VALUE))
+                .addGap(14, 14, 14)
+                .addComponent(rdbDatCoc)
+                .addGap(18, 18, 18)
+                .addComponent(btnHoanTat)
+                .addContainerGap(42, Short.MAX_VALUE))
         );
 
         jDesktopPane1.setLayer(jPanel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -69,10 +115,33 @@ public class DatCoc extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnHoanTatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHoanTatActionPerformed
+        // TODO add your handling code here:
+         String id=txtMahd.getText();
+        boolean kt=false;
+        if(kt==true){
+            return;
+        }else{
+            try {
+                rdbDatCoc.setSelected(true);
+                String sql="update HoaDon set TrangThaiTT=N'Đã đặt cọc(chờ xác nhận)',TrangThai=N'Đang xử lý' where Id="+id;
+                JDBCHelper.update(sql);
+                MsgBox.alert(this, "Đặt cọc thành công!");
+                this.dispose();
+            } catch (SQLException ex) {
+                Logger.getLogger(DatCoc.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_btnHoanTatActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnHoanTat;
     private javax.swing.JDesktopPane jDesktopPane1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JRadioButton rdbDatCoc;
+    private javax.swing.JTextField txtMahd;
     // End of variables declaration//GEN-END:variables
 }

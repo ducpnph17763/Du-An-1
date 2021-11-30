@@ -6,6 +6,7 @@ package UI.LeTan;
 
 import UI.QuanLy.*;
 import Avarta.TestRoundLabel;
+import Helper.XAuth;
 import UI.LeTan.DSLichDatLeTan;
 import UI.NguoiDung.DatLichNguoiDung;
 import UI.ChucNang.*;
@@ -22,11 +23,15 @@ public class LeTanHome extends javax.swing.JFrame {
     /**
      * Creates new form QLDichVu
      */
+   
     public LeTanHome() {
 
         initComponents();
-
+//        String ten=XAuth.user.getTenTK();
+//        lblTen.setText(ten);
     }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -46,7 +51,7 @@ public class LeTanHome extends javax.swing.JFrame {
         lblDSLD = new javax.swing.JLabel();
         lblDatLich = new javax.swing.JLabel();
         lblDichVu = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        lblTen = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel3 = new TestRoundLabel(150);
         jLabel1 = new javax.swing.JLabel();
@@ -200,11 +205,11 @@ public class LeTanHome extends javax.swing.JFrame {
         });
         jPanel1.add(lblDichVu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 230, 200, 50));
 
-        jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("Họ tên");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 190, 110, -1));
+        lblTen.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblTen.setForeground(new java.awt.Color(255, 255, 255));
+        lblTen.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTen.setText("Họ tên");
+        jPanel1.add(lblTen, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 190, 110, -1));
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 10)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
@@ -476,7 +481,6 @@ public class LeTanHome extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblDSLD;
     private javax.swing.JLabel lblDangXuat;
@@ -485,5 +489,6 @@ public class LeTanHome extends javax.swing.JFrame {
     private javax.swing.JLabel lblHoaDon;
     private javax.swing.JLabel lblKhachHang;
     private javax.swing.JLabel lblTaiKhoan;
+    private javax.swing.JLabel lblTen;
     // End of variables declaration//GEN-END:variables
 }

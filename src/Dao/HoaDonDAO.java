@@ -123,7 +123,7 @@ public class HoaDonDAO extends BarberDAO<HoaDon, String> {
 
     public List<Model.HoaDon> SelectHoaDonNguoiDung(String tentk) {
         List<Model.HoaDon> list = this.selectBySql("select * from HoaDon join KhachHang on KhachHang.Id = HoaDon.Id_KH \n"
-                + "join TaiKhoan on TaiKhoan.Id = KhachHang.Id_TK where TenTK = ?", tentk);
+                + "join TaiKhoan on TaiKhoan.Id = KhachHang.Id_TK where HoaDon.TrangThai=N'Đã xử lý' and TenTK = ?", tentk);
         if (list.isEmpty()) {
             return null;
         }

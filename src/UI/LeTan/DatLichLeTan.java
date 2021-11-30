@@ -415,9 +415,9 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
         NhanVien nv = (NhanVien) mol.getSelectedItem();
         Model.KhachHang kh = khdao.SelectBySoDienThoai(txtSDT.getText());
         Integer makh;
-        if(kh == null) {
+        if (kh == null) {
             makh = null;
-        }else {
+        } else {
             makh = kh.getId();
         }
         hd.setId(0);
@@ -488,15 +488,12 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
             HoaDon hd = this.GetForm();
             HoaDon hddb = hddao.SelectHoaDonByGioHen(hd);
             if (hddb == null) {
-<<<<<<< Updated upstream
                 hddao.insert(hd);
-=======
                 this.hddao.insert(hd);
                 Model.HoaDon hdcuoi = hddao.selectHD_CuoiCung();
                 for (Model.DichVu l : ls) {
                     this.hddao.InsertHDCT(hdcuoi, l);
                 }
->>>>>>> Stashed changes
                 JOptionPane.showMessageDialog(this, "Bạn đã tạo lịch đặt thành công\nChọn nút đặt lịch để đặt cọc");
                 return;
             }
@@ -510,16 +507,16 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
     }
 
     private void HuyDichVu() {
-        int index=tblLichDat.getSelectedRow();
-        if(index>=0){
+        int index = tblLichDat.getSelectedRow();
+        if (index >= 0) {
             for (int i = 0; i < ls.size(); i++) {
-                if(index==i){
+                if (index == i) {
                     ls.remove(index);
                     fillTable1();
                     MsgBox.alert(this, "Huỷ dịch vụ thành công!");
                 }
             }
-        }else{
+        } else {
             MsgBox.alert(this, "Bạn chưa chọn dịch vụ để huỷ!");
         }
     }

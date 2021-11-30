@@ -9,6 +9,7 @@ import Dao.BarberDAO;
 import Helper.JDBCHelper;
 import Model.HoaDon;
 import Model.KhachHang;
+import Model.NhanVien;
 import Model.TaiKhoan;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -76,6 +77,14 @@ String SELECT_ALL_SQL = "SELECT * FROM KHACHHANG WHERE TrangThai = N'Hoạt đ�
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+    
+    public KhachHang SelectByTenTK(String tentk) {
+        List<KhachHang>list=this.selectBySql("select KhachHang.* from KhachHang join TaiKhoan on KhachHang.Id_TK = TaiKhoan.Id where TaiKhoan.TenTK = ?", tentk);
+        if(list.isEmpty()){
+            return null;
+        }
+        return list.get(0);
     }
     
 

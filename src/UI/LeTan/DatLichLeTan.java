@@ -482,7 +482,7 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
             System.out.println(hd.toString());
             HoaDon hddb = hddao.SelectHoaDonByGioHen(hd);
             if (hddb == null) {
-                hddao.insert(hd);
+                hddao.insert(hd);            
                 JOptionPane.showMessageDialog(this, "Bạn đã tạo lịch đặt thành công\nChọn nút đặt lịch để đặt cọc");
                 return;
             }

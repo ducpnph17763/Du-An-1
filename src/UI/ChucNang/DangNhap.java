@@ -39,6 +39,7 @@ public class DangNhap extends javax.swing.JFrame {
         this.addPlacehodelStyle(txtTK);
         this.removePlacehodelStyle(txtPass);
         setLocationRelativeTo(null);
+        setResizable(false);
     }
 
     public void addPlacehodelStyle(JTextField textField) {
@@ -299,15 +300,17 @@ public class DangNhap extends javax.swing.JFrame {
         } else if (tk.getVaiTro() == 1) {
             LeTanHome lt = new LeTanHome();
             lt.setVisible(true);
-
         } else if (tk.getVaiTro() == 2) {
             ThoCatHome tc = new ThoCatHome();
+            XAuth.user = tk;
             tc.setVisible(true);
         }else if(tk.getVaiTro() == 3){
             NguoiDungHome nd = new NguoiDungHome();
+            
             nd.setVisible(true);
         }
-        XAuth.user = tk ;
+        XAuth.user = tk;
+        System.out.println("tk:"+tk);
         this.dispose();
 
 

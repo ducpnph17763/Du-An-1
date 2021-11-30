@@ -5,7 +5,11 @@
  */
 package UI.ThoCat;
 
+import Helper.JDBCHelper;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -22,6 +26,58 @@ public class DSLichThoCat extends javax.swing.JInternalFrame {
         this.setBorder(null);
         BasicInternalFrameUI bui = (BasicInternalFrameUI) this.getUI();
         bui.setNorthPane(null);
+        init();
+    }
+    
+    void init(){
+        LayDuLieuHoaDon();
+    }
+    void LayDuLieuHoaDon(){
+        String sql = "select HoaDon.Id,NgayHen,GioHen,KhachHang.HoTen \n"
+                + "from HoaDon\n"
+                + "join KhachHang on KhachHang.Id=HoaDon.Id_KH\n"
+                + "Join NhanVien on NhanVien.Id=HoaDon.Id_TC\n"
+                + "where NhanVien.Id=HoaDon.Id_TC and HoaDon.TrangThai=N'Đang xử lý' and HoaDon.TrangThaiTT=N'Đã đặt cọc(đã xác nhận)' and ";
+        ResultSet rs=JDBCHelper.query(sql);
+        DefaultTableModel model=(DefaultTableModel)tblLichDat.getModel();
+        model.setRowCount(0);
+        try {
+            while(rs.next()){
+                Object[] item=new Object[4];
+                item[0]=rs.getString("Id");
+                item[1]=rs.getString("NgayHen");
+                item[2]=rs.getString("GioHen");
+                item[3]=rs.getString("HoTen");
+                model.addRow(item);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        
+    }
+    
+    void LayDuLieuHoaDonChiTiet(){
+        int row=tblLichDat.getSelectedRow();
+        String mahd=tblLichDat.getValueAt(row, 0).toString();
+        String sql = "select DichVu.Id,TenDV,DichVu.GiaTien from DichVu join HoaDonChiTiet on DichVu.Id=HoaDonChiTiet.Id_DV\n"
+                + "  where HoaDonChiTiet.Id_HD=" + mahd;
+        ResultSet rs=JDBCHelper.query(sql);
+        DefaultTableModel mol=(DefaultTableModel)tblCTLichDat.getModel();
+        mol.setRowCount(0);
+        int c=0;
+        try {
+            while (rs.next()) {
+                Object[] item = new Object[4];
+                c++;
+                item[0] = c;
+                item[1] = rs.getString("Id");
+                item[2] = rs.getString("TenDV");
+                item[3] = rs.getInt("GiaTien");
+                mol.addRow(item);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -47,13 +103,13 @@ public class DSLichThoCat extends javax.swing.JInternalFrame {
 
         tblCTLichDat.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "STT", "Mã CTHD", "Mã HD", "Mã DV", "Tên DV", "Giá Tiền"
+                "STT", "Mã dịch vụ", "Tên dịch vụ", "Giá tiền"
             }
         ));
         tblCTLichDat.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -65,13 +121,13 @@ public class DSLichThoCat extends javax.swing.JInternalFrame {
 
         tblLichDat.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Mã lịch Đặt", "Ngày hẹn", "Mã thợ cắt", "Tổng tiền", "Đặt cọc", "Trạng thái thanh toán", "Trạng thái hóa đơn"
+                "Mã lịch Đặt", "Ngày hẹn", "Giờ hẹn", "Khách Hàng"
             }
         ));
         tblLichDat.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -128,7 +184,8 @@ public class DSLichThoCat extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_tblLichDatMousePressed
 
     private void tblLichDatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLichDatMouseClicked
-        // TODO add your handling code here:   
+        // TODO add your handling code here:  
+        LayDuLieuHoaDonChiTiet();
     }//GEN-LAST:event_tblLichDatMouseClicked
 
     private void tblCTLichDatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCTLichDatMouseClicked

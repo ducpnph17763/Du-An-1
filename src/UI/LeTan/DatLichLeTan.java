@@ -488,15 +488,14 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
             HoaDon hd = this.GetForm();
             HoaDon hddb = hddao.SelectHoaDonByGioHen(hd);
             if (hddb == null) {
-<<<<<<< Updated upstream
+
                 hddao.insert(hd);
-=======
+
                 this.hddao.insert(hd);
                 Model.HoaDon hdcuoi = hddao.selectHD_CuoiCung();
                 for (Model.DichVu l : ls) {
                     this.hddao.InsertHDCT(hdcuoi, l);
                 }
->>>>>>> Stashed changes
                 JOptionPane.showMessageDialog(this, "Bạn đã tạo lịch đặt thành công\nChọn nút đặt lịch để đặt cọc");
                 return;
             }

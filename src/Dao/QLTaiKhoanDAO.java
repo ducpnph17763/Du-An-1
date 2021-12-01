@@ -22,6 +22,7 @@ public class QLTaiKhoanDAO extends BarberDAO<TTKhachHang, Object> {
     String DELETE_SQL = "delete from ThongTinKhachHang where SoDienThoai=?";
     String INSERT_SQL = "insert into ThongTinKhachHang (Id_KH,SoDienThoai,Email,TrangThai) values (?,?,?,?)";
     String UPDATE_SQL = "update ThongTinKhachHang set Email=?, SoDienThoai=? where SoDienThoai=? ";
+    String SELECT_ALL_SQL = "select * from ThongTinKhachHang";
     String getId = "Select * from ThongTinKhachHang where SoDienThoai=?";
 
     public List<TTKhachHang> selectTT(String id) {
@@ -82,7 +83,7 @@ public class QLTaiKhoanDAO extends BarberDAO<TTKhachHang, Object> {
 
     @Override
     public List<TTKhachHang> selectAll() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.selectBySql(SELECT_ALL_SQL);
     }
 
     @Override

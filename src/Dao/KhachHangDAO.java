@@ -9,6 +9,7 @@ import Dao.BarberDAO;
 import Helper.JDBCHelper;
 import Model.HoaDon;
 import Model.KhachHang;
+import Model.NhanVien;
 import Model.TaiKhoan;
 import java.sql.ResultSet;
 import java.sql.SQLException;

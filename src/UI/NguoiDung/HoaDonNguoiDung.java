@@ -91,13 +91,13 @@ public class HoaDonNguoiDung extends javax.swing.JInternalFrame {
 
         tblHoaDon.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Mã Hóa Đơn", "Tên TC", "Ngày đặt ", "Thanh Toán", "Đánh Giá"
+                "Mã Hóa Đơn", "Tên TC", "Ngày đặt ", "Thanh Toán", "Đánh Giá", "Phản Hồi"
             }
         ));
         tblHoaDon.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -286,16 +286,18 @@ public class HoaDonNguoiDung extends javax.swing.JInternalFrame {
                 jDesktopPane1.add(dmk);
                 dmk.setLocation((jDesktopPane1.getWidth() - dmk.getWidth()) / 2, (jDesktopPane1.getHeight() - dmk.getHeight()) / 2);
                 dmk.show();
+                
             }
                             
         } catch (Exception e) {
             MsgBox.alert(this, "bạn chưa chọn hoá đơn để đánh giá!");
 
         }
+        this.FillTableHoaDon();
     }//GEN-LAST:event_btnDanhGiaActionPerformed
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
-        // TODO add your handling code here:
+
         this.FillTableHoaDon();       
     }//GEN-LAST:event_btnResetActionPerformed
 
@@ -325,7 +327,7 @@ public class HoaDonNguoiDung extends javax.swing.JInternalFrame {
             NhanVien nv = nvdao.selectById(l.getId_TC());
             mol.addRow(new Object[]{l.getId(), nv.getHoTen(), l.getNgayHen(), l.getThanhToan(),
                 
-                l.getDanhGia()});
+                l.getDanhGia(), l.getPhanHoi()});
         }
         } catch (Exception e) {
             MsgBox.alert(this, "Không tìm thấy hoá đơn nào!");

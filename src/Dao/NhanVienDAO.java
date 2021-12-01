@@ -207,4 +207,12 @@ String SELECT_VTRO = "SELECT VaiTro FROM NhanVien";
             return list;
         }
     }
+    
+    public NhanVien SelectByTenTK(String tentk) {
+        List<NhanVien>list=this.selectBySql("select NhanVien.* from NhanVien join TaiKhoan on NhanVien.Id_TK = TaiKhoan.Id where TaiKhoan.TenTK = ?", tentk);
+        if(list.isEmpty()){
+            return null;
+        }
+        return list.get(0);
+    }
 }

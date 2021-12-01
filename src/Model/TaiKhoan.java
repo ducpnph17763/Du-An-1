@@ -15,17 +15,21 @@ public class TaiKhoan {
     private String matKhau;
     private int vaiTro;
     private String trangThai;
+    private String Hinh;
 
     public TaiKhoan() {
     }
 
-    public TaiKhoan(int id, String tenTK, String matKhau, int vaiTro, String trangThai) {
+    public TaiKhoan(int id, String tenTK, String matKhau, int vaiTro, String trangThai, String Hinh) {
         this.id = id;
         this.tenTK = tenTK;
         this.matKhau = matKhau;
         this.vaiTro = vaiTro;
         this.trangThai = trangThai;
+        this.Hinh = Hinh;
     }
+
+
 
     public int getId() {
         return id;
@@ -66,6 +70,16 @@ public class TaiKhoan {
     public void setTrangThai(String trangThai) {
         this.trangThai = trangThai;
     }
+
+    public String getHinh() {
+        return Hinh;
+    }
+
+    public void setHinh(String Hinh) {
+        this.Hinh = Hinh;
+    }
+    
+    
     
     
     

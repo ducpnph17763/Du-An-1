@@ -325,9 +325,8 @@ public class HoaDonNguoiDung extends javax.swing.JInternalFrame {
         mol.setRowCount(0);
         for (HoaDon l : ls) {
             NhanVien nv = nvdao.selectById(l.getId_TC());
-            mol.addRow(new Object[]{l.getId(), nv.getHoTen(), l.getNgayHen(), l.getThanhToan(),
-                
-                l.getDanhGia(), l.getPhanHoi()});
+            mol.addRow(new Object[]{l.getId(), nv.getHoTen(), l.getNgayHen(), l.getThanhToan(),                
+                l.getDanhGia().equals("0")?"Hài lòng":l.getDanhGia().equals("1")?"Rất hài lòng":"Không hài lòng", l.getPhanHoi()});
         }
         } catch (Exception e) {
             MsgBox.alert(this, "Không tìm thấy hoá đơn nào!");

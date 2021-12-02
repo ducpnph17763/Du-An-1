@@ -29,6 +29,7 @@ public class DanhGia extends javax.swing.JInternalFrame {
         initComponents();
         loadDanhGia();
         this.txtId.setText(contructor);
+        txtId.setEditable(false);
     }
     
     void loadDanhGia() {

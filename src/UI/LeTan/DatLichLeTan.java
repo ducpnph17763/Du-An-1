@@ -10,9 +10,11 @@ import Dao.HoaDonDAO;
 import Dao.KhachHangDAO;
 import Dao.NhanVienDAO;
 import Helper.MsgBox;
+import Helper.XAuth;
 import Model.DichVu;
 import Model.HoaDon;
 import Model.NhanVien;
+import UI.ChucNang.DatCoc;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,7 +40,8 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
     HoaDonDAO hddao = new HoaDonDAO();
     List<Model.DichVu> ls = new ArrayList<>();
     KhachHangDAO khdao = new KhachHangDAO();
-
+    List<Model.HoaDon>list=new ArrayList<>();
+    String tenTK=XAuth.user.getTenTK();
     public DatLichLeTan() {
         initComponents();
         this.init();
@@ -65,6 +68,7 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jDesktopPane1 = new javax.swing.JDesktopPane();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         cboNgayDat = new javax.swing.JComboBox<>();
@@ -183,7 +187,7 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(46, 46, 46)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -205,10 +209,10 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
                     .addComponent(btnDatLich, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnTaoLichDat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(61, 61, 61))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1286, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(25, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1310, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -252,13 +256,60 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
                 .addGap(68, 68, 68))
         );
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1330, 810));
+        jDesktopPane1.setLayer(jPanel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
+        jDesktopPane1.setLayout(jDesktopPane1Layout);
+        jDesktopPane1Layout.setHorizontalGroup(
+            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1330, Short.MAX_VALUE)
+            .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+        jDesktopPane1Layout.setVerticalGroup(
+            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 810, Short.MAX_VALUE)
+            .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 810, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+
+        getContentPane().add(jDesktopPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1330, 810));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDatLichActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDatLichActionPerformed
-        // TODO add your handling code here:    
+        // TODO add your handling code here:
+        list=hddao.selectAll();
+        System.out.println("độ dài:"+list.size());
+        for (int i = list.size()-1; i >= 0; i--) {
+            Object[]row={
+                list.get(i).getId(),list.get(i).getTrangThaiTT()
+            };                        
+        }       
+        if(list.get(list.size()-1).getTrangThaiTT().equals("Đã đặt cọc(chờ xác nhận)")){
+            MsgBox.alert(this, "Lịch đặt đã đặt cọc rồi đang chờ xác nhận!");
+            return;
+        }else if(list.get(list.size()-1).getTrangThaiTT().equals("Đã đặt cọc")){
+            MsgBox.alert(this, "Lịch đặt đã đặt cọc trước đó!");
+            return;
+        }else if(list.get(list.size()-1).getTrangThaiTT().equals("Đã huỷ lịch")){
+            MsgBox.alert(this, "Lịch đặt đã huỷ trước đó trước đó!");
+            return;
+        }else{
+            DatCoc dc=new DatCoc(list.get(list.size()-1).getId()+"");
+            System.out.println("đặt cọc:"+dc);
+            jDesktopPane1.add(dc);
+            dc.setLocation(((jDesktopPane1.getWidth()-dc.getWidth())/2),((jDesktopPane1.getHeight()-dc.getHeight())/2));
+            dc.show();
+            System.out.println("tên TK"+tenTK);
+        }           
     }//GEN-LAST:event_btnDatLichActionPerformed
 
     private void cboNgayDatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboNgayDatActionPerformed
@@ -309,6 +360,7 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
     private javax.swing.JComboBox<String> cboNgayDat;
     private javax.swing.JComboBox<String> cboThoCat;
     private javax.swing.JComboBox<String> cboThoiGian;
+    private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -428,10 +480,10 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
         hd.setNgayTao(sdf.parse(ngay));
         hd.setDatCoc(tongtien * 20 / 100);
         hd.setThanhToan(tongtien);
-        hd.setTrangThaiTT("Chưa thanh toán");
-        hd.setTrangThai("Chưa đặt cọc");
-        hd.setDanhGia(null);
-        hd.setPhanHoi("Phản hồi");
+        hd.setTrangThaiTT("Chưa đặt cọc");
+        hd.setTrangThai("Chưa thanh toán");
+        hd.setDanhGia("0");
+        hd.setPhanHoi("");
         hd.setGioHen(gioHen);
         return hd;
     }

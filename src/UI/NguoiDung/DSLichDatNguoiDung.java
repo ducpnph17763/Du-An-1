@@ -45,15 +45,14 @@ public class DSLichDatNguoiDung extends javax.swing.JInternalFrame {
     }
     
     void layThongTinLichDat() {
-        System.out.println("tên TK:"+tenTK);
-        String sql = "select HoaDon.Id,HoaDon.NgayHen,KhachHang.HoTen,HoaDon.Id_TC,HoaDon.DatCoc,\n"
-                + "   HoaDon.ThanhToan,HoaDon.TrangThaiTT,HoaDon.TrangThai\n"
-                + "   from HoaDon join KhachHang on HoaDon.Id_KH=KhachHang.Id\n"
-                + "   join NhanVien on HoaDon.Id_TC=NhanVien.Id		\n"
-                + "   join TaiKhoan on TaiKhoan.Id=KhachHang.Id_TK\n"
-                + "   where HoaDon.Id_KH=KhachHang.Id and NhanVien.Id=HoaDon.Id_TC \n"
-                + "   and HoaDon.TrangThaiTT LIKE N'Chưa thanh toán' \n"
-                + "   and (HoaDon.TrangThai LIKE N'Đang xử lý' or HoaDon.TrangThai LIKE N'Đã huỷ lịch') and TaiKhoan.TenTK=N'"+tenTK+"'";
+        System.out.println("tên TK:" + tenTK);
+        String sql = "	select HoaDon.Id,HoaDon.NgayHen,KhachHang.HoTen,HoaDon.Id_TC,HoaDon.DatCoc,\n"
+                + "     HoaDon.ThanhToan,HoaDon.TrangThaiTT,HoaDon.TrangThai\n"
+                + "     from HoaDon join KhachHang on HoaDon.Id_KH=KhachHang.Id\n"
+                + "     join NhanVien on HoaDon.Id_TC=NhanVien.Id		\n"
+                + "     join TaiKhoan on TaiKhoan.Id=KhachHang.Id_TK\n"
+                + "     where HoaDon.Id_KH=KhachHang.Id and NhanVien.Id=HoaDon.Id_TC \n"                + " \n"
+                + "     and (HoaDon.TrangThai LIKE N'Chưa thanh toán' or HoaDon.TrangThai LIKE N'Đã huỷ lịch') and TaiKhoan.TenTK='"+tenTK+"'";
         ResultSet rs=JDBCHelper.query(sql);
         Object[]row=new Object[]{
           "Mã lịch đặt","Ngày hẹn","Khách hàng","Id Thợ cắt","Đặt cọc","Tổng tiền","Trạng thái TT","Trạng thái hoá đơn"  
@@ -110,6 +109,35 @@ public class DSLichDatNguoiDung extends javax.swing.JInternalFrame {
             
         }
 
+    }
+     
+     void TinhTienCoc(){
+        int index=tblCTLichDat.getSelectedRow();
+        String mahd=tblCTLichDat.getValueAt(index, 2).toString();
+        String sql = "select (sum(HoaDonChiTiet.GiaTien)/100)*20 as TongTienDatCoc from HoaDon\n"
+                + "   join HoaDonChiTiet on HoaDon.Id=HoaDonChiTiet.Id_HD\n"
+                + "   where HoaDon.Id="+mahd;
+        ResultSet rs=JDBCHelper.query(sql);
+        try {
+            if(rs.next()){
+                String tongTien;
+                tongTien=rs.getString("TongTienDatCoc");
+                if(tongTien==null){
+                    String update="update HoaDon set DatCoc=0,TrangThai=N'Đã huỷ lịch' where Id="+mahd;
+                    JDBCHelper.update(update);
+                    layThongTinLichDat();
+                    DefaultTableModel mol =(DefaultTableModel)tblCTLichDat.getModel();
+                    mol.setRowCount(0);
+                    MsgBox.alert(this, "Lịch này đã bị huỷ!");
+                    LayTTBangCTLichDat();
+                }else{
+                    String update="update HoaDon set DatCoc="+tongTien+" where Id="+mahd;
+                    JDBCHelper.update(update);
+                    layThongTinLichDat();
+                }
+            }
+        } catch (Exception e) {
+        }
     }
      
      
@@ -358,8 +386,7 @@ public class DSLichDatNguoiDung extends javax.swing.JInternalFrame {
                         System.out.println("index:" + this.index);
                         DefaultTableModel mol = (DefaultTableModel) tblCTLichDat.getModel();
                         mol.setRowCount(0);
-                        MsgBox.alert(this, "Hủy lịch thành công!");
-                       
+                        MsgBox.alert(this, "Hủy lịch thành công!");                       
                     }
                 }
                 layThongTinLichDat();
@@ -376,32 +403,53 @@ public class DSLichDatNguoiDung extends javax.swing.JInternalFrame {
         if (row == -1 && index == -1) {
             MsgBox.alert(this, "Bạn chưa chọn dịch vụ!");
             System.out.println("index:" + row);
-        }if(index==-1){
-              MsgBox.alert(this, "Chi tiết lịch đặt trống!");
+        }
+        String TrangThaiHD = tblLichDat.getValueAt(row, 7).toString();
+        if (row >= 0) {
+            if (TrangThaiHD.equals("Đã huỷ lịch")) {
+                MsgBox.alert(this, "Lịch đã bị huỷ trước đó");
+                return;
+            }
         }
         try {
             index = tblCTLichDat.getSelectedRow();
             String mahdct = tblCTLichDat.getValueAt(index, 1).toString();
             String mahd = tblCTLichDat.getValueAt(index, 2).toString();
+            String TrangThaiTT = tblLichDat.getValueAt(row, 6).toString();
             if (index >= 0) {
-                try {
-                    boolean kt = MsgBox.confirm(this, "Bạn có muốn huỷ dịch vụ không?\nHuỷ dịch vụ bạn sẽ mất cọc!");
-                    if (kt == true) {
-                        String sql = "delete from HoaDonChiTiet where Id=" + mahdct;
-                        JDBCHelper.update(sql);
-                        TinhTongTien();
-//                        LayTTBangCTLichDat();
-                        DefaultTableModel mol =(DefaultTableModel)tblCTLichDat.getModel();
-                        mol.setRowCount(0);
-                        MsgBox.alert(this, "Huỷ dịch vụ thành công!");
-//                        tblLichDat.setRowSelectionInterval(this.index, this.index);
+                if (TrangThaiTT.equals("Đã đặt cọc(chờ xác nhận)")) {
+                    try {
+                        boolean kt = MsgBox.confirm(this, "Bạn có muốn huỷ dịch vụ không?\nHuỷ dịch vụ bạn sẽ mất cọc!");
+                        if (kt == true) {
+                            String sql = "delete from HoaDonChiTiet where Id=" + mahdct;
+                            JDBCHelper.update(sql);
+                            TinhTongTien();
+                            DefaultTableModel mol = (DefaultTableModel) tblCTLichDat.getModel();
+                            mol.setRowCount(0);
+                            MsgBox.alert(this, "Huỷ dịch vụ thành công!");
+                        }
+                    } catch (SQLException e) {
+                        System.out.println(e);
                     }
-                } catch (SQLException e) {
-                    System.out.println(e);
+                } else {
+                    try {
+                        boolean kt = MsgBox.confirm(this, "Bạn có muốn huỷ dịch vụ không?\nHuỷ dịch vụ bạn sẽ mất cọc!");
+                        if (kt == true) {
+                            String sql = "delete from HoaDonChiTiet where Id=" + mahdct;
+                            JDBCHelper.update(sql);
+                            TinhTongTien();
+                            TinhTienCoc();                       
+                            DefaultTableModel mol = (DefaultTableModel) tblCTLichDat.getModel();
+                            mol.setRowCount(0);
+                            MsgBox.alert(this, "Huỷ dịch vụ thành công!");                       
+                        }
+                    } catch (SQLException e) {
+                        System.out.println(e);
+                    }
                 }
             }
         } catch (Exception e) {
-
+            System.out.println("row:" + row);
             System.out.println("index:" + index);
         }
     }//GEN-LAST:event_btnHuyDVActionPerformed

@@ -9,8 +9,12 @@ import Helper.MsgBox;
 import Helper.ValidateHelper;
 import Helper.XImage;
 import Model.DichVu;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
@@ -58,10 +62,22 @@ public class QLDichVu extends javax.swing.JInternalFrame {
             XImage.save(file);
             ImageIcon icon=XImage.read(file.getName());
             lblAnh.setIcon(icon);
-            lblAnh.setToolTipText(file.getName());
-            
-            
+            lblAnh.setToolTipText(file.getName()); 
+            String filename = file.getAbsolutePath();
+            this.setHinh(filename);
         }
+    }
+    
+    public void setHinh(String fileName) {
+        BufferedImage bufferedImage = null;
+        try {
+            bufferedImage = ImageIO.read(new File(fileName));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Image scaledImage = bufferedImage.getScaledInstance(lblAnh.getWidth(), lblAnh.getHeight(), Image.SCALE_SMOOTH);
+        ImageIcon image = new ImageIcon(scaledImage);
+        lblAnh.setIcon(image);
     }
    Model.DichVu getForm() {
         DichVu dv = new DichVu();
@@ -386,7 +402,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         // TODO add your handling code here:
-      if(ValidateHelper.checkNullText(txtTenDV)&&ValidateHelper.checkNullText(txtGiaTien)){
+      if(ValidateHelper.checkNullText(txtTenDV)&&ValidateHelper.checkNullText(txtGiaTien)&&ValidateHelper.checkNullGioiThieu(txtGioiThieu)){
             if(ValidateHelper.checkTenDV(txtTenDV)&&ValidateHelper.checkGiaTien(txtGiaTien)&&ValidateHelper.checkGioiThieu(txtGioiThieu)){
                 insert();
                 clearForm();
@@ -406,7 +422,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
         // TODO add your handling code here:
-         if (ValidateHelper.checkNullText(txtTenDV) && ValidateHelper.checkNullText(txtGiaTien)) {
+         if (ValidateHelper.checkNullText(txtTenDV) && ValidateHelper.checkNullText(txtGiaTien)&&ValidateHelper.checkNullGioiThieu(txtGioiThieu)) {
             if (ValidateHelper.checkTenDV(txtTenDV) && ValidateHelper.checkGiaTien(txtGiaTien) && ValidateHelper.checkGioiThieu(txtGioiThieu)) {
                 try {
                     update();
@@ -422,7 +438,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
         // TODO add your handling code here:
         String index1 = (String) tblDichVu.getValueAt(index, 0);
-        if (ValidateHelper.checkNullText(txtTenDV) && ValidateHelper.checkNullText(txtGiaTien)) {
+        if (ValidateHelper.checkNullText(txtTenDV) && ValidateHelper.checkNullText(txtGiaTien)&&ValidateHelper.checkNullGioiThieu(txtGioiThieu)) {
             if (ValidateHelper.checkTenDV(txtTenDV) && ValidateHelper.checkGiaTien(txtGiaTien) && ValidateHelper.checkGioiThieu(txtGioiThieu)) {
                 try {
 

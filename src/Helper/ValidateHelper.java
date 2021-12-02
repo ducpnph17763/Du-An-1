@@ -35,6 +35,16 @@ public class ValidateHelper {
         }
     }
     
+    public static boolean checkNullGioiThieu(JTextPane txt){
+        if(txt.getText().trim().length()>0){
+            return true;
+        }else{
+            txt.requestFocus();
+            MsgBox.alert(txt.getRootPane(),txt.getName()+ " không được trống!");
+            return false;
+        }
+    }
+    
     
     public static boolean checkGioiThieu(JTextPane txt){
         String ten=txt.getText();

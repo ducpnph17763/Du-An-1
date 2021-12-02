@@ -309,8 +309,6 @@ public class DangNhap extends javax.swing.JFrame {
         }
         XAuth.user = tk ;
         this.dispose();
-
-
     }//GEN-LAST:event_btnDangNhapActionPerformed
 
     private void ckcHienPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ckcHienPassActionPerformed

@@ -9,6 +9,7 @@ import Dao.DichVuDAO;
 import Dao.HoaDonDAO;
 import Helper.JDBCHelper;
 import Helper.MsgBox;
+import Helper.XAuth;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 import java.sql.*;
 import javax.swing.table.DefaultTableModel;
@@ -25,6 +26,7 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
     int index=0;
     HoaDonDAO hddao=new HoaDonDAO();
     DichVuDAO dvdao=new DichVuDAO();
+    int maTK=XAuth.user.getId();
     public DSLichDatLeTan() {
         initComponents();
         this.setBorder(null);
@@ -271,7 +273,6 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
     private void btnHuyLichActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHuyLichActionPerformed
         // TODO add your handling code here:              
         try {
-
             index = tblLichDat.getSelectedRow();
             String mahd = tblLichDat.getValueAt(this.index, 0).toString();
             String trangThai = tblLichDat.getValueAt(this.index, 7).toString();
@@ -430,29 +431,44 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
     
     private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToanActionPerformed
         // TODO add your handling code here: 
-        try {
-            int row=-1;
+       
+       
+        System.out.println("mã nhân viên:"+maTK);
+         int row=-1;
+        try {          
             row = tblLichDat.getSelectedRow();
             String mahd = tblLichDat.getValueAt(row, 0).toString();
             String TrangThaiTT=tblLichDat.getValueAt(row, 6).toString();
             String TrangThai=tblLichDat.getValueAt(row, 7).toString();
             System.out.println("trạng thái thanh toán:"+TrangThaiTT);
-            System.out.println("trạng thái:"+TrangThai);          
-            if(TrangThai.equals("Đã thanh toán")){
-                MsgBox.alert(this, "Lịch đặt này đã thanh toán rồi!");
-                return;
-            }if(TrangThai.equals("Đã huỷ lịch")){
-                MsgBox.alert(this, "Lịch đã bị huỷ trước đó");
-                return;
-            }else{
+            System.out.println("trạng thái:"+TrangThai);   
+           
+
+            if(TrangThai.equals("Chưa thanh toán")){
+                 System.out.println("row:"+row);
                 if (row>=0) {
-                String sql = "update HoaDon set TrangThai=N'Đã thanh toán' where HoaDon.Id=" + mahd;
-                JDBCHelper.update(sql);
+                 String sql1 ="select nhanVien.Id from NhanVien join TaiKhoan on NhanVien.Id_TK=TaiKhoan.Id where TaiKhoan.Id="+maTK;
+                ResultSet rs=JDBCHelper.query(sql1);
+                try {
+                    while (rs.next()) {            
+                    Object[]item=new Object[1];
+                    item[0]=rs.getString("id");
+                    String sql = "update HoaDon set Id_NV="+item[0]+",TrangThaiTT=N'Đã đặt cọc', TrangThai=N'Đã thanh toán' where HoaDon.Id=" + mahd;
+                    JDBCHelper.update(sql);
+                }
+                } catch (Exception e) {
+                }                        
                 layThongTinLichDat();
                 DefaultTableModel mol=(DefaultTableModel)tblCTLichDat.getModel();
                 mol.setRowCount(0);
                 MsgBox.alert(this, "Thanh toán thành công!");                 
             }
+            }else if(TrangThai.equals("Đã thanh toán")){
+                MsgBox.alert(this, "Lịch đặt này đã thanh toán rồi!");
+                return;
+            }else if(TrangThai.equals("Đã huỷ lịch")){
+                MsgBox.alert(this, "Lịch đã bị huỷ trước đó");
+                return;
             }            
         } catch (Exception e) {
             MsgBox.alert(this, "Bạn chưa chọn hoá đơn thanh toán!");

@@ -79,7 +79,7 @@ public class DangNhap extends javax.swing.JFrame {
         btnDangKy = new javax.swing.JButton();
         lblQuenMK = new javax.swing.JLabel();
         btnDangNhap = new javax.swing.JButton();
-        jLabel7 = new javax.swing.JLabel();
+        lblBack = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -99,6 +99,7 @@ public class DangNhap extends javax.swing.JFrame {
 
         txtPass.setText("Nhập mật khẩu của bạn");
         txtPass.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        txtPass.setEchoChar('\u0000');
         txtPass.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 txtPassFocusGained(evt);
@@ -225,13 +226,13 @@ public class DangNhap extends javax.swing.JFrame {
         });
         getContentPane().add(btnDangNhap, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 320, 80, 30));
 
-        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/muiTen.png"))); // NOI18N
-        jLabel7.addMouseListener(new java.awt.event.MouseAdapter() {
+        lblBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/muiTen.png"))); // NOI18N
+        lblBack.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel7MouseClicked(evt);
+                lblBackMouseClicked(evt);
             }
         });
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 60, 30, 30));
+        getContentPane().add(lblBack, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 60, 30, 30));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/tao-mot-form-login-co-ban-trong-java-63730679233.2311.jpg"))); // NOI18N
         jLabel1.setText("jLabel1");
@@ -249,7 +250,6 @@ public class DangNhap extends javax.swing.JFrame {
     }//GEN-LAST:event_txtPassActionPerformed
 
     private void txtTKFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTKFocusGained
-
         if (txtTK.getText().equals("Nhập tài khoản của bạn")) {
             txtTK.setText(null);
             txtTK.requestFocus();
@@ -259,7 +259,7 @@ public class DangNhap extends javax.swing.JFrame {
 
     private void txtPassFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPassFocusGained
         // TODO add your handling code here:
-        if (txtPass.getText().equals("Nhập mật khẩu của bạn")) {
+        if (String.valueOf(txtPass.getPassword()).equals("Nhập mật khẩu của bạn")) {
             txtPass.setText(null);
             txtPass.requestFocus();
             txtPass.setEchoChar('*');
@@ -277,7 +277,7 @@ public class DangNhap extends javax.swing.JFrame {
 
     private void txtPassFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPassFocusLost
         // TODO add your handling code here:
-        if (txtPass.getText().length() == 0) {
+        if (String.valueOf(txtPass.getPassword()).length() == 0) {
             addPlacehodelStyle(txtPass);
             txtPass.setText("Nhập mật khẩu của bạn");
             txtPass.setEchoChar('\u0000');
@@ -293,22 +293,29 @@ public class DangNhap extends javax.swing.JFrame {
         String tenTK = txtTK.getText();
         String pass = new String(txtPass.getPassword());
         Model.TaiKhoan tk = dao.select(tenTK);
-        if (tk.getVaiTro() == 0) {
+        if (tk.getVaiTro() == 0 && tk.getMatKhau().equals(pass)) {
             QuanLyHome qly = new QuanLyHome();
             qly.setVisible(true);
-        } else if (tk.getVaiTro() == 1) {
+            XAuth.user = tk;
+            this.dispose();
+        } else if (tk.getVaiTro() == 1 && tk.getMatKhau().equals(pass)) {
             LeTanHome lt = new LeTanHome();
             lt.setVisible(true);
-
-        } else if (tk.getVaiTro() == 2) {
+            XAuth.user = tk;
+            this.dispose();
+        } else if (tk.getVaiTro() == 2 && tk.getMatKhau().equals(pass)) {
             ThoCatHome tc = new ThoCatHome();
             tc.setVisible(true);
-        }else if(tk.getVaiTro() == 3){
+            XAuth.user = tk;
+            this.dispose();
+        } else if (tk.getVaiTro() == 3 && tk.getMatKhau().equals(pass)) {
             NguoiDungHome nd = new NguoiDungHome();
             nd.setVisible(true);
+            XAuth.user = tk;
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Sai tài khoản hoặc mật khẩu");
         }
-        XAuth.user = tk ;
-        this.dispose();
     }//GEN-LAST:event_btnDangNhapActionPerformed
 
     private void ckcHienPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ckcHienPassActionPerformed
@@ -321,7 +328,7 @@ public class DangNhap extends javax.swing.JFrame {
 
     private void lblQuenMKMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblQuenMKMouseClicked
         QuenMatKhau qmk = new QuenMatKhau(this, true);
-         qmk.setVisible(true);
+        qmk.setVisible(true);
     }//GEN-LAST:event_lblQuenMKMouseClicked
 
     private void btnDangKyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangKyActionPerformed
@@ -333,11 +340,11 @@ public class DangNhap extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnDangKyActionPerformed
 
-    private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
+    private void lblBackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblBackMouseClicked
         KhachHangHome main = new KhachHangHome();
         main.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_jLabel7MouseClicked
+    }//GEN-LAST:event_lblBackMouseClicked
 
     /**
      * @param args the command line arguments
@@ -391,9 +398,9 @@ public class DangNhap extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel lblBack;
     private javax.swing.JLabel lblQuenMK;
     private javax.swing.JPasswordField txtPass;
     private javax.swing.JTextField txtTK;

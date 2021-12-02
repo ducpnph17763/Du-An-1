@@ -14,9 +14,7 @@ import Model.HoaDon;
 import Model.NhanVien;
 import Model.TaiKhoan;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.util.List;
-import java.util.function.ObjDoubleConsumer;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
@@ -280,7 +278,6 @@ public class HoaDonNguoiDung extends javax.swing.JInternalFrame {
         try {
             index = tblHoaDon.getSelectedRow();
             String mahd = tblHoaDon.getValueAt(index, 0).toString();
-            System.out.println("mã hoá đơn:" + mahd);
             if (index >= 0) {
                 DanhGia dmk = new DanhGia(mahd);
                 jDesktopPane1.add(dmk);
@@ -297,11 +294,14 @@ public class HoaDonNguoiDung extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnDanhGiaActionPerformed
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
+        // TODO add your handling code here:
+        this.FillTableHoaDon();
+        this.txtTimKiem.setText("");
+        this.SetTextTimKiem();
 
-        this.FillTableHoaDon();       
-    }//GEN-LAST:event_btnResetActionPerformed
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+
+   // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDanhGia;
     private javax.swing.JButton btnReset;
     private javax.swing.JButton btnTim;

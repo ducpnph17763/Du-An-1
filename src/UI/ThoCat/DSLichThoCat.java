@@ -5,7 +5,17 @@
  */
 package UI.ThoCat;
 
+import Dao.HoaDonDAO;
+import Dao.KhachHangDAO;
+import Helper.MsgBox;
+import Helper.XAuth;
+import Model.HoaDon;
+import Model.KhachHang;
+import Model.NhanVien;
+import Model.TaiKhoan;
+import java.util.List;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -13,15 +23,19 @@ import javax.swing.plaf.basic.BasicInternalFrameUI;
  */
 public class DSLichThoCat extends javax.swing.JInternalFrame {
 
-    /**
-     * Creates new form DSLichDat
-     */
+    HoaDonDAO hddao = new HoaDonDAO();
+    KhachHangDAO khdao = new KhachHangDAO();
 
     public DSLichThoCat() {
         initComponents();
         this.setBorder(null);
         BasicInternalFrameUI bui = (BasicInternalFrameUI) this.getUI();
         bui.setNorthPane(null);
+        this.init();
+    }
+    
+    private void init(){
+        this.FillTableHoaDon();
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -65,13 +79,13 @@ public class DSLichThoCat extends javax.swing.JInternalFrame {
 
         tblLichDat.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Mã lịch Đặt", "Ngày hẹn", "Mã thợ cắt", "Tổng tiền", "Đặt cọc", "Trạng thái thanh toán", "Trạng thái hóa đơn"
+                "Mã lịch Đặt", "Tên khách hàng", "Ngày hẹn", "Thời gian"
             }
         ));
         tblLichDat.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -144,4 +158,28 @@ public class DSLichThoCat extends javax.swing.JInternalFrame {
     private javax.swing.JTable tblCTLichDat;
     private javax.swing.JTable tblLichDat;
     // End of variables declaration//GEN-END:variables
+
+    private void FillTableHoaDon() {
+        TaiKhoan tk = XAuth.user;
+        try {
+            List<Model.HoaDon> ls = hddao.SelectByThoCat(tk.getId());
+            DefaultTableModel mol = (DefaultTableModel) tblLichDat.getModel();
+            mol.setRowCount(0);
+            String tenKH;
+            for (HoaDon l : ls) {
+                if(l.getId_KH() == null) {
+                    tenKH = "Khách Hàng";
+                }else {
+                    Model.KhachHang kh = khdao.selectById(l.getId_KH());
+                    tenKH = kh.getHoTen();
+                }
+                
+                mol .addRow(new Object[]{l.getId(), tenKH, l.getNgayHen(), l.getGioHen()});
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+//            MsgBox.alert(this, "Không tìm thấy hoá đơn nào!");
+        }
+
+    }
 }

@@ -50,7 +50,11 @@ String SELECT_ALL_SQL = "SELECT * FROM KHACHHANG WHERE TrangThai = N'Hoạt đ�
 
     @Override
     public KhachHang selectById(Object id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<KhachHang>list=this.selectBySql("select * from KhachHang where Id = ?", id);
+        if(list.isEmpty()){
+            return null;
+        }
+        return list.get(0);
     }
 
     @Override
@@ -66,7 +70,7 @@ String SELECT_ALL_SQL = "SELECT * FROM KHACHHANG WHERE TrangThai = N'Hoạt đ�
             while (rs.next()) {                
                 KhachHang entity=new KhachHang();
                 entity.setId(rs.getInt(1));
-                entity.setId_tk(rs.getInt(2));
+                entity.setId_tk(rs.getInt("ID_TK"));
                 entity.setHoTen(rs.getString(3));
                 entity.setHinh(rs.getString(4));
                 entity.setTrangThai(rs.getString(5));

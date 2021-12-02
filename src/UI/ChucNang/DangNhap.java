@@ -19,6 +19,7 @@ import java.awt.Font;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
@@ -29,6 +30,7 @@ import javax.swing.JTextField;
 public class DangNhap extends javax.swing.JFrame {
 
     Connection con;
+    int count = 0;
 
     /**
      * Creates new form DangNhap
@@ -292,6 +294,16 @@ public class DangNhap extends javax.swing.JFrame {
     private void btnDangNhapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangNhapActionPerformed
         String tenTK = txtTK.getText();
         String pass = new String(txtPass.getPassword());
+        List<Model.TaiKhoan> list = dao.selectAll();
+        for (int i = 0; i < list.size(); i++) {
+            if (tenTK.equals(list.get(i).getTenTK())) {
+                count = 1;
+                break;
+            }
+        }
+        if (count == 0) {
+            JOptionPane.showMessageDialog(this, "Tài khoản không tồn tại");
+        }
         Model.TaiKhoan tk = dao.select(tenTK);
         if (tk.getVaiTro() == 0 && tk.getMatKhau().equals(pass)) {
             QuanLyHome qly = new QuanLyHome();

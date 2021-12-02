@@ -264,17 +264,17 @@ public class HoaDonNguoiDung extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtTimKiemActionPerformed
 
     private void btnTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimActionPerformed
-        if(txtTimKiem.getText().equals("Nhập mã hóa đơn")) {
+        if (txtTimKiem.getText().equals("Nhập mã hóa đơn")) {
             JOptionPane.showMessageDialog(this, "Phải nhập vào mã hóa đơn!", "Thông báo", JOptionPane.ERROR_MESSAGE);
             return;
-        }else {
+        } else {
             this.TimKiemHoaDon();
         }
     }//GEN-LAST:event_btnTimActionPerformed
 
     private void btnDanhGiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDanhGiaActionPerformed
-         int index=-1;
-        
+        int index = -1;
+
         try {
             index = tblHoaDon.getSelectedRow();
             String mahd = tblHoaDon.getValueAt(index, 0).toString();
@@ -283,9 +283,9 @@ public class HoaDonNguoiDung extends javax.swing.JInternalFrame {
                 jDesktopPane1.add(dmk);
                 dmk.setLocation((jDesktopPane1.getWidth() - dmk.getWidth()) / 2, (jDesktopPane1.getHeight() - dmk.getHeight()) / 2);
                 dmk.show();
-                
+
             }
-                            
+
         } catch (Exception e) {
             MsgBox.alert(this, "bạn chưa chọn hoá đơn để đánh giá!");
 
@@ -293,14 +293,13 @@ public class HoaDonNguoiDung extends javax.swing.JInternalFrame {
         this.FillTableHoaDon();
     }//GEN-LAST:event_btnDanhGiaActionPerformed
 
-    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
+    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
         this.FillTableHoaDon();
         this.txtTimKiem.setText("");
         this.SetTextTimKiem();
 
-
-
+    }
    // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDanhGia;
     private javax.swing.JButton btnReset;
@@ -321,17 +320,17 @@ public class HoaDonNguoiDung extends javax.swing.JInternalFrame {
         TaiKhoan tk = XAuth.user;
         try {
             List<Model.HoaDon> ls = hddao.SelectHoaDonNguoiDung(tk.getTenTK());
-        DefaultTableModel mol = (DefaultTableModel) tblHoaDon.getModel();
-        mol.setRowCount(0);
-        for (HoaDon l : ls) {
-            NhanVien nv = nvdao.selectById(l.getId_TC());
-            mol.addRow(new Object[]{l.getId(), nv.getHoTen(), l.getNgayHen(), l.getThanhToan(),                
-                l.getDanhGia().equals("0")?"Hài lòng":l.getDanhGia().equals("1")?"Rất hài lòng":"Không hài lòng", l.getPhanHoi()});
-        }
+            DefaultTableModel mol = (DefaultTableModel) tblHoaDon.getModel();
+            mol.setRowCount(0);
+            for (HoaDon l : ls) {
+                NhanVien nv = nvdao.selectById(l.getId_TC());
+                mol.addRow(new Object[]{l.getId(), nv.getHoTen(), l.getNgayHen(), l.getThanhToan(),
+                    l.getDanhGia().equals("0") ? "Hài lòng" : l.getDanhGia().equals("1") ? "Rất hài lòng" : "Không hài lòng", l.getPhanHoi()});
+            }
         } catch (Exception e) {
             MsgBox.alert(this, "Không tìm thấy hoá đơn nào!");
         }
-        
+
     }
 
     private void FillTableHDCT(int id) {

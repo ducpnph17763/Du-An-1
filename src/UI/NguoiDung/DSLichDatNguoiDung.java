@@ -363,7 +363,8 @@ public class DSLichDatNguoiDung extends javax.swing.JInternalFrame {
 
     private void btnHuyLichActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHuyLichActionPerformed
         // TODO add your handling code here:
-        try {
+       try {
+
             index = tblLichDat.getSelectedRow();
             String mahd = tblLichDat.getValueAt(this.index, 0).toString();
             String trangThai = tblLichDat.getValueAt(this.index, 7).toString();
@@ -374,22 +375,23 @@ public class DSLichDatNguoiDung extends javax.swing.JInternalFrame {
                     if (trangThai.equalsIgnoreCase("Đã huỷ lịch")) {
                         MsgBox.alert(this, "Lịch đặt này đã bị huỷ trước đó!");
                         return;
-                    } else if (trangThaiTT.equals("Đã thanh toán") && trangThai.equals("Đã xử lý")) {
+                    } else if (trangThai.equals("Đã thanh toán")) {
                         MsgBox.alert(this, "Lịch đặt này đã thanh toán!");
                         return;
-                    } else if (trangThai.equals("Đang xử lý") && trangThaiTT.equals("Chưa thanh toán")) {
+                    } else if (trangThai.equals("Chưa thanh toán")) {
                         String cautruyvan1 = "delete from HoaDonChiTiet where Id_HD=" + mahd;
                         JDBCHelper.update(cautruyvan1);
                         String sql = "update HoaDon set ThanhToan=0,TrangThai=N'Đã huỷ lịch' where Id=" + mahd;
                         JDBCHelper.update(sql);
                         layThongTinLichDat();
-                        System.out.println("index:" + this.index);
                         DefaultTableModel mol = (DefaultTableModel) tblCTLichDat.getModel();
                         mol.setRowCount(0);
-                        MsgBox.alert(this, "Hủy lịch thành công!");                       
+                        MsgBox.alert(this, "Hủy lịch thành công!");
+
                     }
+
                 }
-                layThongTinLichDat();
+
             }
         } catch (Exception e) {
             MsgBox.alert(this, "Bạn chưa chọn lịch đặt để huỷ!");
@@ -461,10 +463,17 @@ public class DSLichDatNguoiDung extends javax.swing.JInternalFrame {
             index=tblLichDat.getSelectedRow();
             String mahd=tblLichDat.getValueAt(index, 0).toString();
             String TrangThaiTT=tblLichDat.getValueAt(index, 6).toString();
+            String TrangThai=tblLichDat.getValueAt(index, 7).toString();
             if(TrangThaiTT.equals("Đã đặt cọc(chờ xác nhận)")){
-                MsgBox.alert(this, "Lịch đặt đã đặt cọc rồi!");
+                MsgBox.alert(this, "Lịch đặt đã đặt cọc rồi đang chờ xác nhận!");
                 return;
-            }
+            }if(TrangThaiTT.equals("Đã đặt cọc")){
+                MsgBox.alert(this, "Lịch đặt đã đặt cọc trước đó");
+                return;
+            }if(TrangThai.equals("Đã huỷ lịch")){
+                MsgBox.alert(this, "Lịch đặt đã bị huỷ trước đó!");
+                return;
+            }            
             if(index>=0){
             DatCoc dc=new DatCoc(mahd);
             jDesktopPane1.add(dc);

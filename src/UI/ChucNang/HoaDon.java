@@ -46,7 +46,7 @@ public class HoaDon extends javax.swing.JInternalFrame {
                 + "from HoaDon\n"
                 + "join KhachHang on KhachHang.Id=HoaDon.Id_KH\n"
                 + "Join NhanVien on NhanVien.Id=HoaDon.Id_TC\n"
-                + "where NhanVien.Id=HoaDon.Id_TC and HoaDon.TrangThai=N'Đã xử lý' and HoaDon.TrangThaiTT=N'Đã thanh toán' and HoaDon.id="+id;
+                + "where NhanVien.Id=HoaDon.Id_TC and HoaDon.TrangThai=N'Đã thanh toán' and HoaDon.TrangThaiTT=N'Đã đặt cọc' and HoaDon.id="+id;
         ResultSet rs=JDBCHelper.query(sql);
         DefaultTableModel model=(DefaultTableModel)tblHoaDon.getModel();
         model.setRowCount(0);
@@ -72,7 +72,7 @@ public class HoaDon extends javax.swing.JInternalFrame {
                 + "from HoaDon\n"
                 + "join KhachHang on KhachHang.Id=HoaDon.Id_KH\n"
                 + "Join NhanVien on NhanVien.Id=HoaDon.Id_TC\n"
-                + "where NhanVien.Id=HoaDon.Id_TC and HoaDon.TrangThai=N'Đã xử lý' and HoaDon.TrangThaiTT=N'Đã thanh toán' ";
+                + "where NhanVien.Id=HoaDon.Id_TC and HoaDon.TrangThai=N'Đã thanh toán' and HoaDon.TrangThaiTT=N'Đã đặt cọc' ";
         ResultSet rs=JDBCHelper.query(sql);
         DefaultTableModel model=(DefaultTableModel)tblHoaDon.getModel();
         model.setRowCount(0);
@@ -85,7 +85,7 @@ public class HoaDon extends javax.swing.JInternalFrame {
                 item[3]=rs.getString("HoTen");
                 item[4]=rs.getString("NgayHen");
                 item[5]=rs.getString("ThanhToan");
-                item[6]=rs.getString("DanhGia");
+                item[6]=rs.getString("DanhGia").equals("0")?"Hài lòng":rs.getString("DanhGia").equals("1")?"Rất hài lòng":"không hài lòng";                
                 model.addRow(item);
             }
         } catch (SQLException e) {

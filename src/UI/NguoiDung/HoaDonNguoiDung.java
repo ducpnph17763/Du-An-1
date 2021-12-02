@@ -14,9 +14,7 @@ import Model.HoaDon;
 import Model.NhanVien;
 import Model.TaiKhoan;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.util.List;
-import java.util.function.ObjDoubleConsumer;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
@@ -91,13 +89,13 @@ public class HoaDonNguoiDung extends javax.swing.JInternalFrame {
 
         tblHoaDon.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Mã Hóa Đơn", "Tên TC", "Ngày đặt ", "Thanh Toán", "Đánh Giá"
+                "Mã Hóa Đơn", "Tên TC", "Ngày đặt ", "Thanh Toán", "Đánh Giá", "Phản Hồi"
             }
         ));
         tblHoaDon.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -280,7 +278,6 @@ public class HoaDonNguoiDung extends javax.swing.JInternalFrame {
         try {
             index = tblHoaDon.getSelectedRow();
             String mahd = tblHoaDon.getValueAt(index, 0).toString();
-            System.out.println("mã hoá đơn:" + mahd);
             if (index >= 0) {
                 DanhGia dmk = new DanhGia(mahd);
                 jDesktopPane1.add(dmk);
@@ -296,7 +293,9 @@ public class HoaDonNguoiDung extends javax.swing.JInternalFrame {
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
         // TODO add your handling code here:
-        this.FillTableHoaDon();       
+        this.FillTableHoaDon();
+        this.txtTimKiem.setText("");
+        this.SetTextTimKiem();
     }//GEN-LAST:event_btnResetActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -323,9 +322,7 @@ public class HoaDonNguoiDung extends javax.swing.JInternalFrame {
         mol.setRowCount(0);
         for (HoaDon l : ls) {
             NhanVien nv = nvdao.selectById(l.getId_TC());
-            mol.addRow(new Object[]{l.getId(), nv.getHoTen(), l.getNgayHen(), l.getThanhToan(),
-                
-                l.getDanhGia()});
+            mol.addRow(new Object[]{l.getId(), nv.getHoTen(), l.getNgayHen(), l.getThanhToan(),l.getDanhGia(), l.getPhanHoi()});
         }
         } catch (Exception e) {
             MsgBox.alert(this, "Không tìm thấy hoá đơn nào!");

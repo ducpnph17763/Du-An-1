@@ -122,8 +122,8 @@ public class HoaDonDAO extends BarberDAO<HoaDon, String> {
     }
 
     public List<Model.HoaDon> SelectHoaDonNguoiDung(String tentk) {
-        List<Model.HoaDon> list = this.selectBySql("select * from HoaDon join KhachHang on KhachHang.Id = HoaDon.Id_KH \n"
-                + "join TaiKhoan on TaiKhoan.Id = KhachHang.Id_TK where HoaDon.TrangThai=N'Đã xử lý' and TenTK = ?", tentk);
+            List<Model.HoaDon> list = this.selectBySql("select * from HoaDon join KhachHang on KhachHang.Id = HoaDon.Id_KH \n" +
+"join TaiKhoan on TaiKhoan.Id = KhachHang.Id_TK where HoaDon.TrangThaiTT=N'Đã thanh toán' and TenTK = ?", tentk);
         if (list.isEmpty()) {
             return null;
         }
@@ -131,7 +131,7 @@ public class HoaDonDAO extends BarberDAO<HoaDon, String> {
     }
     
     public Model.HoaDon TimKiemHoaDonNguoiDung(String tk, String id) {
-        List<Model.HoaDon> ls = this.selectBySql("Select * from HoaDon join KhachHang on KhachHang.Id = HoaDon.Id_KH join TaiKhoan on KhachHang.Id_TK = TaiKhoan.Id where TaiKhoan.TenTK = ? and HoaDon.Id = ?", tk , id);
+        List<Model.HoaDon> ls = this.selectBySql("Select HoaDon.* from HoaDon join KhachHang on KhachHang.Id = HoaDon.Id_KH join TaiKhoan on KhachHang.Id_TK = TaiKhoan.Id where TaiKhoan.TenTK = ? and HoaDon.Id = ? and HoaDon.TrangThaiTT = N'Đã thanh toán'", tk , id);
         if(ls.size() == 0) {
             return null;
         }else {
@@ -157,6 +157,8 @@ public class HoaDonDAO extends BarberDAO<HoaDon, String> {
         return list.get(0);
     }
     
-     
-    
+    public List<HoaDon> SelectByThoCat(int id) {
+        return this.selectBySql("Select * from HoaDon where Id_TC = ? and TrangThaiTT = ?", id, "Chưa thanh toán");
+    }
+
 }

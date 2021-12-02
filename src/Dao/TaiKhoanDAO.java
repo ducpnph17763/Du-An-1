@@ -110,6 +110,7 @@ public class TaiKhoanDAO extends BarberDAO<TaiKhoan, Object> {
                 entity.setMatKhau(rs.getString("MatKhau"));
                 entity.setVaiTro(rs.getInt("VaiTro"));
                 entity.setTrangThai(rs.getString("TrangThai"));
+                entity.setHinh(rs.getString("Hinh"));
                 list.add(entity);
             }
             rs.getStatement().getConnection().close();

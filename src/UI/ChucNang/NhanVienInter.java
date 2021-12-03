@@ -813,6 +813,10 @@ public class NhanVienInter extends javax.swing.JInternalFrame {
             MsgBox.alert(this, "SĐT không đúng định dạng");
             this.txtPhone.requestFocus();
             return false;
+        }  else if (this.nvDAO.selectBySDT(this.txtEmail.getText()) != null) {
+            MsgBox.alert(this, "Số điện thoại đã tồn tại");
+            this.txtEmail.requestFocus();
+            return false;
         }
 
         // Check địa chỉ

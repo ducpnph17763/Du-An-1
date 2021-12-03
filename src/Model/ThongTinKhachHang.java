@@ -16,6 +16,15 @@ public class ThongTinKhachHang {
     public ThongTinKhachHang() {
     }
 
+    public ThongTinKhachHang(int id, int idKH, String email, String sdt) {
+        this.id = id;
+        this.idKH = idKH;
+        this.email = email;
+        this.sdt = sdt;
+    }
+
+    
+    
     public int getId() {
         return id;
     }

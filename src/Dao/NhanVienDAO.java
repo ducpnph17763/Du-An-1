@@ -29,7 +29,8 @@ public class NhanVienDAO extends BarberDAO<NhanVien, Object>{
     String SELECT_ALL_SQL = "SELECT*FROM NhanVien where TrangThai =N'Hoạt động'";
     String SELECT_BY_ID_SQL = "SELECT*FROM NhanVien where Id=?";
     String SELECT_BY_EMAIL = "SELECT*FROM NhanVien where Email=?";
-String SELECT_VTRO = "SELECT VaiTro FROM NhanVien";
+    String SELECT_BY_SDT = "SELECT*FROM NhanVien where Sodienthoai=?";
+    String SELECT_VTRO = "SELECT VaiTro FROM NhanVien";
 
     @Override
     public void insert(NhanVien entity) {
@@ -151,6 +152,15 @@ String SELECT_VTRO = "SELECT VaiTro FROM NhanVien";
     
     public NhanVien selectByEmail(Object id) {
       List<NhanVien>list=this.selectBySql(SELECT_BY_EMAIL, id);
+      if(list.isEmpty()){
+          return null;
+      }else{
+          return list.get(0);
+      }
+    }
+    
+    public NhanVien selectBySDT(Object id) {
+      List<NhanVien>list=this.selectBySql(SELECT_BY_SDT, id);
       if(list.isEmpty()){
           return null;
       }else{

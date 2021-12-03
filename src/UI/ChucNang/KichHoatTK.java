@@ -24,6 +24,10 @@ public class KichHoatTK extends javax.swing.JFrame {
     }
     public KichHoatTK() {
         initComponents();
+<<<<<<< Updated upstream
+=======
+        setLocationRelativeTo(null);
+>>>>>>> Stashed changes
     }
 
     /**

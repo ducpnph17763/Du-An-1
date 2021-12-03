@@ -4,6 +4,8 @@
  */
 package UI.ChucNang;
 
+import Dao.KhachHangDAO;
+import Dao.NhanVienDAO;
 import Dao.TaiKhoanDAO;
 import Helper.MsgBox;
 import Model.TaiKhoan;
@@ -31,6 +33,8 @@ public class DangKy extends javax.swing.JFrame {
     int randomCode;
     private int index;
     private TaiKhoanDAO dao;
+    private KhachHangDAO khDAO;
+    private ThongTinKhachHang ttkhDAO;
     private DefaultTableModel model;
     private List<TaiKhoan> list = new ArrayList<>();
     /**
@@ -41,7 +45,7 @@ public class DangKy extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         this.dao = new TaiKhoanDAO();
-        
+        this.khDAO = new KhachHangDAO();
     }
 
     /**
@@ -219,9 +223,6 @@ public class DangKy extends javax.swing.JFrame {
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         this.dispose();
-//    TaiKhoan tk = this.getForm();
-//        System.out.println("TK: "+tk.getTenTK());
-//        System.out.println("MK: "+tk.getMatKhau());
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void txtRe_PassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRe_PassActionPerformed
@@ -235,7 +236,6 @@ public class DangKy extends javax.swing.JFrame {
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
         // TODO add your handling code here:
         check();
-//        insert();
     }//GEN-LAST:event_btnRegisterActionPerformed
 
     public void check() {
@@ -245,6 +245,9 @@ public class DangKy extends javax.swing.JFrame {
         } else if (txtTK.getText().trim().length() > 20) {
             MsgBox.alert(this, "Tài khoản không được quá 20 kí tự!");
             txtTK.requestFocus();
+        } else if (this.dao.select(this.txtTK.getText()) != null) {
+            MsgBox.alert(this, "Tên tài khoản đã tồn tại");
+            this.txtTK.requestFocus();
         } else if (txtPass.getText().trim().length() == 0) {
             MsgBox.alert(this, "Mật khẩu không được để trống!");
             txtPass.requestFocus();
@@ -254,18 +257,42 @@ public class DangKy extends javax.swing.JFrame {
         } else if (!txtRe_Pass.getText().matches(txtPass.getText())) {
             MsgBox.alert(this, "Xác nhận mật khẩu không trùng với mật khảu!");
             txtRe_Pass.requestFocus();
-        } else if (txtPhoneNumber.getText().trim().length() == 0) {
-            MsgBox.alert(this, "Số điện thoại không được để trống!");
-            txtPhoneNumber.requestFocus();
-        } else if (!txtPhoneNumber.getText().matches("(84|0[3|5|7|8|9])+([0-9]{8})")) {
-            MsgBox.alert(this, "Số điện thoại không hợp lệ!");
-            txtPhoneNumber.requestFocus();
+<<<<<<< Updated upstream
+=======
+        } else if (txtFullName.getText().trim().length() == 0) {
+            MsgBox.alert(this, "Họ tên không được để trống!");
+            txtFullName.requestFocus();
+        } else if (txtFullName.getText().trim().length()<3) {
+            MsgBox.alert(this, "Họ tên không hợp lệ!");
+            txtFullName.requestFocus();
         } else if (txtEmail.getText().trim().length() == 0) {
             MsgBox.alert(this, "Email không được để trống!");
             txtEmail.requestFocus();
         } else if (!txtEmail.getText().matches("\\w+@\\w+(\\.\\w+){1,2}")) {
             MsgBox.alert(this, "Email không hợp lệ!");
             txtEmail.requestFocus();
+        } else if (this.khDAO.SelectByEmail(this.txtEmail.getText()) != null) {
+            MsgBox.alert(this, "Email đã tồn tại");
+            this.txtEmail.requestFocus();
+>>>>>>> Stashed changes
+        } else if (txtPhoneNumber.getText().trim().length() == 0) {
+            MsgBox.alert(this, "Số điện thoại không được để trống!");
+            txtPhoneNumber.requestFocus();
+        } else if (!txtPhoneNumber.getText().matches("(84|0[3|5|7|8|9])+([0-9]{8})")) {
+            MsgBox.alert(this, "Số điện thoại không hợp lệ!");
+            txtPhoneNumber.requestFocus();
+<<<<<<< Updated upstream
+        } else if (txtEmail.getText().trim().length() == 0) {
+            MsgBox.alert(this, "Email không được để trống!");
+            txtEmail.requestFocus();
+        } else if (!txtEmail.getText().matches("\\w+@\\w+(\\.\\w+){1,2}")) {
+            MsgBox.alert(this, "Email không hợp lệ!");
+            txtEmail.requestFocus();
+=======
+        }  else if (this.khDAO.SelectBySoDienThoai(this.txtPhoneNumber.getText()) != null) {
+            MsgBox.alert(this, "Số điện thoại đã tồn tại");
+            this.txtEmail.requestFocus();
+>>>>>>> Stashed changes
         } else {
             guiMaCode();
             this.dispose();

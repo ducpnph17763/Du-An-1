@@ -11,6 +11,7 @@ import Model.HoaDon;
 import Model.KhachHang;
 import Model.NhanVien;
 import Model.TaiKhoan;
+import Model.ThongTinKhachHang;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -90,9 +91,17 @@ String SELECT_ALL_SQL = "SELECT * FROM KHACHHANG WHERE TrangThai = N'Hoạt đ�
         }
         return list.get(0);
     }
-    
+//    
     public KhachHang SelectBySoDienThoai(String sdt) {
         List<KhachHang>list=this.selectBySql("select KhachHang.* from KhachHang join ThongTinKhachHang on KhachHang.Id = ThongTinKhachHang.Id_KH where SoDienThoai = ? ", sdt);
+        if(list.isEmpty()){
+            return null;
+        }
+        return list.get(0);
+    }
+    
+    public KhachHang SelectByEmail(String email) {
+        List<KhachHang>list=this.selectBySql("select KhachHang.* from KhachHang join ThongTinKhachHang on KhachHang.Id = ThongTinKhachHang.Id_KH where Email = ? ", email);
         if(list.isEmpty()){
             return null;
         }

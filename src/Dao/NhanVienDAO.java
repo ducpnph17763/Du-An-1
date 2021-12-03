@@ -27,7 +27,7 @@ public class NhanVienDAO extends BarberDAO<NhanVien, Object>{
             + ",Email=?,SoDienThoai=?,VaiTro=?,TrangThai=? where Id=?";
     String DELETE_SQL = "DELETE FROM NhanVien";
     String SELECT_ALL_SQL = "SELECT*FROM NhanVien where TrangThai =N'Hoạt động'";
-    String SELECT_BY_ID_SQL = "SELECT*FROM NhanVien where Id=?";
+    String SELECT_BY_ID_SQL = "SELECT*FROM NhanVien join TaiKhoan on TaiKhoan.Id=NhanVien.Id_TK where TaiKhoan.Id=?";
     String SELECT_BY_EMAIL = "SELECT*FROM NhanVien where Email=?";
 String SELECT_VTRO = "SELECT VaiTro FROM NhanVien";
 

@@ -480,7 +480,7 @@ public class TaiKhoan extends javax.swing.JInternalFrame {
         } else {
             txtEmail.setText(tblBang.getValueAt(index, 0) + "");
             txtSDT.setText(tblBang.getValueAt(index, 1) + "");
-            String id = String.valueOf(XAuth.user.getId());
+            int id = XAuth.user.getId();
             txtTen.setText(nvdao.selectById(id).getHoTen());
         }
     }

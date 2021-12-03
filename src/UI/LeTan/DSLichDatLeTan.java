@@ -39,6 +39,7 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
 
     void init() {
         layThongTinLichDat();
+        layLichDat();
     }
 
     void layThongTinLichDat() {
@@ -132,6 +133,36 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
         }
     }
 
+    void layLichDat() {
+        String sql = "select HoaDon.Id,HoaDon.NgayHen,null as HoTen,HoaDon.Id_TC,HoaDon.DatCoc,HoaDon.ThanhToan,HoaDon.TrangThaiTT,HoaDon.TrangThai\n"
+                + "     from HoaDon join NhanVien on NhanVien.Id=HoaDon.Id_TC\n"
+                + "	where  NhanVien.Id=HoaDon.Id_TC             \n"
+                + "      and (HoaDon.TrangThai LIKE N'Chưa thanh toán' or HoaDon.TrangThai LIKE N'Đã huỷ lịch')";
+         ResultSet rs=JDBCHelper.query(sql);
+        Object[]row=new Object[]{
+          "Mã lịch đặt","Ngày hẹn","Khách hàng","Id Thợ cắt","Đặt cọc","Tổng tiền","Trạng thái TT","Trạng thái hoá đơn"  
+        };
+        DefaultTableModel mol=new DefaultTableModel(row,0);
+        tblLichDat.setModel(mol);
+        try {
+            while (rs.next()) {                
+                Object[] item=new Object[8];
+                item[0]=rs.getInt("Id");
+                item[1]=rs.getString("NgayHen");
+                item[2]=rs.getString("HoTen");
+                item[3]=rs.getString("Id_TC");
+                item[4]=rs.getInt("DatCoc");
+                item[5]=rs.getString("ThanhToan");
+                item[6]=rs.getString("TrangThaiTT");
+                item[7]=rs.getString("TrangThai");
+                mol.addRow(item);
+                
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -308,6 +339,7 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
                         String sql = "update HoaDon set ThanhToan=0,TrangThai=N'Đã huỷ lịch' where Id=" + mahd;
                         JDBCHelper.update(sql);
                         layThongTinLichDat();
+                        layLichDat();
                         DefaultTableModel mol = (DefaultTableModel) tblCTLichDat.getModel();
                         mol.setRowCount(0);
                         MsgBox.alert(this, "Hủy lịch thành công!");
@@ -339,6 +371,7 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
                     String update = "update HoaDon set DatCoc=0,TrangThai=N'Đã huỷ lịch' where Id=" + mahd;
                     JDBCHelper.update(update);
                     layThongTinLichDat();
+                    layLichDat();
                     DefaultTableModel mol = (DefaultTableModel) tblCTLichDat.getModel();
                     mol.setRowCount(0);
                     MsgBox.alert(this, "Lịch này đã bị huỷ!");
@@ -347,6 +380,7 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
                     String update = "update HoaDon set DatCoc=" + tongTien + " where Id=" + mahd;
                     JDBCHelper.update(update);
                     layThongTinLichDat();
+                    layLichDat();
                 }
             }
         } catch (Exception e) {
@@ -431,6 +465,7 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
                     String update = "update HoaDon set ThanhToan=0,TrangThai=N'Đã huỷ lịch' where Id=" + mahd;
                     JDBCHelper.update(update);
                     layThongTinLichDat();
+                    layLichDat();
                     DefaultTableModel mol = (DefaultTableModel) tblCTLichDat.getModel();
                     mol.setRowCount(0);
                     MsgBox.alert(this, "Lịch này đã bị huỷ!");
@@ -447,7 +482,6 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
 
     private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToanActionPerformed
         // TODO add your handling code here: 
-
         System.out.println("mã nhân viên:" + maTK);
         int row = -1;
         try {
@@ -473,6 +507,7 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
                     } catch (Exception e) {
                     }
                     layThongTinLichDat();
+                    layLichDat();
                     DefaultTableModel mol = (DefaultTableModel) tblCTLichDat.getModel();
                     mol.setRowCount(0);
                     MsgBox.alert(this, "Thanh toán thành công!");

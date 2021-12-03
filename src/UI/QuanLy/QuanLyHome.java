@@ -588,7 +588,7 @@ public class QuanLyHome extends javax.swing.JFrame {
         try {
             bufferedImage = ImageIO.read(new File("src\\Image\\" + fileName));
         } catch (IOException e) {
-            e.printStackTrace();
+            
         }
         Image scaledImage = bufferedImage.getScaledInstance(lblHinh.getWidth(), lblHinh.getHeight(), Image.SCALE_SMOOTH);
         ImageIcon image = new ImageIcon(scaledImage);

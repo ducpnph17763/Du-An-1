@@ -22,6 +22,8 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.swing.table.DefaultTableModel;
+import Model.KhachHang;
+import Model.ThongTinKhachHang;
 
 /**
  *
@@ -141,7 +143,6 @@ public class DangKy extends javax.swing.JFrame {
 
         txtPhoneNumber.setBackground(new java.awt.Color(84, 141, 251));
         txtPhoneNumber.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        txtPhoneNumber.setForeground(new java.awt.Color(255, 255, 255));
         txtPhoneNumber.setBorder(null);
         jPanel1.add(txtPhoneNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 390, 248, 29));
 
@@ -242,35 +243,46 @@ public class DangKy extends javax.swing.JFrame {
         if (txtTK.getText().trim().length() == 0) {
             MsgBox.alert(this, "Tài khoản không được để trống!");
             txtTK.requestFocus();
+        } else if (txtTK.getText().trim().length() <3) {
+            MsgBox.alert(this, "Tài khoản tối thiểu 3 kí tự!");
+            txtTK.requestFocus();
         } else if (txtTK.getText().trim().length() > 20) {
             MsgBox.alert(this, "Tài khoản không được quá 20 kí tự!");
             txtTK.requestFocus();
         } else if (txtPass.getText().trim().length() == 0) {
             MsgBox.alert(this, "Mật khẩu không được để trống!");
             txtPass.requestFocus();
+        } else if (txtPass.getText().trim().length() <3) {
+            MsgBox.alert(this, "Mật khẩu tối thiểu 3 kí tự!");
+            txtTK.requestFocus();
         } else if (txtRe_Pass.getText().trim().length() == 0) {
             MsgBox.alert(this, "Xác nhận mật khẩu không được để trống!");
             txtRe_Pass.requestFocus();
         } else if (!txtRe_Pass.getText().matches(txtPass.getText())) {
             MsgBox.alert(this, "Xác nhận mật khẩu không trùng với mật khảu!");
             txtRe_Pass.requestFocus();
-        } else if (txtPhoneNumber.getText().trim().length() == 0) {
-            MsgBox.alert(this, "Số điện thoại không được để trống!");
-            txtPhoneNumber.requestFocus();
-        } else if (!txtPhoneNumber.getText().matches("(84|0[3|5|7|8|9])+([0-9]{8})")) {
-            MsgBox.alert(this, "Số điện thoại không hợp lệ!");
-            txtPhoneNumber.requestFocus();
+        } else if (txtFullName.getText().trim().length() == 0) {
+            MsgBox.alert(this, "Họ tên không được để trống!");
+            txtFullName.requestFocus();
+        } else if (txtFullName.getText().trim().length()<3) {
+            MsgBox.alert(this, "Họ tên không hợp lệ!");
+            txtFullName.requestFocus();
         } else if (txtEmail.getText().trim().length() == 0) {
             MsgBox.alert(this, "Email không được để trống!");
             txtEmail.requestFocus();
         } else if (!txtEmail.getText().matches("\\w+@\\w+(\\.\\w+){1,2}")) {
             MsgBox.alert(this, "Email không hợp lệ!");
             txtEmail.requestFocus();
+        } else if (txtPhoneNumber.getText().trim().length() == 0) {
+            MsgBox.alert(this, "Số điện thoại không được để trống!");
+            txtPhoneNumber.requestFocus();
+        } else if (!txtPhoneNumber.getText().matches("(84|0[3|5|7|8|9])+([0-9]{8})")) {
+            MsgBox.alert(this, "Số điện thoại không hợp lệ!");
+            txtPhoneNumber.requestFocus();
         } else {
             guiMaCode();
             this.dispose();
-            TaiKhoan tk = getForm();
-            KichHoatTK kichhoat = new KichHoatTK(tk);
+            KichHoatTK kichhoat = new KichHoatTK(randomCode, txtTK.getText(),txtPass.getText(), txtFullName.getText(), txtEmail.getText(), txtPhoneNumber.getText());            
             kichhoat.setVisible(true);
         }
     }
@@ -311,20 +323,6 @@ public class DangKy extends javax.swing.JFrame {
             }
     }
 
-    public TaiKhoan getForm(){
-        TaiKhoan tk = new TaiKhoan();
-        tk.setTenTK(txtTK.getText());
-        tk.setMatKhau(new String(txtPass.getPassword()));
-        tk.setVaiTro(3);
-        tk.setTrangThai("Hoạt động");
-        return tk;
-    }
-    public void setForm(TaiKhoan tk){
-        this.txtTK.setText(tk.getTenTK());
-        this.txtPass.setText(tk.getMatKhau());
-    }
-    
-    
     /**
      * @param args the command line arguments
      */
@@ -350,6 +348,8 @@ public class DangKy extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(DangKy.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 

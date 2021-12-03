@@ -586,7 +586,7 @@ public class QuanLyHome extends javax.swing.JFrame {
     public void SetHinh(String fileName) {
         BufferedImage bufferedImage = null;
         try {
-            bufferedImage = ImageIO.read(new File("Du-An-1\\src\\Image\\" + fileName));
+            bufferedImage = ImageIO.read(new File("src\\Image\\" + fileName));
         } catch (IOException e) {
             e.printStackTrace();
         }

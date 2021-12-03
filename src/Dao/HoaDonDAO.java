@@ -20,8 +20,8 @@ import java.util.logging.Logger;
 public class HoaDonDAO extends BarberDAO<HoaDon, String> {
 
     String UPDATE_SQL = "UPDATE HoaDon set TrangThaiTT=?,TrangThai=? where Id=?";
-    String SELECT_ALL_SQL = "select*from HoaDon";
-    String SELECT_BY_ID_SQL = "select*from HoaDon where Id=?";
+    String SELECT_ALL_SQL = "select * from HoaDon";
+    String SELECT_BY_ID_SQL = "select * from HoaDon where Id=?";
     String Insert = "Insert into HoaDon(Id_KH,Id_NV,Id_TC,NgayHen,GioHen,NgayTao,DatCoc,ThanhToan,TrangThaiTT,TrangThai,DanhGia,PhanHoi)"
             + "values(?,?,?,?,?,?,?,?,?,?,?,?)";
 

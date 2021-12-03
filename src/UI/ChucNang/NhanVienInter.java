@@ -585,6 +585,7 @@ public class NhanVienInter extends javax.swing.JInternalFrame {
         this.txtPhone.setText(nv.getSdt());
         this.txtEmail.setText(nv.getEmail());
         rdoNam.setSelected(nv.getGioiTinh());
+        rdoNu.setSelected(!nv.getGioiTinh());
         this.txtDiaChi.setText(nv.getDiaChi());
         this.cbbVaiTro.setSelectedItem(nv.getVaiTro());
     }
@@ -628,7 +629,11 @@ public class NhanVienInter extends javax.swing.JInternalFrame {
     public void setFormTK(Model.TaiKhoan tk) {
         this.txtUser.setText(tk.getTenTK());
         this.txtPass.setText(tk.getMatKhau());
-        rdoHoatDong.setSelected(true);
+        if(tk.getTrangThai().equals("Hoạt động")){
+            rdoHoatDong.setSelected(true);
+        }else{
+            rdoKhongHoatDong.setSelected(true);
+        }
     }
 
     private void clearForm() {
@@ -710,12 +715,14 @@ public class NhanVienInter extends javax.swing.JInternalFrame {
 
     private void first() {
         this.index = 0;
+        tblNV.setRowSelectionInterval(index, index);
         this.edit();
     }
 
     private void prev() {
         if (this.index > 0) {
             this.index--;
+            tblNV.setRowSelectionInterval(index, index);
             this.edit();
         }
     }
@@ -723,12 +730,14 @@ public class NhanVienInter extends javax.swing.JInternalFrame {
     private void next() {
         if (this.index < this.tblNV.getRowCount() - 1) {
             this.index++;
+            tblNV.setRowSelectionInterval(index, index);
             this.edit();
         }
     }
 
     private void last() {
         this.index = tblNV.getRowCount() - 1;
+        tblNV.setRowSelectionInterval(index, index);
         this.edit();
     }
 
@@ -812,6 +821,10 @@ public class NhanVienInter extends javax.swing.JInternalFrame {
         } else if (!this.txtPhone.getText().matches("(84|0[3|5|7|8|9])+([0-9]{8})")) {
             MsgBox.alert(this, "SĐT không đúng định dạng");
             this.txtPhone.requestFocus();
+            return false;
+        } else if (this.nvDAO.selectBySDT(this.txtEmail.getText()) != null) {
+            MsgBox.alert(this, "Email đã tồn tại");
+            this.txtEmail.requestFocus();
             return false;
         }
 

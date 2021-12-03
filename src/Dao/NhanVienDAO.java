@@ -158,6 +158,15 @@ String SELECT_VTRO = "SELECT VaiTro FROM NhanVien";
       }
     }
     
+    public NhanVien selectBySDT(Object id) {
+      List<NhanVien>list=this.selectBySql("SELECT*FROM NhanVien where SoDienThoai=?", id);
+      if(list.isEmpty()){
+          return null;
+      }else{
+          return list.get(0);
+      }
+    }
+    
     public NhanVien selectBVTro(Object id) {
       List<NhanVien>list=this.selectBySql(SELECT_VTRO, id);
       if(list.isEmpty()){

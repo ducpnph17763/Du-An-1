@@ -23,8 +23,7 @@ import java.util.logging.Logger;
  */
 public class TaiKhoanDAO extends BarberDAO<TaiKhoan, Object> {
 
-    String INSERT_SQL = "INSERT INTO TaiKhoan(TenTK,MatKhau,VaiTro,TrangThai)"
-            + "values(?,?,?,?)";
+    String INSERT_SQL = "INSERT INTO TaiKhoan(TenTK,MatKhau,VaiTro,TrangThai) values(?,?,?,?)";
     String UPDATE_SQL = "UPDATE TaiKhoan set MatKhau=?,TrangThai=? where TenTK=?";
     String DELETE_SQL = "DELETE FROM TaiKhoan Where TenTK=?";
     String SELECT_ALL_SQL = "SELECT*FROM TaiKhoan";
@@ -51,7 +50,7 @@ public class TaiKhoanDAO extends BarberDAO<TaiKhoan, Object> {
         }
         return list.get(0);
     }
-    
+
     public TaiKhoan select(String tentk) {
         String sql = "Select * from TaiKhoan where TenTK = ?";
         List<TaiKhoan> list = this.selectBySql(sql, tentk);

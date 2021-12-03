@@ -303,30 +303,31 @@ public class DangNhap extends javax.swing.JFrame {
         }
         if (count == 0) {
             JOptionPane.showMessageDialog(this, "Tài khoản không tồn tại");
-        }
-        Model.TaiKhoan tk = dao.select(tenTK);
-        if (tk.getVaiTro() == 0 && tk.getMatKhau().equals(pass)) {
-            QuanLyHome qly = new QuanLyHome();
-            qly.setVisible(true);
-            XAuth.user = tk;
-            this.dispose();
-        } else if (tk.getVaiTro() == 1 && tk.getMatKhau().equals(pass)) {
-            LeTanHome lt = new LeTanHome();
-            lt.setVisible(true);
-            XAuth.user = tk;
-            this.dispose();
-        } else if (tk.getVaiTro() == 2 && tk.getMatKhau().equals(pass)) {
-            ThoCatHome tc = new ThoCatHome();
-            tc.setVisible(true);
-            XAuth.user = tk;
-            this.dispose();
-        } else if (tk.getVaiTro() == 3 && tk.getMatKhau().equals(pass)) {
-            NguoiDungHome nd = new NguoiDungHome();
-            nd.setVisible(true);
-            XAuth.user = tk;
-            this.dispose();
         } else {
-            JOptionPane.showMessageDialog(this, "Sai tài khoản hoặc mật khẩu");
+            Model.TaiKhoan tk = dao.select(tenTK);
+            if (tk.getVaiTro() == 0 && tk.getMatKhau().equals(pass)) {
+                QuanLyHome qly = new QuanLyHome();
+                qly.setVisible(true);
+                XAuth.user = tk;
+                this.dispose();
+            } else if (tk.getVaiTro() == 1 && tk.getMatKhau().equals(pass)) {
+                LeTanHome lt = new LeTanHome();
+                lt.setVisible(true);
+                XAuth.user = tk;
+                this.dispose();
+            } else if (tk.getVaiTro() == 2 && tk.getMatKhau().equals(pass)) {
+                ThoCatHome tc = new ThoCatHome();
+                tc.setVisible(true);
+                XAuth.user = tk;
+                this.dispose();
+            } else if (tk.getVaiTro() == 3 && tk.getMatKhau().equals(pass)) {
+                NguoiDungHome nd = new NguoiDungHome();
+                nd.setVisible(true);
+                XAuth.user = tk;
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Sai tài khoản hoặc mật khẩu");
+            }
         }
     }//GEN-LAST:event_btnDangNhapActionPerformed
 

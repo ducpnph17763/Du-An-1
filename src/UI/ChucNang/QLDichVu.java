@@ -13,6 +13,7 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -31,6 +32,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
      */
     int index=-1;
     DichVuDAO dvdao=new DichVuDAO();
+    List<Model.DichVu>list=new ArrayList<>();
     JFileChooser fileChoose=new JFileChooser();
     public QLDichVu() {
         initComponents();
@@ -79,11 +81,13 @@ public class QLDichVu extends javax.swing.JInternalFrame {
         ImageIcon image = new ImageIcon(scaledImage);
         lblAnh.setIcon(image);
     }
+    
    Model.DichVu getForm() {
         DichVu dv = new DichVu();
         index=0;
         String id = (String) tblDichVu.getValueAt(index, 0);
-        dv.setId(id);
+        System.out.println("id để sửa:"+id);
+        dv.setId(lblID.getText());
         System.out.println("id"+dv.getId());
         dv.setTenDV(txtTenDV.getText());
         dv.setGiaTien(Integer.parseInt(txtGiaTien.getText()));
@@ -93,7 +97,8 @@ public class QLDichVu extends javax.swing.JInternalFrame {
     }
     
     void setForm(Model.DichVu dv) {
-        
+       
+        lblID.setText(dv.getId());
         txtTenDV.setText(dv.getTenDV());
         txtGiaTien.setText(dv.getGiaTien() + "");
         txtGioiThieu.setText(dv.getMoTa());
@@ -171,6 +176,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
         btnSua = new javax.swing.JButton();
         btnXoa = new javax.swing.JButton();
         btnChonAnh = new javax.swing.JButton();
+        lblID = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -201,23 +207,33 @@ public class QLDichVu extends javax.swing.JInternalFrame {
         jPanel3.add(jScrollPane1, "card2");
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel7.setText("Tên dịch vụ");
+        jPanel4.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(13, 52, -1, -1));
 
         jLabel8.setText("Giá tiền");
+        jPanel4.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(19, 119, -1, -1));
 
         jLabel9.setText("Hình ảnh");
+        jPanel4.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(19, 187, -1, -1));
 
         jLabel10.setText("Giới thiệu");
+        jPanel4.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(19, 244, -1, -1));
 
         txtTenDV.setName("Tên dịch vụ"); // NOI18N
+        jPanel4.add(txtTenDV, new org.netbeans.lib.awtextra.AbsoluteConstraints(81, 49, 467, -1));
 
         txtGiaTien.setName("Giá tiền"); // NOI18N
+        jPanel4.add(txtGiaTien, new org.netbeans.lib.awtextra.AbsoluteConstraints(81, 116, 464, -1));
 
         txtGioiThieu.setName("Giới thiệu"); // NOI18N
         jScrollPane2.setViewportView(txtGioiThieu);
 
+        jPanel4.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(81, 244, 464, 125));
+
         lblAnh.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
+        jPanel4.add(lblAnh, new org.netbeans.lib.awtextra.AbsoluteConstraints(869, 11, 243, 358));
 
         btnLamMoi.setBackground(new java.awt.Color(57, 70, 138));
         btnLamMoi.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -230,6 +246,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
                 btnLamMoiActionPerformed(evt);
             }
         });
+        jPanel4.add(btnLamMoi, new org.netbeans.lib.awtextra.AbsoluteConstraints(1160, 30, 138, 54));
 
         btnThem.setBackground(new java.awt.Color(57, 70, 138));
         btnThem.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -242,6 +259,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
                 btnThemActionPerformed(evt);
             }
         });
+        jPanel4.add(btnThem, new org.netbeans.lib.awtextra.AbsoluteConstraints(1161, 102, 138, 54));
 
         btnSua.setBackground(new java.awt.Color(57, 70, 138));
         btnSua.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -254,6 +272,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
                 btnSuaActionPerformed(evt);
             }
         });
+        jPanel4.add(btnSua, new org.netbeans.lib.awtextra.AbsoluteConstraints(1161, 200, 138, 54));
 
         btnXoa.setBackground(new java.awt.Color(57, 70, 138));
         btnXoa.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -266,6 +285,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
                 btnXoaActionPerformed(evt);
             }
         });
+        jPanel4.add(btnXoa, new org.netbeans.lib.awtextra.AbsoluteConstraints(1161, 315, 138, 54));
 
         btnChonAnh.setText("Chọn file");
         btnChonAnh.addActionListener(new java.awt.event.ActionListener() {
@@ -273,80 +293,10 @@ public class QLDichVu extends javax.swing.JInternalFrame {
                 btnChonAnhActionPerformed(evt);
             }
         });
+        jPanel4.add(btnChonAnh, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 183, 90, -1));
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(jLabel10)
-                                .addGap(18, 18, 18)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 464, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(jLabel9)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnChonAnh, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel8)))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(13, 13, 13)
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtGiaTien, javax.swing.GroupLayout.PREFERRED_SIZE, 464, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtTenDV, javax.swing.GroupLayout.PREFERRED_SIZE, 467, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 311, Short.MAX_VALUE)
-                .addComponent(lblAnh, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(49, 49, 49)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnLamMoi, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(btnThem, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
-                        .addComponent(btnSua, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnXoa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGap(19, 19, 19))
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(49, 49, 49)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtTenDV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7))
-                        .addGap(47, 47, 47)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel8)
-                            .addComponent(txtGiaTien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(47, 47, 47)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnChonAnh)
-                            .addComponent(jLabel9))
-                        .addGap(38, 38, 38)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(jLabel10)
-                                .addGap(0, 0, Short.MAX_VALUE))))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(btnLamMoi, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(37, 37, 37)
-                                .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
-                                .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(36, 36, 36)
-                                .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(lblAnh, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap())
-        );
+        lblID.setText("jLabel1");
+        jPanel4.add(lblID, new org.netbeans.lib.awtextra.AbsoluteConstraints(1210, 50, -1, -1));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -356,13 +306,13 @@ public class QLDichVu extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 1308, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -447,7 +397,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
                     clearForm();
                     MsgBox.alert(this, "Xoá thành công!");
                 } catch (Exception e) {
-                    System.out.println(e);
+                    MsgBox.alert(this, "dịch vụ đã tồn tại trong hoá đơn chi tiết!");
                 }
             }
         }
@@ -470,6 +420,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblAnh;
+    private javax.swing.JLabel lblID;
     private javax.swing.JTable tblDichVu;
     private javax.swing.JTextField txtGiaTien;
     private javax.swing.JTextPane txtGioiThieu;

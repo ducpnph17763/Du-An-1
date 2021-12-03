@@ -277,8 +277,6 @@ public class QuanLyHome extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Quản lý: ");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, -1, -1));
-
-        lblHinh.setBackground(new java.awt.Color(17, 16, 99));
         jPanel1.add(lblHinh, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 60, 120, 120));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/LoGo.png"))); // NOI18N
@@ -588,7 +586,7 @@ public class QuanLyHome extends javax.swing.JFrame {
     public void SetHinh(String fileName) {
         BufferedImage bufferedImage = null;
         try {
-            bufferedImage = ImageIO.read(new File("src\\Image\\" + fileName));
+            bufferedImage = ImageIO.read(new File("Du-An-1\\src\\Image\\" + fileName));
         } catch (IOException e) {
             e.printStackTrace();
         }

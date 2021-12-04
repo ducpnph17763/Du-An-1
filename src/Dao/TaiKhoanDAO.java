@@ -163,7 +163,7 @@ public class TaiKhoanDAO extends BarberDAO<TaiKhoan, Object> {
 //        String sql = "SELECT TAIKHOAN.ID,TENTK,MATKHAU,TAIKHOAN.TRANGTHAI FROM TAIKHOAN JOIN NHANVIEN ON TAIKHOAN.ID = NHANVIEN.ID_TK WHERE NHANVIEN.ID=?";
 //        return  this.selectBySql(sql, idNV);
 //    }
-    String sql = "SELECT TAIKHOAN.ID,TENTK,MATKHAU,TAIKHOAN.VAITRO,TAIKHOAN.TRANGTHAI FROM TAIKHOAN JOIN NHANVIEN ON TAIKHOAN.ID = NHANVIEN.ID_TK WHERE NHANVIEN.ID=?";
+    String sql = "SELECT TAIKHOAN.* FROM TAIKHOAN JOIN NHANVIEN ON TAIKHOAN.ID = NHANVIEN.ID_TK WHERE NHANVIEN.ID=?";
 
     public TaiKhoan selectByIdNv(String idNV) {
         List<TaiKhoan> list = this.selectBySql(sql, idNV);

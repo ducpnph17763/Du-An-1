@@ -56,6 +56,7 @@ public class QuenMatKhau extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -63,6 +64,9 @@ public class QuenMatKhau extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         btnGuiMK = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        cboNV = new javax.swing.JRadioButton();
+        cboND = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -118,6 +122,15 @@ public class QuenMatKhau extends javax.swing.JDialog {
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Nhập email của tài khoản :");
 
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("Bạn là :");
+
+        buttonGroup1.add(cboNV);
+        cboNV.setText("Nhân viên");
+
+        buttonGroup1.add(cboND);
+        cboND.setText("Người dùng");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -129,13 +142,18 @@ public class QuenMatKhau extends javax.swing.JDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
+                    .addComponent(jLabel4)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                            .addComponent(jLabel3)
+                            .addGap(18, 18, 18)
+                            .addComponent(cboNV, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(btnGuiMK)
+                                .addComponent(cboND, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnGuiMK)
-                .addGap(172, 172, 172))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -146,9 +164,18 @@ public class QuenMatKhau extends javax.swing.JDialog {
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41)
-                .addComponent(btnGuiMK, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(74, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
+                        .addComponent(btnGuiMK, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(38, 38, 38))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(23, 23, 23)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(cboNV)
+                            .addComponent(cboND))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 480, 300));
@@ -166,7 +193,9 @@ public class QuenMatKhau extends javax.swing.JDialog {
             guiMKMoi();
             try {
                 tkdao.update(getTTTK());
+                System.out.println("Pass là :" + getTTTK().getMatKhau());
             } catch (Exception e) {
+                e.printStackTrace();
             }
             this.dispose();
             KhachHangHome main = new KhachHangHome();
@@ -175,7 +204,7 @@ public class QuenMatKhau extends javax.swing.JDialog {
     }//GEN-LAST:event_btnGuiMKActionPerformed
 
     Model.TaiKhoan getTTTK() {
-        if (tkdao.getTenTKNV(txtMail.getText()).getVaiTro() == 3) {
+        if (cboND.isSelected()) {
             int id = tkdao.getTenTKKH(txtMail.getText()).getId();
             String tenTK = tkdao.getTenTKKH(txtMail.getText()).getTenTK();
             String mk = newPass;
@@ -241,21 +270,39 @@ public class QuenMatKhau extends javax.swing.JDialog {
         List<Model.NhanVien> listNV = nvdao.selectAll();
         List<Model.TTKhachHang> listKH = khdao.selectAll();
         String mail = txtMail.getText();
-        if (tkdao.getTenTKKH(mail) == null) {
+
+        if (txtMail.getText().length() == 0) {
+            JOptionPane.showMessageDialog(this, "Vui lòng điền email");
+            index = 0;
+            return;
+        }
+        if (cboND.isSelected() == false && cboNV.isSelected() == false) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn vai trò");
+            index = 0;
+            return;
+        }
+        if (tkdao.getTenTKKH(mail) == null && tkdao.getTenTKNV(mail) == null) {
             JOptionPane.showMessageDialog(this, "Email không tồn tại");
-        } else if (tkdao.getTenTKKH(mail).getVaiTro() == 3) {
+            index = 0;
+            return;
+        }
+        if (cboND.isSelected()) {
             for (Model.TTKhachHang x : listKH) {
                 if (mail.equals(x.getEmail())) {
                     index = 1;
                     break;
                 }
             }
-        } else {
+            return;
+        }
+        if (cboNV.isSelected()) {
             for (Model.NhanVien x : listNV) {
                 if (mail.equals(x.getEmail())) {
+                    index = 1;
                     break;
                 }
             }
+            return;
         }
     }
 
@@ -287,7 +334,7 @@ public class QuenMatKhau extends javax.swing.JDialog {
             transport.connect(host, user, pass);
             transport.sendMessage(msg, msg.getAllRecipients());
             transport.close();
-            MsgBox.alert(this, "Code đã được gửi về email");
+            MsgBox.alert(this, "Pass đã được gửi về email");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -308,8 +355,12 @@ public class QuenMatKhau extends javax.swing.JDialog {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGuiMK;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JRadioButton cboND;
+    private javax.swing.JRadioButton cboNV;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

@@ -26,7 +26,7 @@ public class ValidateHelper {
     public static boolean checkTenDV(JTextField txt){
         String ten=txt.getText();
         String rgx=".{1,50}";
-        if(ten.matches(rgx)){
+        if(ten.matches(rgx)==true){
             return true;
         }else{
             txt.requestFocus();
@@ -63,8 +63,11 @@ public class ValidateHelper {
        String rgx="\\d{5,20}";
         
         try {
-            if(tienString.matches(rgx)==true){
+            if(tienString.matches(rgx)==true&&Integer.valueOf(tienString)>0){
             return true;
+        }if(Integer.valueOf(tienString)<=0){
+            MsgBox.alert(txt.getRootPane(), txt.getName()+ "phải lớn hơn 0!");
+            return false;
         }else{
             txt.requestFocus();
             MsgBox.alert(txt.getRootPane(),txt.getName()+ " phải từ 5 số đến 20 số!");

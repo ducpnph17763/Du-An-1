@@ -134,7 +134,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
         btnXoa.setEnabled(edit);
     
     }
-    
+   
     void clearForm(){
         DichVu dv=new DichVu();
         setForm(dv);

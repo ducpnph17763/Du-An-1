@@ -23,7 +23,7 @@ import java.util.logging.Logger;
  */
 public class TaiKhoanDAO extends BarberDAO<TaiKhoan, Object> {
 
-    String INSERT_SQL = "INSERT INTO TaiKhoan(TenTK,MatKhau,VaiTro,TrangThai) values(?,?,?,?)";
+    String INSERT_SQL = "INSERT INTO TaiKhoan(TenTK,MatKhau,VaiTro,TrangThai,Hinh) values(?,?,?,?,?)";
     String UPDATE_SQL = "UPDATE TaiKhoan set MatKhau=?,TrangThai=? where TenTK=?";
     String DELETE_SQL = "DELETE FROM TaiKhoan Where TenTK=?";
     String SELECT_ALL_SQL = "SELECT*FROM TaiKhoan";
@@ -63,7 +63,7 @@ public class TaiKhoanDAO extends BarberDAO<TaiKhoan, Object> {
     @Override
     public void insert(TaiKhoan entity) {
         try {
-            JDBCHelper.update(INSERT_SQL, entity.getTenTK(), entity.getMatKhau(), entity.getVaiTro(), entity.getTrangThai()
+            JDBCHelper.update(INSERT_SQL, entity.getTenTK(), entity.getMatKhau(), entity.getVaiTro(), entity.getTrangThai(), entity.getHinh()
             );
         } catch (SQLException ex) {
             Logger.getLogger(TaiKhoanDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -163,15 +163,17 @@ public class TaiKhoanDAO extends BarberDAO<TaiKhoan, Object> {
 //        String sql = "SELECT TAIKHOAN.ID,TENTK,MATKHAU,TAIKHOAN.TRANGTHAI FROM TAIKHOAN JOIN NHANVIEN ON TAIKHOAN.ID = NHANVIEN.ID_TK WHERE NHANVIEN.ID=?";
 //        return  this.selectBySql(sql, idNV);
 //    }
-    String sql = "SELECT TAIKHOAN.* FROM TAIKHOAN JOIN NHANVIEN ON TAIKHOAN.ID = NHANVIEN.ID_TK WHERE NHANVIEN.ID=?";
+    String sql = "SELECT * FROM TAIKHOAN where ID=?";
 
-    public TaiKhoan selectByIdNv(String idNV) {
+    public TaiKhoan selectByIdNv(int idNV) {
         List<TaiKhoan> list = this.selectBySql(sql, idNV);
         if (list.isEmpty()) {
             return null;
         }
         return list.get(0);
     }
+    
+    
 
     @Override
     public void delete(Object id) {

@@ -25,9 +25,9 @@ public class NhanVienDAO extends BarberDAO<NhanVien, Object>{
             + "values(?,?,?,?,?,?,?)";
     String UPDATE_SQL = "UPDATE NhanVien set HoTen=?,GioiTinh=?,DiaChi=?"
             + ",Email=?,SoDienThoai=?,VaiTro=?,TrangThai=? where Id=?";
-    String DELETE_SQL = "DELETE FROM NhanVien";
+    String DELETE_SQL = "DELETE FROM NhanVien Where id=?";
     String SELECT_ALL_SQL = "SELECT*FROM NhanVien where TrangThai =N'Hoạt động'";
-    String SELECT_BY_ID_SQL = "SELECT*FROM NhanVien join TaiKhoan on TaiKhoan.Id=NhanVien.Id_TK where TaiKhoan.Id=?";
+    String SELECT_BY_ID_SQL = "SELECT*FROM NhanVien Where Id=?";
     String SELECT_BY_EMAIL = "SELECT*FROM NhanVien where Email=?";
 String SELECT_VTRO = "SELECT VaiTro FROM NhanVien";
 
@@ -53,10 +53,9 @@ String SELECT_VTRO = "SELECT VaiTro FROM NhanVien";
         }
     }
 
-    @Override
-    public void delete(Object id) {
+    public void deleteNV(NhanVien entity) {
         try {
-            JDBCHelper.update(DELETE_SQL, id);
+            JDBCHelper.update(DELETE_SQL, entity.getId());
         } catch (SQLException ex) {
             Logger.getLogger(NhanVienDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -72,15 +71,6 @@ String SELECT_VTRO = "SELECT VaiTro FROM NhanVien";
       }
     }
 
-     public Model.NhanVien LayHoTenTC(String id) {
-        List<Model.NhanVien> ls = this.selectBySql("select NhanVien.hoTen from NhanVien join HoaDon on NhanVien.Id=HoaDon.Id_TC where HoaDon.TrangThai=N'Đã thanh toán' and HoaDon.Id_TC=?", id);
-        if(ls.size() == 0) {
-            return null;
-        }else {
-            return ls.get(0);
-        }
-    }
-    
     @Override
     public List<NhanVien> selectAll() {
       return this.selectBySql(SELECT_ALL_SQL);
@@ -195,6 +185,19 @@ String SELECT_VTRO = "SELECT VaiTro FROM NhanVien";
         return  this.selectBySql(sql, idNV);
     }
     
+//    public NhanVien selectByIDNVien(int idNV) {
+//        List<NhanVien> list = this.selectBySql("SELECT * FROM NHANVIEN WHERE ID=?", idNV);
+//        if (list.isEmpty()) {
+//            return null;
+//        }
+//        return list.get(0);
+//    }
+    
+    public List<NhanVien> selectByIDNVien(int idNV) {
+        String sql ="SELECT * FROM NHANVIEN WHERE ID=?";
+      return this.selectBySql(sql, idNV);
+    }
+    
     
     public List<NhanVien> selectByIdNV(String id, String hoTen, String SoDienThoai, String Email, String VaiTro) {
         String sql = "SELECT * FROM NHANVIEN WHERE Id LIKE ? OR HoTen LIKE ? OR SoDienThoai LIKE ? OR Email LIKE ? OR VaiTro LIKE ?";
@@ -232,5 +235,10 @@ String SELECT_VTRO = "SELECT VaiTro FROM NhanVien";
             return null;
         }
         return list.get(0);
+    }
+
+    @Override
+    public void delete(Object id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -50,7 +50,7 @@ String SELECT_ALL_SQL = "SELECT * FROM KHACHHANG WHERE TrangThai = N'Hoạt đ�
 
     @Override
     public KhachHang selectById(Object id) {
-        List<KhachHang>list=this.selectBySql("select * from KhachHang where Id = ?", id);
+        List<KhachHang>list=this.selectBySql("SELECT*FROM KhachHang join TaiKhoan on TaiKhoan.Id=KhachHang.Id_TK where TaiKhoan.Id=?", id);
         if(list.isEmpty()){
             return null;
         }

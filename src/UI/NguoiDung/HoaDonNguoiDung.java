@@ -8,6 +8,7 @@ import Dao.DichVuDAO;
 import Dao.HoaDonDAO;
 import Dao.NhanVienDAO;
 import Dao.TaiKhoanDAO;
+import Helper.JDBCHelper;
 import Helper.MsgBox;
 import Helper.XAuth;
 import Model.HoaDon;
@@ -19,7 +20,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 import javax.swing.table.DefaultTableModel;
-
+import java.sql.*;
 /**
  *
  * @author DELL
@@ -42,10 +43,62 @@ public class HoaDonNguoiDung extends javax.swing.JInternalFrame {
     }
 
     public void init() {
-        this.FillTableHoaDon();
+//        this.FillTableHoaDon();
         this.SetTextTimKiem();
+        layHoaDonNguoiDung();
     }
 
+    void layHoaDonNguoiDung(){
+        String TenTK=XAuth.user.getTenTK();
+        String sql="select HoaDon.Id,NhanVien.HoTen,HoaDon.NgayHen,HoaDon.ThanhToan,HoaDon.DanhGia,HoaDon.PhanHoi from HoaDon \n" +
+"	join NhanVien on HoaDon.Id_TC=NhanVien.Id\n" +
+"	join KhachHang on KhachHang.Id=HoaDon.Id_KH\n" +
+"	join TaiKhoan on TaiKhoan.Id=KhachHang.Id_TK where HoaDon.Id_TC=NhanVien.Id and HoaDon.TrangThai=N'Đã thanh toán' \n" +
+"	and TrangThaiTT=N'Đã đặt cọc' \n" +
+"	and TaiKhoan.TenTK=N'"+TenTK+"'";
+        ResultSet rs= JDBCHelper.query(sql);
+        DefaultTableModel mol =(DefaultTableModel)tblHoaDon.getModel();
+        mol.setRowCount(0);
+        try {
+            while (rs.next()) {                
+                Object[]item=new Object[6];
+                item[0]=rs.getInt("Id");
+                item[1]=rs.getString("HoTen");
+                item[2]=rs.getString("NgayHen");
+                item[3]=rs.getString("ThanhToan");
+                item[4]=rs.getString("DanhGia").equals("0")?"Hài lòng":rs.getString("DanhGia").equals("1")?"Rất hài lòng":"Không hài lòng";
+                item[5]=rs.getString("PhanHoi");
+                mol.addRow(item);
+            }   
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+     void LayDuLieuHoaDonChiTiet(){
+        int row=tblHoaDon.getSelectedRow();
+        String mahd=tblHoaDon.getValueAt(row, 0).toString();
+        String sql = "select DichVu.Id,TenDV,DichVu.GiaTien from DichVu join HoaDonChiTiet on DichVu.Id=HoaDonChiTiet.Id_DV\n"
+                + "  where HoaDonChiTiet.Id_HD=" + mahd;
+        ResultSet rs=JDBCHelper.query(sql);
+        DefaultTableModel mol=(DefaultTableModel)tblHDCT.getModel();
+        mol.setRowCount(0);
+        int c=0;
+        try {
+            while (rs.next()) {
+                Object[] item = new Object[4];
+                c++;
+                item[0] = c;
+                item[1] = rs.getString("Id");
+                item[2] = rs.getString("TenDV");
+                item[3] = rs.getInt("GiaTien");
+                mol.addRow(item);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+    
     public void addPlacehodelStyle(JTextField textField) {
         Font font = textField.getFont();
         font = font.deriveFont(font.PLAIN);
@@ -57,7 +110,6 @@ public class HoaDonNguoiDung extends javax.swing.JInternalFrame {
         Font font = textField.getFont();
         font = font.deriveFont(font.PLAIN);
         textField.setFont(font);
-
     }
 
     /**
@@ -237,13 +289,15 @@ public class HoaDonNguoiDung extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tblHoaDonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonMouseClicked
-        try {
-            int index = tblHoaDon.getSelectedRow();
-            int id = (int) tblHoaDon.getValueAt(index, 0);
-            this.FillTableHDCT(id);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            int index = tblHoaDon.getSelectedRow();
+//            int id = (int) tblHoaDon.getValueAt(index, 0);
+//            this.FillTableHDCT(id);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
+        LayDuLieuHoaDonChiTiet();
     }//GEN-LAST:event_tblHoaDonMouseClicked
 
     private void txtTimKiemFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTimKiemFocusGained
@@ -267,11 +321,42 @@ public class HoaDonNguoiDung extends javax.swing.JInternalFrame {
         if (txtTimKiem.getText().equals("Nhập mã hóa đơn")) {
             JOptionPane.showMessageDialog(this, "Phải nhập vào mã hóa đơn!", "Thông báo", JOptionPane.ERROR_MESSAGE);
             return;
-        } else {
-            this.TimKiemHoaDon();
+        } else {  
+          timKiemHoaDon(txtTimKiem.getText(),XAuth.user.getTenTK());
+          DefaultTableModel mol=(DefaultTableModel)tblHDCT.getModel();
+          mol.setRowCount(0);  
         }
     }//GEN-LAST:event_btnTimActionPerformed
-
+    
+    void timKiemHoaDon(String id,String TenTK){
+        System.out.println("id"+id);
+        String sql = "select HoaDon.Id,KhachHang.id,HoaDon.Id_TC,NhanVien.HoTen,NgayHen,ThanhToan,DanhGia\n"
+                + "   from HoaDon\n"
+                + "   join KhachHang on KhachHang.Id=HoaDon.Id_KH\n"
+                + "   Join NhanVien on NhanVien.Id=HoaDon.Id_TC\n"
+                + "   join TaiKhoan on TaiKhoan.Id=KhachHang.Id_TK\n"
+                + "   where NhanVien.Id=HoaDon.Id_TC and HoaDon.TrangThai=N'Đã thanh toán' and HoaDon.TrangThaiTT=N'Đã đặt cọc' and TaiKhoan.TenTK=N'"+TenTK+"'\n"
+                + "   and HoaDon.Id="+id;
+        ResultSet rs=JDBCHelper.query(sql);
+        DefaultTableModel model=(DefaultTableModel)tblHoaDon.getModel();
+        model.setRowCount(0);
+        try {
+            while(rs.next()){
+                Object[] item=new Object[7];
+                item[0]=rs.getString("Id");
+                item[1]=rs.getString("Id");
+                item[2]=rs.getString("Id_TC");
+                item[3]=rs.getString("HoTen");
+                item[4]=rs.getString("NgayHen");
+                item[5]=rs.getString("ThanhToan");
+                item[6]=rs.getString("DanhGia");
+                model.addRow(item);
+                MsgBox.alert(this, "Đã tìm thấy");
+            }
+        } catch (Exception e) {         
+           MsgBox.alert(this, "Không tìm thấy!");
+        }      
+    }
     private void btnDanhGiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDanhGiaActionPerformed
         int index = -1;
 
@@ -283,19 +368,16 @@ public class HoaDonNguoiDung extends javax.swing.JInternalFrame {
                 jDesktopPane1.add(dmk);
                 dmk.setLocation((jDesktopPane1.getWidth() - dmk.getWidth()) / 2, (jDesktopPane1.getHeight() - dmk.getHeight()) / 2);
                 dmk.show();
-
             }
-
         } catch (Exception e) {
             MsgBox.alert(this, "bạn chưa chọn hoá đơn để đánh giá!");
-
         }
-        this.FillTableHoaDon();
+      layHoaDonNguoiDung();
     }//GEN-LAST:event_btnDanhGiaActionPerformed
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
-        this.FillTableHoaDon();
+        layHoaDonNguoiDung();
         this.txtTimKiem.setText("");
         this.SetTextTimKiem();
 
@@ -316,53 +398,54 @@ public class HoaDonNguoiDung extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtTimKiem;
     // End of variables declaration//GEN-END:variables
 
-    private void FillTableHoaDon() {
-        TaiKhoan tk = XAuth.user;
-        try {
-            List<Model.HoaDon> ls = hddao.SelectHoaDonNguoiDung(tk.getTenTK());
-            DefaultTableModel mol = (DefaultTableModel) tblHoaDon.getModel();
-            mol.setRowCount(0);
-            for (HoaDon l : ls) {
-                NhanVien nv = nvdao.selectById(l.getId_TC());
-                mol.addRow(new Object[]{l.getId(), nv.getHoTen(), l.getNgayHen(), l.getThanhToan(),
-                    l.getDanhGia().equals("0") ? "Hài lòng" : l.getDanhGia().equals("1") ? "Rất hài lòng" : "Không hài lòng", l.getPhanHoi()});
-            }
-        } catch (Exception e) {
-            MsgBox.alert(this, "Không tìm thấy hoá đơn nào!");
-        }
-
-    }
-
-    private void FillTableHDCT(int id) {
-        List<Model.DichVu> ls = dvdao.SelectHoaDon(String.valueOf(id));
-        DefaultTableModel mol = (DefaultTableModel) tblHDCT.getModel();
-        mol.setRowCount(0);
-        for (Model.DichVu l : ls) {
-            mol.addRow(new Object[]{l.getId(), l.getTenDV(), l.getGiaTien()});
-        }
-    }
-
+//    private void FillTableHoaDon() {
+//        TaiKhoan tk = XAuth.user;
+//        try {
+//            List<Model.HoaDon> ls = hddao.SelectHoaDonNguoiDung(tk.getTenTK());
+//            DefaultTableModel mol = (DefaultTableModel) tblHoaDon.getModel();
+//            mol.setRowCount(0);
+//            for (HoaDon l : ls) {
+//                NhanVien nv = nvdao.selectById(l.getId_TC());
+//                mol.addRow(new Object[]{l.getId(), nv.getHoTen(), l.getNgayHen(), l.getThanhToan(),
+//                    l.getDanhGia().equals("0") ? "Hài lòng" : l.getDanhGia().equals("1") ? "Rất hài lòng" : "Không hài lòng", l.getPhanHoi()});
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            MsgBox.alert(this, "Không tìm thấy hoá đơn nào!");
+//        }
+//
+//    }
+//
+//    private void FillTableHDCT(int id) {
+//        List<Model.DichVu> ls = dvdao.SelectHoaDon(String.valueOf(id));
+//        DefaultTableModel mol = (DefaultTableModel) tblHDCT.getModel();
+//        mol.setRowCount(0);
+//        for (Model.DichVu l : ls) {
+//            mol.addRow(new Object[]{l.getId(), l.getTenDV(), l.getGiaTien()});
+//        }
+//    }
+//
     private void SetTextTimKiem() {
         if (txtTimKiem.getText().length() == 0) {
             addPlacehodelStyle(txtTimKiem);
             txtTimKiem.setText("Nhập mã hóa đơn");
         }
     }
-
-    public void TimKiemHoaDon() {
-        String id = txtTimKiem.getText();
-        TaiKhoan tk = XAuth.user;
-        DefaultTableModel mol = (DefaultTableModel) tblHoaDon.getModel();
-        Model.HoaDon l = hddao.TimKiemHoaDonNguoiDung(tk.getTenTK(), id);
-        mol.setRowCount(0);
-        if (l == null) {
-            JOptionPane.showMessageDialog(this, "Không tìm thấy hóa đơn", "", JOptionPane.ERROR_MESSAGE);
-            return;
-        } else {
-            NhanVien nv = nvdao.selectById(l.getId_TC());
-            mol.addRow(new Object[]{l.getId(), nv.getHoTen(), l.getNgayHen(), l.getThanhToan(), l.getDanhGia()});
-        }
-
-    }
-
+//
+//    public void TimKiemHoaDon() {
+//        String id = txtTimKiem.getText();
+//        TaiKhoan tk = XAuth.user;
+//        DefaultTableModel mol = (DefaultTableModel) tblHoaDon.getModel();
+//        Model.HoaDon l = hddao.TimKiemHoaDonNguoiDung(tk.getTenTK(), id);
+//        mol.setRowCount(0);
+//        if (l == null) {
+//            JOptionPane.showMessageDialog(this, "Không tìm thấy hóa đơn", "", JOptionPane.ERROR_MESSAGE);
+//            return;
+//        } else {
+//            NhanVien nv = nvdao.selectById(l.getId_TC());
+//            mol.addRow(new Object[]{l.getId(), nv.getHoTen(), l.getNgayHen(), l.getThanhToan(), l.getDanhGia()});
+//        }
+//
+//    }
+//
 }

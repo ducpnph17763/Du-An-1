@@ -72,6 +72,15 @@ String SELECT_VTRO = "SELECT VaiTro FROM NhanVien";
       }
     }
 
+     public Model.NhanVien LayHoTenTC(String id) {
+        List<Model.NhanVien> ls = this.selectBySql("select NhanVien.hoTen from NhanVien join HoaDon on NhanVien.Id=HoaDon.Id_TC where HoaDon.TrangThai=N'Đã thanh toán' and HoaDon.Id_TC=?", id);
+        if(ls.size() == 0) {
+            return null;
+        }else {
+            return ls.get(0);
+        }
+    }
+    
     @Override
     public List<NhanVien> selectAll() {
       return this.selectBySql(SELECT_ALL_SQL);

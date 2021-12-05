@@ -27,7 +27,7 @@ public class NhanVienDAO extends BarberDAO<NhanVien, Object>{
             + ",Email=?,SoDienThoai=?,VaiTro=?,TrangThai=? where Id=?";
     String DELETE_SQL = "DELETE FROM NhanVien";
     String SELECT_ALL_SQL = "SELECT*FROM NhanVien where TrangThai =N'Hoạt động'";
-    String SELECT_BY_ID_SQL = "SELECT*FROM NhanVien join TaiKhoan on TaiKhoan.Id=NhanVien.Id_TK where TaiKhoan.Id=?";
+    String SELECT_BY_ID_SQL = "SELECT*FROM NhanVien Where Id=?";
     String SELECT_BY_EMAIL = "SELECT*FROM NhanVien where Email=?";
 String SELECT_VTRO = "SELECT VaiTro FROM NhanVien";
 
@@ -184,6 +184,19 @@ String SELECT_VTRO = "SELECT VaiTro FROM NhanVien";
     public List<NhanVien> selectByIdNv(int idNV){
         String sql = "SELECT TAIKHOAN.* FROM TAIKHOAN JOIN NHANVIEN ON TAIKHOAN.ID = NHANVIEN.ID_TK WHERE NHANVIEN.ID=?";
         return  this.selectBySql(sql, idNV);
+    }
+    
+//    public NhanVien selectByIDNVien(int idNV) {
+//        List<NhanVien> list = this.selectBySql("SELECT * FROM NHANVIEN WHERE ID=?", idNV);
+//        if (list.isEmpty()) {
+//            return null;
+//        }
+//        return list.get(0);
+//    }
+    
+    public List<NhanVien> selectByIDNVien(int idNV) {
+        String sql ="SELECT * FROM NHANVIEN WHERE ID=?";
+      return this.selectBySql(sql, idNV);
     }
     
     

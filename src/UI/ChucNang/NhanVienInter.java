@@ -420,23 +420,15 @@ public class NhanVienInter extends javax.swing.JInternalFrame {
 
     private void tblNVMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblNVMouseClicked
         // TODO add your handling code here:
-        if (evt.getClickCount() == 2) {
-            this.index = this.tblNV.getSelectedRow();
-            this.edit();
-
-        }
-//        if (XAuth.isManager()) {
-//            if (evt.getButton() == MouseEvent.BUTTON3) {
-//                this.popupMenu.show(this, evt.getX(), evt.getY());
-//            }
-//        }
+        this.index = this.tblNV.getSelectedRow();
+        this.edit();
     }//GEN-LAST:event_tblNVMouseClicked
 
     private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCapNhatActionPerformed
         // TODO add your handling code here:
-//        if (this.check() == true && this.checkT()==true) {
-        this.update();
-//        }
+        if (this.check() == true && checkTrung() == true) {
+            this.update();
+        }
     }//GEN-LAST:event_btnCapNhatActionPerformed
 
     private void btnFirstActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFirstActionPerformed
@@ -537,8 +529,8 @@ public class NhanVienInter extends javax.swing.JInternalFrame {
     private void edit() {
         int idNV = (int) this.tblNV.getValueAt(this.index, 0);
         NhanVien nv = this.nvDAO.selectById(idNV);
-        int idtk = (int) this.tblNV.getValueAt(this.index, 0);
-        TaiKhoan tk = (TaiKhoan) tkDAO.selectByIdNv(nv.getId() + "");
+//        int idtk = (int) this.tblNV.getValueAt(this.index, 0);
+        TaiKhoan tk = (TaiKhoan) tkDAO.selectByIdNv(layMaTK(nv.getId()));
         this.setForm(nv);
         this.setFormTK(tk);
         this.updateStatus();
@@ -555,27 +547,17 @@ public class NhanVienInter extends javax.swing.JInternalFrame {
             nv.setDiaChi(this.txtDiaChi.getText());
             nv.setVaiTro((String) this.cbbVaiTro.getSelectedItem());
             nv.setTrangThai(this.LayTrangThai());
-//            System.out.println(nv.getId());
-//            System.out.println(nv.getId_TK());
-//            System.out.println(nv.getHoTen());
-//            System.out.println(nv.getGioiTinh());
-//            System.out.println(nv.getDiaChi());
-//            System.out.println(nv.getEmail());
-//            System.out.println(nv.getSdt());
-//            System.out.println(nv.getVaiTro());
-//            System.out.println(nv.getTrangThai());
             return nv;
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
-    
-    
-    public String LayTrangThai(){
-        if(rdoHoatDong.isSelected()==true){
+
+    public String LayTrangThai() {
+        if (rdoHoatDong.isSelected() == true) {
             return "Hoạt động";
-        }else{
+        } else {
             return "Không hoạt động";
         }
     }
@@ -590,10 +572,6 @@ public class NhanVienInter extends javax.swing.JInternalFrame {
         this.cbbVaiTro.setSelectedItem(nv.getVaiTro());
     }
 
-//    private void setFormTK(Model.TaiKhoan tk) {
-//        this.txtPass.setText(tk.getMatKhau());
-//        this.rdoHoatDong.setSelected(tk.getTrangThai());
-//    }
     public Model.TaiKhoan getFormTK() {
         Model.TaiKhoan tk = new Model.TaiKhoan();
         tk.setTenTK(txtUser.getText());
@@ -626,12 +604,20 @@ public class NhanVienInter extends javax.swing.JInternalFrame {
         return 0;
     }
 
+    int layMaTK(int maNV) {
+        list = (List<NhanVien>) nvDAO.selectByIDNVien(maNV);
+        for (NhanVien nhanVien : list) {
+            return nhanVien.getId_TK();
+        }
+        return maNV;
+    }
+
     public void setFormTK(Model.TaiKhoan tk) {
         this.txtUser.setText(tk.getTenTK());
         this.txtPass.setText(tk.getMatKhau());
-        if(tk.getTrangThai().equals("Hoạt động")){
+        if (tk.getTrangThai().equals("Hoạt động")) {
             rdoHoatDong.setSelected(true);
-        }else{
+        } else {
             rdoKhongHoatDong.setSelected(true);
         }
     }
@@ -699,9 +685,6 @@ public class NhanVienInter extends javax.swing.JInternalFrame {
                 try {
                     this.tkDAO.updateTK(tenTK);
 
-//                    NhanVien nv = this.getForm();
-//                this.nvDAO.updateTK();
-//                    this.nvDAO.updateTK(tenTK);
                     this.fillNhanVienHienTai();
                     this.clearForm();
                     MsgBox.alert(this, "Xoá thành công");
@@ -769,6 +752,40 @@ public class NhanVienInter extends javax.swing.JInternalFrame {
             this.txtUser.requestFocus();
             return false;
         }
+        if (this.nvDAO.selectByEmail(this.txtEmail.getText()) != null) {
+            MsgBox.alert(this, "Email đã tồn tại");
+            this.txtEmail.requestFocus();
+            return false;
+        }
+        if (this.nvDAO.selectBySDT(this.txtPhone.getText()) != null) {
+            MsgBox.alert(this, "Số điện thoại đã tồn tại");
+            this.txtPhone.requestFocus();
+            return false;
+        }
+        return true;
+    }
+
+    private boolean checkTrung() {
+        list = nvDAO.selectAll();
+        int row = tblNV.getSelectedRow();
+        NhanVien nv = list.get(row);
+        int manv = nv.getId();
+
+        System.out.println(nv.getId());
+        for (NhanVien nhanVien : list) {
+            if (txtEmail.getText().equals(nhanVien.getEmail()) && manv != (nhanVien.getId())) {
+                MsgBox.alert(this, "Email đã tồn tại");
+                return false;
+//                break;
+            }
+            if (txtPhone.getText().equals(nhanVien.getSdt()) && manv != (nhanVien.getId())) {
+                MsgBox.alert(this, "Sdt đã tồn tại");
+//                break;
+                return false;
+            }
+
+        }
+
         return true;
     }
 
@@ -807,10 +824,6 @@ public class NhanVienInter extends javax.swing.JInternalFrame {
             MsgBox.alert(this, "Email không đúng định dạng");
             this.txtEmail.requestFocus();
             return false;
-        } else if (this.nvDAO.selectByEmail(this.txtEmail.getText()) != null) {
-            MsgBox.alert(this, "Email đã tồn tại");
-            this.txtEmail.requestFocus();
-            return false;
         }
 
         // Check sdt
@@ -821,10 +834,6 @@ public class NhanVienInter extends javax.swing.JInternalFrame {
         } else if (!this.txtPhone.getText().matches("(84|0[3|5|7|8|9])+([0-9]{8})")) {
             MsgBox.alert(this, "SĐT không đúng định dạng");
             this.txtPhone.requestFocus();
-            return false;
-        } else if (this.nvDAO.selectBySDT(this.txtEmail.getText()) != null) {
-            MsgBox.alert(this, "Email đã tồn tại");
-            this.txtEmail.requestFocus();
             return false;
         }
 

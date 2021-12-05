@@ -7,12 +7,15 @@ package UI.ThoCat;
 
 import Dao.HoaDonDAO;
 import Dao.KhachHangDAO;
+import Helper.JDBCHelper;
 import Helper.MsgBox;
 import Helper.XAuth;
 import Model.HoaDon;
 import Model.KhachHang;
 import Model.NhanVien;
 import Model.TaiKhoan;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 import javax.swing.table.DefaultTableModel;
@@ -35,7 +38,59 @@ public class DSLichThoCat extends javax.swing.JInternalFrame {
     }
     
     private void init(){
-        this.FillTableHoaDon();
+        LayDuLieuHoaDon();
+    }
+    
+    void LayDuLieuHoaDon(){
+        String tenTK=XAuth.user.getTenTK();
+        System.out.println("tên tk"+tenTK);
+        String sql = "select HoaDon.Id,KhachHang.HoTen,NgayHen,GioHen \n"
+                + "from HoaDon\n"
+                + "join KhachHang on KhachHang.Id=HoaDon.Id_KH\n"
+                + "Join NhanVien on NhanVien.Id=HoaDon.Id_TC\n"
+                + "join TaiKhoan on TaiKhoan.Id=NhanVien.Id_TK\n"
+                + "where NhanVien.Id=HoaDon.Id_TC and HoaDon.TrangThai=N'Chưa thanh toán' \n"
+                + "and (HoaDon.TrangThaiTT=N'Đã đặt cọc' or HoaDon.TrangThaiTT=N'Đã đặt cọc(chờ xác nhận)') and TaiKhoan.TenTK=N'"+tenTK+"'";
+        ResultSet rs=JDBCHelper.query(sql);
+        DefaultTableModel model=(DefaultTableModel)tblLichDat.getModel();
+        model.setRowCount(0);
+        try {
+            while(rs.next()){
+                Object[] item=new Object[4];
+                item[0]=rs.getString("Id");
+                item[1]=rs.getString("HoTen");
+                item[2]=rs.getString("NgayHen");
+                item[3]=rs.getString("GioHen");
+                model.addRow(item);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        
+    }
+    
+    void LayDuLieuHoaDonChiTiet(){
+        int row=tblLichDat.getSelectedRow();
+        String mahd=tblLichDat.getValueAt(row, 0).toString();
+        String sql = "select DichVu.Id,TenDV,DichVu.GiaTien from DichVu join HoaDonChiTiet on DichVu.Id=HoaDonChiTiet.Id_DV\n"
+                + "  where HoaDonChiTiet.Id_HD=" + mahd;
+        ResultSet rs=JDBCHelper.query(sql);
+        DefaultTableModel mol=(DefaultTableModel)tblCTLichDat.getModel();
+        mol.setRowCount(0);
+        int c=0;
+        try {
+            while (rs.next()) {
+                Object[] item = new Object[4];
+                c++;
+                item[0] = c;
+                item[1] = rs.getString("Id");
+                item[2] = rs.getString("TenDV");
+                item[3] = rs.getInt("GiaTien");
+                mol.addRow(item);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -61,13 +116,13 @@ public class DSLichThoCat extends javax.swing.JInternalFrame {
 
         tblCTLichDat.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "STT", "Mã CTHD", "Mã HD", "Mã DV", "Tên DV", "Giá Tiền"
+                "Mã dịch vụ", "Tên dịch vụ", "Giá tiền"
             }
         ));
         tblCTLichDat.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -143,6 +198,7 @@ public class DSLichThoCat extends javax.swing.JInternalFrame {
 
     private void tblLichDatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLichDatMouseClicked
         // TODO add your handling code here:   
+        LayDuLieuHoaDonChiTiet();
     }//GEN-LAST:event_tblLichDatMouseClicked
 
     private void tblCTLichDatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCTLichDatMouseClicked
@@ -159,27 +215,5 @@ public class DSLichThoCat extends javax.swing.JInternalFrame {
     private javax.swing.JTable tblLichDat;
     // End of variables declaration//GEN-END:variables
 
-    private void FillTableHoaDon() {
-        TaiKhoan tk = XAuth.user;
-        try {
-            List<Model.HoaDon> ls = hddao.SelectByThoCat(tk.getId());
-            DefaultTableModel mol = (DefaultTableModel) tblLichDat.getModel();
-            mol.setRowCount(0);
-            String tenKH;
-            for (HoaDon l : ls) {
-                if(l.getId_KH() == null) {
-                    tenKH = "Khách Hàng";
-                }else {
-                    Model.KhachHang kh = khdao.selectById(l.getId_KH());
-                    tenKH = kh.getHoTen();
-                }
-                
-                mol .addRow(new Object[]{l.getId(), tenKH, l.getNgayHen(), l.getGioHen()});
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-//            MsgBox.alert(this, "Không tìm thấy hoá đơn nào!");
-        }
-
-    }
+   
 }

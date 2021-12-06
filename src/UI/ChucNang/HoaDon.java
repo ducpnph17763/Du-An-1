@@ -38,6 +38,7 @@ public class HoaDon extends javax.swing.JInternalFrame {
 
      void init(){
         LayDuLieuHoaDon();
+      
     }
     
      void timKiemHoaDon(String id){
@@ -66,12 +67,10 @@ public class HoaDon extends javax.swing.JInternalFrame {
             System.out.println(e);
         }
     }
-    
-    void LayDuLieuHoaDon(){
-        String sql = "select HoaDon.Id,KhachHang.id,HoaDon.Id_TC,NhanVien.HoTen,NgayHen,ThanhToan,DanhGia \n"
-                + "from HoaDon\n"
-                + "join KhachHang on KhachHang.Id=HoaDon.Id_KH\n"
-                + "Join NhanVien on NhanVien.Id=HoaDon.Id_TC\n"
+     
+    void layHoaDonKHNull(){
+        String sql = "select HoaDon.Id,HoaDon.Id_TC,null HoTen,NhanVien.HoTen,NgayHen,ThanhToan,DanhGia\n"
+                + "from HoaDon join NhanVien on NhanVien.Id=HoaDon.Id_TC\n"
                 + "where NhanVien.Id=HoaDon.Id_TC and HoaDon.TrangThai=N'Đã thanh toán' and HoaDon.TrangThaiTT=N'Đã đặt cọc' ";
         ResultSet rs=JDBCHelper.query(sql);
         DefaultTableModel model=(DefaultTableModel)tblHoaDon.getModel();
@@ -81,6 +80,31 @@ public class HoaDon extends javax.swing.JInternalFrame {
                 Object[] item=new Object[7];
                 item[0]=rs.getString("Id");
                 item[1]=rs.getString("Id");
+                item[2]=rs.getString("Id_TC");
+                item[3]=rs.getString("HoTen");
+                item[4]=rs.getString("NgayHen");
+                item[5]=rs.getString("ThanhToan");
+                item[6]=rs.getString("DanhGia").equals("0")?"Hài lòng":rs.getString("DanhGia").equals("1")?"Rất hài lòng":"không hài lòng";                
+                model.addRow(item);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    } 
+    
+    void LayDuLieuHoaDon(){
+        String sql = "select HoaDon.Id,HoaDon.Id_KH,HoaDon.Id_TC,NhanVien.HoTen,HoaDon.NgayHen,HoaDon.ThanhToan,HoaDon.DanhGia\n"
+                + "            from HoaDon join NhanVien on HoaDon.Id_TC=NhanVien.Id		\n"
+                + "            where  NhanVien.Id=HoaDon.Id_TC \n"
+                + "            and HoaDon.TrangThai LIKE N'Đã thanh toán'  and HoaDon.TrangThaiTT like N'Đã đặt cọc'";
+        ResultSet rs=JDBCHelper.query(sql);
+        DefaultTableModel model=(DefaultTableModel)tblHoaDon.getModel();
+        model.setRowCount(0);
+        try {
+            while(rs.next()){
+                Object[] item=new Object[7];
+                item[0]=rs.getString("Id");
+                item[1]=rs.getString("Id_KH");
                 item[2]=rs.getString("Id_TC");
                 item[3]=rs.getString("HoTen");
                 item[4]=rs.getString("NgayHen");

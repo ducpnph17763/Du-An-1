@@ -13,16 +13,14 @@ public class TTKhachHang {
     private int id_KH;
     private String sdt;
     private String email;
-    private String trangThai;
 
     public TTKhachHang() {
     }
 
-    public TTKhachHang(int id_KH, String sdt, String email, String trangThai) {
+    public TTKhachHang(int id_KH, String sdt, String email) {
         this.id_KH = id_KH;
         this.sdt = sdt;
         this.email = email;
-        this.trangThai = trangThai;
     }
 
     public int getId_KH() {
@@ -47,14 +45,6 @@ public class TTKhachHang {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getTrangThai() {
-        return trangThai;
-    }
-
-    public void setTrangThai(String trangThai) {
-        this.trangThai = trangThai;
     }
 
     

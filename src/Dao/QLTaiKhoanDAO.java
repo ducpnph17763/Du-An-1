@@ -46,7 +46,7 @@ public class QLTaiKhoanDAO extends BarberDAO<TTKhachHang, Object> {
     public void insert(TTKhachHang entity) {
         try {
             JDBCHelper.update(INSERT_SQL, entity.getId_KH(), entity.getSdt(),
-                    entity.getEmail(), entity.getTrangThai());
+                    entity.getEmail());
         } catch (SQLException ex) {
             Logger.getLogger(QLTaiKhoanDAO.class.getName()).log(Level.SEVERE, null, ex);
         }

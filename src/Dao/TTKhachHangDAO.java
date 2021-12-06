@@ -25,7 +25,16 @@ public class TTKhachHangDAO extends BarberDAO<TTKhachHang, String>{
     String DELETE_SQL = " DELETE From ThongTinKhachHang";
     String SELECT_ALL_SQL = " select * from ThongTinKhachHang";
     String SELECT_BY_ID_SQL = " select * from ThongTinKhachHang where Id_KH = ?";
-
+    String Select_Email = "select * from ThongTinKhachHang where Email = ?";
+    public TTKhachHang select_Email(Object id) {
+      List<TTKhachHang>list=this.selectBySql(Select_Email, id);
+      if(list.isEmpty()){
+          return null;
+      }else{
+          return list.get(0);
+      }
+    }
+    
     @Override
     public void insert(TTKhachHang entity) {
          try {

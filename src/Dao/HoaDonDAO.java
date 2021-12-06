@@ -63,7 +63,7 @@ public class HoaDonDAO extends BarberDAO<HoaDon, String> {
     }
 
     @Override
-    public List<HoaDon> selectAll() {
+    public List<Model.HoaDon> selectAll() {
         return this.selectBySql(SELECT_ALL_SQL);
     }
 

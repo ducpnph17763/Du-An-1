@@ -459,11 +459,11 @@ public class TaiKhoan extends javax.swing.JInternalFrame {
 
     TTKhachHang getFormKH() {
         int id_tk = XAuth.user.getId();
-        int id_kh = dao.selectById(id_tk).getId();
+        int id_kh = dao.selectById(id_tk+"").getId();
         String email = txtEmail.getText();
         String sdt = txtSDT.getText();
         String trangThai = "Đang hoạt động";
-        return new TTKhachHang(id_kh, sdt, email, trangThai);
+        return new TTKhachHang(id_kh, sdt, email);
     }
 
     NhanVien getFormNV() {
@@ -485,7 +485,7 @@ public class TaiKhoan extends javax.swing.JInternalFrame {
             txtSDT.setText(tblBang.getValueAt(index, 1) + "");
             int id = XAuth.user.getId();
             System.out.println("id khách hàng:"+id);
-            txtTen.setText(dao.selectById(id).getHoTen());
+            txtTen.setText(dao.selectById(id+"").getHoTen());
         } else {
             txtEmail.setText(tblBang.getValueAt(index, 0) + "");
             txtSDT.setText(tblBang.getValueAt(index, 1) + "");

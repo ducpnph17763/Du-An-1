@@ -5,7 +5,24 @@
  */
 package UI.ChucNang;
 
+import Dao.KhachHangDAO;
+import Dao.QLTaiKhoanDAO;
+import Dao.TTKhachHangDAO;
+import Dao.TaiKhoanDAO;
+import Helper.JDBCHelper;
+import Helper.MsgBox;
+import Helper.XImage;
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -16,12 +33,255 @@ public class KhachHang extends javax.swing.JInternalFrame {
     /**
      * Creates new form KhachHang
      */
+     int index = 0;
+    JFileChooser fileChoose = new JFileChooser();
+    List<Model.TaiKhoan> listTK = new ArrayList<>();
+    KhachHangDAO khdao = new KhachHangDAO();
+    TTKhachHangDAO ttdao = new TTKhachHangDAO();
+    TaiKhoanDAO tkdao = new TaiKhoanDAO();
+    QLTaiKhoanDAO qldao = new QLTaiKhoanDAO();
     public KhachHang() {
         initComponents();
-//         this.setSize(1430, 810);
         this.setBorder(null);
         BasicInternalFrameUI bui=(BasicInternalFrameUI)this.getUI();
         bui.setNorthPane(null);
+        init();
+    }
+    
+    
+     void init() {
+        layTTKK();
+        updateStatus();
+    }
+
+    void layTTKK() {
+        String sql = "select KhachHang.Id,Hoten,Email,SoDienThoai,KhachHang.Hinh from KhachHang join ThongTinKhachHang\n"
+                + "on ThongTinKhachHang.Id_KH=KhachHang.Id\n"
+                + "join TaiKhoan on TaiKhoan.Id=KhachHang.Id_TK";
+        ResultSet rs = JDBCHelper.query(sql);
+        DefaultTableModel mol = (DefaultTableModel) tblKhachHang.getModel();
+        mol.setRowCount(0);
+        try {
+            while (rs.next()) {
+                Object[] item = new Object[5];
+                item[0] = rs.getString("id");
+                item[1] = rs.getString("HoTen");
+                item[2] = rs.getString("SoDienThoai");
+                item[3] = rs.getString("Email");
+                item[4] = rs.getString("Hinh");
+                mol.addRow(item);
+
+            }
+        } catch (Exception e) {
+        }
+    }
+       void layTaiKhoan() {
+
+        String sdt = txtSdt.getText();
+        String sql = "select  TaiKhoan.id,TenTK,MatKhau from TaiKhoan join KhachHang on KhachHang.Id_TK=TaiKhoan.Id \n"
+                + "join ThongTinKhachHang on KhachHang.Id=ThongTinKhachHang.Id_KH where ThongTinKhachHang.SoDienThoai=N'" + sdt + "'";
+        ResultSet rs = JDBCHelper.query(sql);
+        try {
+            while (rs.next()) {
+               Object[] item = new Object[3];
+                item[0] = rs.getString("Id");
+                item[1] = rs.getString("TenTK");
+                item[2] = rs.getString("MatKhau");
+                String kh=String.valueOf(khdao.selectById(item[0]+"").getId());
+                lblID.setText(kh+"");             
+                txtTaiKhoan.setText(item[1] + "");
+                txtMatKhau.setText(item[2] + "");
+
+            }
+        } catch (Exception e) {
+        }
+    }
+
+    void fillTableKhachHang() {
+        DefaultTableModel mol = (DefaultTableModel) tblKhachHang.getModel();
+        mol.setRowCount(0);
+        List<Model.KhachHang> list = khdao.selectAll();
+        for (Model.KhachHang tk : list) {
+            Object[] row = new Object[]{
+                tk.getId(), tk.getHoTen()
+            };
+            mol.addRow(row);
+        }
+
+    }
+    
+    void updateStatus(){
+        boolean edit=(this.index>=0);
+        btnThem.setEnabled(edit);
+        btnSua.setEnabled(!edit);
+    }
+    
+//    void clearForm(){
+////        txtEmail.setText("");
+////        txtHoTen.setText("");
+////        txtMatKhau.setText("");
+////        txtSdt.setText("");
+////        txtTaiKhoan.setText("");
+////        lblAnh.setText("");
+//        Model.KhachHang kh =new Model.KhachHang();
+//       
+//        updateStatus();
+//    }
+    
+    
+     
+     void chonAnh() throws IOException {
+        if (fileChoose.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            File file = fileChoose.getSelectedFile();
+            XImage.save(file);
+            ImageIcon icon = XImage.read(file.getName());
+            lblAnh.setIcon(icon);
+            lblAnh.setToolTipText(file.getName());
+            lblAnh.setText("");
+            Image img = ImageIO.read(file);
+            int width = lblAnh.getWidth();
+            int height = lblAnh.getHeight();
+            lblAnh.setIcon(new ImageIcon(img.getScaledInstance(width, height, 0)));
+
+        }
+    }
+     
+    Model.TaiKhoan getFormTK() {
+        Model.TaiKhoan tk = new Model.TaiKhoan();
+        tk.setTenTK(txtTaiKhoan.getText());
+        tk.setMatKhau(txtMatKhau.getText());
+        tk.setVaiTro(3);
+        tk.setTrangThai("Hoạt động");
+        return tk;
+    }
+
+    Model.KhachHang getFormKH() {
+        Model.KhachHang kh = new Model.KhachHang();
+        for (int i = listTK.size() - 1; i >= 0; i--) {
+            Object[] row = new Object[]{
+                listTK.get(i).getId(), listTK.get(i).getTenTK(), listTK.get(i).getMatKhau()
+            };
+            kh.setId_tk(listTK.get(listTK.size() - 1).getId());
+        }
+        kh.setHoTen(txtHoTen.getText());
+
+        return kh;
+    }
+
+    Model.TTKhachHang getformTTKH() {
+        Model.TTKhachHang ttkh = new Model.TTKhachHang();
+        for (int i = listTK.size() - 1; i >= 0; i--) {
+            Object[] row = new Object[]{
+                listTK.get(i).getId(), listTK.get(i).getTenTK(), listTK.get(i).getMatKhau()
+            };
+
+        }
+        String makh = String.valueOf(listTK.get(listTK.size() - 1).getId());
+        System.out.println("mã khách hàng:" + makh);
+
+        String idKH1 = khdao.selectById(makh).getId() + "";
+
+        int Id_KH = Integer.parseInt(idKH1);
+        String email = txtEmail.getText();
+        String sdt = txtSdt.getText();
+
+        return new Model.TTKhachHang(Id_KH, sdt, email);
+    }
+
+    Model.KhachHang getFormKH1() {
+        Model.KhachHang kh = new Model.KhachHang();
+        String TenTK = txtTaiKhoan.getText();
+        String sql = "select Id from TaiKhoan where TenTK=N'" + TenTK + "'";
+        ResultSet rs = JDBCHelper.query(sql);
+        try {
+            while (rs.next()) {
+                Object[] item = new Object[1];
+                item[0] = rs.getInt("Id");
+                kh.setId_tk(Integer.parseInt(item[0].toString()));
+                System.out.println("id lấy ra:");
+            }
+        } catch (Exception e) {
+        }
+        kh.setHoTen(txtHoTen.getText());
+        kh.setHinh(lblAnh.getToolTipText());
+        return kh;
+    }
+
+    Model.TTKhachHang getformTTKH1() {
+        Model.TTKhachHang ttkh = new Model.TTKhachHang();
+        ttkh.setSdt(txtSdt.getText());
+        ttkh.setId_KH(Integer.valueOf(lblID.getText()));
+        ttkh.setEmail(txtEmail.getText());
+        return ttkh;
+    }
+    
+       boolean CheckDL() {
+        // Check họ tên
+        if (this.txtHoTen.getText().isEmpty()) {
+            MsgBox.alert(this, "Vui lòng nhập họ và tên!");
+            this.txtHoTen.requestFocus();
+            return false;
+        }
+//        else if(!this.txtHoTen.getText().matches("[a-zA-Z]+\\\\.?")){
+//            MsgBox.alert(this, "Họ Tên sai định dạng");
+//            this.txtHoTen.requestFocus();
+//            return false;
+//        }
+
+        // Check sdt
+        if (this.txtSdt.getText().isEmpty()) {
+            MsgBox.alert(this, "Vui lòng nhập SĐT!");
+            this.txtSdt.requestFocus();
+            return false;
+        } else if (!this.txtSdt.getText().matches("(84|0[3|5|7|8|9])+([0-9]{8})")) {
+            MsgBox.alert(this, "SĐT không đúng định dạng");
+            this.txtSdt.requestFocus();
+            return false;
+        }
+
+        // Check email
+        if (this.txtEmail.getText().isEmpty()) {
+            MsgBox.alert(this, "Vui lòng nhập Email!");
+            this.txtEmail.requestFocus();
+            return false;
+        } else if (!this.txtEmail.getText().matches("\\w+@\\w+(\\.\\w+){1,2}")) {
+            MsgBox.alert(this, "Email không đúng định dạng");
+            this.txtEmail.requestFocus();
+            return false;
+        } else if (this.ttdao.select_Email(this.txtEmail.getText()) != null) {
+            MsgBox.alert(this, "Email đã tồn tại");
+            this.txtEmail.requestFocus();
+            return false;
+        }
+
+        // Check tài khoản
+        if (this.txtTaiKhoan.getText().isEmpty()) {
+            MsgBox.alert(this, "Vui lòng nhập tên tài khoản!");
+            this.txtTaiKhoan.requestFocus();
+            return false;
+        }
+
+        // Check mật khẩu
+        if (this.txtMatKhau.getPassword().length == 0) {
+            MsgBox.alert(this, "Vui lòng nhập mật khẩu!");
+            this.txtMatKhau.requestFocus();
+            return false;
+        } else if (this.txtMatKhau.getPassword().length < 3) {
+            MsgBox.alert(this, "Mật khẩu phải dài hơn 3 ký tự");
+            this.txtMatKhau.requestFocus();
+            return false;
+        }
+
+        return true;
+    }
+
+    boolean checTrung() {
+        if (this.tkdao.select(this.txtTaiKhoan.getText()) != null) {
+            MsgBox.alert(this, "Tên tài khoản đã tồn tại");
+            this.txtTaiKhoan.requestFocus();
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -35,49 +295,57 @@ public class KhachHang extends javax.swing.JInternalFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        txtSdt = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jPasswordField1 = new javax.swing.JPasswordField();
+        txtMatKhau = new javax.swing.JPasswordField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jTextField5 = new javax.swing.JTextField();
+        tblKhachHang = new javax.swing.JTable();
+        btnLamMoi = new javax.swing.JButton();
+        btnThem = new javax.swing.JButton();
+        btnSua = new javax.swing.JButton();
+        txtEmail = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jLabel8 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        lblAnh = new javax.swing.JLabel();
+        txtHoTen = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jTextField7 = new javax.swing.JTextField();
+        txtTaiKhoan = new javax.swing.JTextField();
+        lblID = new javax.swing.JLabel();
 
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel2.setText("Họ tên:");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(58, 25, -1, -1));
 
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        txtSdt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                txtSdtActionPerformed(evt);
             }
         });
+        jPanel1.add(txtSdt, new org.netbeans.lib.awtextra.AbsoluteConstraints(99, 73, 538, -1));
 
         jLabel3.setText("Số điện thoại:");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(28, 76, -1, -1));
 
         jLabel4.setText("Email:");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(66, 127, -1, -1));
 
         jLabel5.setText("Tài khoản:");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(44, 217, -1, -1));
 
-        jPasswordField1.addActionListener(new java.awt.event.ActionListener() {
+        txtMatKhau.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jPasswordField1ActionPerformed(evt);
+                txtMatKhauActionPerformed(evt);
             }
         });
+        jPanel1.add(txtMatKhau, new org.netbeans.lib.awtextra.AbsoluteConstraints(99, 252, 538, -1));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblKhachHang.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -88,29 +356,54 @@ public class KhachHang extends javax.swing.JInternalFrame {
                 "MaKH", "TenKH", "SDT", "Email"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
-
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/new.png"))); // NOI18N
-        jButton2.setText("Làm mới");
-
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/insert.png"))); // NOI18N
-        jButton3.setText("Thêm");
-
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/update.png"))); // NOI18N
-        jButton4.setText("Cập nhật");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+        tblKhachHang.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblKhachHangMouseClicked(evt);
             }
         });
+        jScrollPane1.setViewportView(tblKhachHang);
 
-        jTextField5.addActionListener(new java.awt.event.ActionListener() {
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 362, 1310, 414));
+
+        btnLamMoi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/new.png"))); // NOI18N
+        btnLamMoi.setText("Làm mới");
+        btnLamMoi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField5ActionPerformed(evt);
+                btnLamMoiActionPerformed(evt);
             }
         });
+        jPanel1.add(btnLamMoi, new org.netbeans.lib.awtextra.AbsoluteConstraints(99, 290, 134, 54));
+
+        btnThem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/insert.png"))); // NOI18N
+        btnThem.setText("Thêm");
+        btnThem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnThemActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnThem, new org.netbeans.lib.awtextra.AbsoluteConstraints(291, 290, 134, 54));
+
+        btnSua.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/update.png"))); // NOI18N
+        btnSua.setText("Cập nhật");
+        btnSua.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSuaActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnSua, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 290, 134, 54));
+
+        txtEmail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtEmailActionPerformed(evt);
+            }
+        });
+        jPanel1.add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(99, 124, 538, -1));
 
         jLabel6.setText("Mật khẩu:");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(46, 255, -1, -1));
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -118,160 +411,152 @@ public class KhachHang extends javax.swing.JInternalFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+                .addComponent(lblAnh, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblAnh, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        jTextField4.addActionListener(new java.awt.event.ActionListener() {
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1015, 22, -1, 322));
+
+        txtHoTen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField4ActionPerformed(evt);
+                txtHoTenActionPerformed(evt);
             }
         });
+        jPanel1.add(txtHoTen, new org.netbeans.lib.awtextra.AbsoluteConstraints(99, 22, 538, -1));
 
         jLabel7.setText("Hình");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(983, 22, -1, -1));
 
-        jTextField7.addActionListener(new java.awt.event.ActionListener() {
+        txtTaiKhoan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField7ActionPerformed(evt);
+                txtTaiKhoanActionPerformed(evt);
             }
         });
+        jPanel1.add(txtTaiKhoan, new org.netbeans.lib.awtextra.AbsoluteConstraints(99, 214, 538, -1));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1)
-                .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.DEFAULT_SIZE, 538, Short.MAX_VALUE)
-                            .addComponent(jTextField2)
-                            .addComponent(jTextField5)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(44, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(58, 58, 58)
-                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 78, Short.MAX_VALUE)
-                                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jPasswordField1)
-                            .addComponent(jTextField7))))
-                .addGap(346, 346, 346)
-                .addComponent(jLabel7)
-                .addGap(10, 10, 10)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(56, 56, 56))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel2))
-                            .addComponent(jLabel7))
-                        .addGap(31, 31, 31)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))
-                        .addGap(31, 31, 31)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel6)
-                            .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 414, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(24, 24, 24))
-        );
+        lblID.setText("jLabel1");
+        jPanel1.add(lblID, new org.netbeans.lib.awtextra.AbsoluteConstraints(555, 310, -1, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1330, 800));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField1ActionPerformed
+    private void txtMatKhauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMatKhauActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jPasswordField1ActionPerformed
+    }//GEN-LAST:event_txtMatKhauActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+         try {
+            Model.KhachHang kh = getFormKH1();
+            khdao.update(kh);
+            Model.TTKhachHang ttkh = getformTTKH1();
+            ttdao.update(ttkh);
+            MsgBox.alert(this, "update thành công!");
+            layTTKK();
+        } catch (Exception e) {
+            e.printStackTrace();
+            MsgBox.alert(this, " Update thất bại@@");
+        }
+    }//GEN-LAST:event_btnSuaActionPerformed
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    private void txtSdtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSdtActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_txtSdtActionPerformed
 
-    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
+    private void txtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmailActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField5ActionPerformed
+    }//GEN-LAST:event_txtEmailActionPerformed
 
-    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
+    private void txtHoTenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtHoTenActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField4ActionPerformed
+    }//GEN-LAST:event_txtHoTenActionPerformed
 
-    private void jTextField7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField7ActionPerformed
+    private void txtTaiKhoanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTaiKhoanActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField7ActionPerformed
+    }//GEN-LAST:event_txtTaiKhoanActionPerformed
+
+    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
+        // TODO add your handling code here:
+         if (this.CheckDL() == true && this.checTrung() == true) {
+            try {
+                Model.TaiKhoan tk = getFormTK();
+                tkdao.insert(tk);
+                listTK = tkdao.selectAll();
+                for (int i = listTK.size() - 1; i >= 0; i--) {
+                    Object[] row = new Object[]{
+                        listTK.get(i).getId(), listTK.get(i).getTenTK(), listTK.get(i).getMatKhau()
+                    };
+                    txtTaiKhoan.setText(listTK.get(listTK.size() - 1).getTenTK());
+                    txtMatKhau.setText(listTK.get(listTK.size() - 1).getMatKhau());
+                }
+                MsgBox.alert(this, "Thêm tài khoản thành công!");
+
+                Model.KhachHang kh = getFormKH();
+
+                khdao.insert(kh);
+                Model.TTKhachHang ttkh = getformTTKH();
+                ttdao.insert(ttkh);
+                layTTKK();
+                MsgBox.alert(this, "Thêm khách hàng thành công!");
+            } catch (Exception e) {
+                e.printStackTrace();
+                MsgBox.alert(this, " Thêm thất bại @@");
+            }
+        }
+    }//GEN-LAST:event_btnThemActionPerformed
+
+    private void tblKhachHangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblKhachHangMouseClicked
+        // TODO add your handling code here:
+          int index;
+        Model.KhachHang kh = new Model.KhachHang();
+        if (kh.getHinh() != null) {
+            lblAnh.setToolTipText(kh.getHinh());
+            lblAnh.setIcon(XImage.read(kh.getHinh()));
+        }
+        index = tblKhachHang.getSelectedRow();
+        txtHoTen.setText(tblKhachHang.getValueAt(index, 1).toString());
+
+        txtSdt.setText(tblKhachHang.getValueAt(index, 2).toString());
+        txtEmail.setText(tblKhachHang.getValueAt(index, 3).toString());
+
+        layTaiKhoan();
+    }//GEN-LAST:event_tblKhachHangMouseClicked
+
+    private void btnLamMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLamMoiActionPerformed
+        // TODO add your handling code here:
+//        clearForm();
+    }//GEN-LAST:event_btnLamMoiActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton btnLamMoi;
+    private javax.swing.JButton btnSua;
+    private javax.swing.JButton btnThem;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField7;
+    private javax.swing.JLabel lblAnh;
+    private javax.swing.JLabel lblID;
+    private javax.swing.JTable tblKhachHang;
+    private javax.swing.JTextField txtEmail;
+    private javax.swing.JTextField txtHoTen;
+    private javax.swing.JPasswordField txtMatKhau;
+    private javax.swing.JTextField txtSdt;
+    private javax.swing.JTextField txtTaiKhoan;
     // End of variables declaration//GEN-END:variables
 }

@@ -11,6 +11,7 @@ import Model.HoaDon;
 import Model.KhachHang;
 import Model.NhanVien;
 import Model.TaiKhoan;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -22,17 +23,20 @@ import java.util.logging.Logger;
  *
  * @author Huong
  */
-public class KhachHangDAO extends BarberDAO<KhachHang, Object>{
+public class KhachHangDAO extends BarberDAO<KhachHang, String>{
 
-    String INSERT_SQL = "INSERT INTO KHACHHANG (ID_TK,HOTEN,HINH,TRANGTHAI)"
-            + "values(?,?,?,?)";
-    String UPDATE_SQL = "UPDATE TaiKhoan set TenTK=?,MatKhau=?,VaiTro=?,TrangThai=?"
-            + "where Id=? "; 
-String SELECT_ALL_SQL = "SELECT * FROM KHACHHANG WHERE TrangThai = N'Hoạt động'";
+    String INSERT_SQL = "  Insert into KhachHang(Id_TK,HoTen,Hinh) values(?,?,?)";
+    String UPDATE_SQL = "  UPDATE KhachHang set HoTen = ?,Hinh=? where Id_TK = ?";
+    String DELETE_SQL = " DELETE From KhachHang";
+    String SELECT_ALL_SQL = " select * from KhachHang";
+    String SELECT_BY_ID_SQL = " select * from KhachHang where Id_TK = ?";
+    String SELECT_Join = "Select Email, SoDienThoai from KhachHang join ThongTinKhachHang\n"
+            + "  on KhachHang.Id = ThongTinKhachHang.Id_KH where ThongTinKhachHang.Id_KH = ?";
+    
     @Override
     public void insert(KhachHang entity) {
         try {
-            JDBCHelper.update(INSERT_SQL, entity.getId_tk(), entity.getHoTen(), entity.getHinh(),entity.getTrangThai());
+            JDBCHelper.update(INSERT_SQL, entity.getId_tk(), entity.getHoTen(), entity.getHinh());
         } catch (SQLException ex) {
             Logger.getLogger(KhachHangDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -40,41 +44,69 @@ String SELECT_ALL_SQL = "SELECT * FROM KHACHHANG WHERE TrangThai = N'Hoạt đ�
 
     @Override
     public void update(KhachHang entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void delete(Object id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public KhachHang selectById(Object id) {
-        List<KhachHang>list=this.selectBySql("select * from KhachHang where Id = ?", id);
-        if(list.isEmpty()){
-            return null;
+        try {
+            JDBCHelper.update(UPDATE_SQL,  entity.getHoTen(),entity.getHinh(), entity.getId_tk());
+        } catch (SQLException ex) {
+            Logger.getLogger(KhachHangDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return list.get(0);
+    }
+
+    @Override
+    public void delete(String id) {
+        try {
+            JDBCHelper.update(DELETE_SQL, id);
+        } catch (SQLException ex) {
+            Logger.getLogger(KhachHangDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public KhachHang selectById(String id) {
+        List<KhachHang> list = this.selectBySql(SELECT_BY_ID_SQL, id);
+        if (list.isEmpty()) {
+            return null;
+        } else {
+            return list.get(0);
+        }
+    }
+    
+    
+    
+     public KhachHang selectByIdob(Object id) {
+        List<KhachHang> list = this.selectBySql(SELECT_BY_ID_SQL, id);
+        if (list.isEmpty()) {
+            return null;
+        } else {
+            return list.get(0);
+        }
     }
 
     @Override
     public List<KhachHang> selectAll() {
         return this.selectBySql(SELECT_ALL_SQL);
     }
+    
+     public List<KhachHang> selectKH() {
+         String sql="select KhachHang.Id,Hoten,Email,SoDienThoai from KhachHang join ThongTinKhachHang\n"
+                + "on ThongTinKhachHang.Id_KH=KhachHang.Id\n"
+                + "join TaiKhoan on TaiKhoan.Id=KhachHang.Id_TK";
+        return this.selectBySql(SELECT_ALL_SQL);
+    }
 
     @Override
     protected List<KhachHang> selectBySql(String sql, Object... args) {
-        List<KhachHang>list=new ArrayList<>();
+        List<KhachHang> list = new ArrayList<>();
         try {
-            ResultSet rs=JDBCHelper.query(sql, args);
-            while (rs.next()) {                
-                KhachHang entity=new KhachHang();
-                entity.setId(rs.getInt(1));
-                entity.setId_tk(rs.getInt("ID_TK"));
-                entity.setHoTen(rs.getString(3));
-                entity.setHinh(rs.getString(4));
-                entity.setTrangThai(rs.getString(5));
+            ResultSet rs = JDBCHelper.query(sql, args);
+            while (rs.next()) {
+                KhachHang entity = new KhachHang();
+                entity.setId(rs.getInt("Id"));
+                entity.setId_tk(rs.getInt("Id_TK"));
+                entity.setHoTen(rs.getString("HoTen"));
+                entity.setHinh(rs.getString("Hinh"));
+                entity.setTrangThai(rs.getString("TrangThai"));
                 list.add(entity);
+
             }
             rs.getStatement().getConnection().close();
             return list;
@@ -82,6 +114,40 @@ String SELECT_ALL_SQL = "SELECT * FROM KHACHHANG WHERE TrangThai = N'Hoạt đ�
             throw new RuntimeException(e);
         }
     }
+
+    public Object LayEmail(int kh) {
+        Object[] oj = new Object[2];
+        try {
+            PreparedStatement pstm = JDBCHelper.getStmt("Select * from ThongTinKhachHang where Id_KH = ?", kh);
+            ResultSet rs = pstm.executeQuery();
+            while (rs.next()) {
+                
+                oj[0] = rs.getString("SoDienThoai");
+                oj[1] = rs.getString("Email");
+                
+            }
+        } catch (Exception e) {
+        }
+        return oj;
+    }
+    
+    public Object LayTK(KhachHang tk) {
+        Object[] oj = new Object[2];
+        try {
+            PreparedStatement pstm = JDBCHelper.getStmt("Select * from TaiKhoan  join KhachHang on TaiKhoan.Id = KhachHang.Id_TK where Id_TK = ?", tk.getId_tk());
+            ResultSet rs = pstm.executeQuery();
+            while (rs.next()) {
+                
+                oj[0] = rs.getString("TenTK");
+                
+                
+            }
+        } catch (Exception e) {
+        }
+        return oj;
+    }
+    
+       
     
     public KhachHang SelectByTenTK(String tentk) {
         List<KhachHang>list=this.selectBySql("select KhachHang.* from KhachHang join TaiKhoan on KhachHang.Id_TK = TaiKhoan.Id where TaiKhoan.TenTK = ?", tentk);

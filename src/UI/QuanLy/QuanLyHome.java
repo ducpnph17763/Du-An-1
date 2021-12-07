@@ -251,7 +251,7 @@ public class QuanLyHome extends javax.swing.JFrame {
         lblDichVu.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblDichVu.setForeground(new java.awt.Color(255, 255, 255));
         lblDichVu.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblDichVu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/add.png"))); // NOI18N
+        lblDichVu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/dichvu.png"))); // NOI18N
         lblDichVu.setText("Dịch vụ");
         lblDichVu.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
         lblDichVu.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -588,7 +588,7 @@ public class QuanLyHome extends javax.swing.JFrame {
         try {
             bufferedImage = ImageIO.read(new File("src\\Image\\" + fileName));
         } catch (IOException e) {
-            e.printStackTrace();
+            
         }
         Image scaledImage = bufferedImage.getScaledInstance(lblHinh.getWidth(), lblHinh.getHeight(), Image.SCALE_SMOOTH);
         ImageIcon image = new ImageIcon(scaledImage);

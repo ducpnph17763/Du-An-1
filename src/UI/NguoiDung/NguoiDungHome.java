@@ -380,7 +380,7 @@ public class NguoiDungHome extends javax.swing.JFrame {
 
     private void lblDichVuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblDichVuMouseClicked
         PNchinh.removeAll();
-        QLDichVu dv = new QLDichVu();
+        DichVuInter dv = new DichVuInter();
         PNchinh.add(dv);
         dv.show();
     }//GEN-LAST:event_lblDichVuMouseClicked

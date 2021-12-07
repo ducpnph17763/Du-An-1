@@ -69,9 +69,8 @@
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="btnTaoHoaDon" max="32767" attributes="0"/>
                               <Component id="btnLamMoi" alignment="0" max="32767" attributes="0"/>
-                              <Component id="btnThemDichVu" alignment="0" max="32767" attributes="0"/>
+                              <Component id="btnThemDichVu" alignment="0" pref="131" max="32767" attributes="0"/>
                               <Component id="btnHuyDichVu" alignment="0" max="32767" attributes="0"/>
-                              <Component id="btnDatLich" alignment="1" min="-2" pref="131" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
                       </Group>
@@ -111,9 +110,7 @@
                           <Component id="btnHuyDichVu" min="-2" pref="50" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="btnLamMoi" min="-2" pref="50" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
-                          <Component id="btnDatLich" min="-2" pref="50" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="91" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
@@ -239,9 +236,9 @@
         <Component class="javax.swing.JButton" name="btnTaoHoaDon">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/Image/add.png"/>
+              <Image iconType="3" name="/Image/calendar.png"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="T&#x1ea1;o"/>
+            <Property name="text" type="java.lang.String" value="&#x110;&#x1eb7;t l&#x1ecb;ch"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTaoHoaDonActionPerformed"/>
@@ -275,17 +272,6 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnHuyDichVuActionPerformed"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JButton" name="btnDatLich">
-          <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/Image/calendar.png"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="&#x110;&#x1eb7;t l&#x1ecb;ch"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDatLichActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

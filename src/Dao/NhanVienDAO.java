@@ -25,9 +25,9 @@ public class NhanVienDAO extends BarberDAO<NhanVien, Object>{
             + "values(?,?,?,?,?,?,?)";
     String UPDATE_SQL = "UPDATE NhanVien set HoTen=?,GioiTinh=?,DiaChi=?"
             + ",Email=?,SoDienThoai=?,VaiTro=?,TrangThai=? where Id=?";
-    String DELETE_SQL = "DELETE FROM NhanVien";
+    String DELETE_SQL = "DELETE FROM NhanVien Where id=?";
     String SELECT_ALL_SQL = "SELECT*FROM NhanVien where TrangThai =N'Hoạt động'";
-    String SELECT_BY_ID_SQL = "SELECT*FROM NhanVien where Id=?";
+    String SELECT_BY_ID_SQL = "SELECT*FROM NhanVien Where Id=?";
     String SELECT_BY_EMAIL = "SELECT*FROM NhanVien where Email=?";
 String SELECT_VTRO = "SELECT VaiTro FROM NhanVien";
 
@@ -53,10 +53,9 @@ String SELECT_VTRO = "SELECT VaiTro FROM NhanVien";
         }
     }
 
-    @Override
-    public void delete(Object id) {
+    public void deleteNV(NhanVien entity) {
         try {
-            JDBCHelper.update(DELETE_SQL, id);
+            JDBCHelper.update(DELETE_SQL, entity.getId());
         } catch (SQLException ex) {
             Logger.getLogger(NhanVienDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -158,6 +157,15 @@ String SELECT_VTRO = "SELECT VaiTro FROM NhanVien";
       }
     }
     
+    public NhanVien selectBySDT(Object id) {
+      List<NhanVien>list=this.selectBySql("SELECT*FROM NhanVien where SoDienThoai=?", id);
+      if(list.isEmpty()){
+          return null;
+      }else{
+          return list.get(0);
+      }
+    }
+    
     public NhanVien selectBVTro(Object id) {
       List<NhanVien>list=this.selectBySql(SELECT_VTRO, id);
       if(list.isEmpty()){
@@ -175,6 +183,19 @@ String SELECT_VTRO = "SELECT VaiTro FROM NhanVien";
     public List<NhanVien> selectByIdNv(int idNV){
         String sql = "SELECT TAIKHOAN.* FROM TAIKHOAN JOIN NHANVIEN ON TAIKHOAN.ID = NHANVIEN.ID_TK WHERE NHANVIEN.ID=?";
         return  this.selectBySql(sql, idNV);
+    }
+    
+//    public NhanVien selectByIDNVien(int idNV) {
+//        List<NhanVien> list = this.selectBySql("SELECT * FROM NHANVIEN WHERE ID=?", idNV);
+//        if (list.isEmpty()) {
+//            return null;
+//        }
+//        return list.get(0);
+//    }
+    
+    public List<NhanVien> selectByIDNVien(int idNV) {
+        String sql ="SELECT * FROM NHANVIEN WHERE ID=?";
+      return this.selectBySql(sql, idNV);
     }
     
     
@@ -214,5 +235,10 @@ String SELECT_VTRO = "SELECT VaiTro FROM NhanVien";
             return null;
         }
         return list.get(0);
+    }
+
+    @Override
+    public void delete(Object id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

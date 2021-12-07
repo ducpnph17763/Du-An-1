@@ -86,7 +86,6 @@ public class DatLichNguoiDung extends javax.swing.JInternalFrame {
         btnLamMoi = new javax.swing.JButton();
         btnThemDichVu = new javax.swing.JButton();
         btnHuyDichVu = new javax.swing.JButton();
-        btnDatLich = new javax.swing.JButton();
 
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -121,8 +120,8 @@ public class DatLichNguoiDung extends javax.swing.JInternalFrame {
         ));
         jScrollPane1.setViewportView(tblDichVu);
 
-        btnTaoHoaDon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/add.png"))); // NOI18N
-        btnTaoHoaDon.setText("Tạo");
+        btnTaoHoaDon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/calendar.png"))); // NOI18N
+        btnTaoHoaDon.setText("Đặt lịch");
         btnTaoHoaDon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTaoHoaDonActionPerformed(evt);
@@ -145,14 +144,6 @@ public class DatLichNguoiDung extends javax.swing.JInternalFrame {
         btnHuyDichVu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnHuyDichVuActionPerformed(evt);
-            }
-        });
-
-        btnDatLich.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/calendar.png"))); // NOI18N
-        btnDatLich.setText("Đặt lịch");
-        btnDatLich.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDatLichActionPerformed(evt);
             }
         });
 
@@ -186,9 +177,8 @@ public class DatLichNguoiDung extends javax.swing.JInternalFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(btnTaoHoaDon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnLamMoi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnThemDichVu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnHuyDichVu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnDatLich, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnThemDichVu, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
+                            .addComponent(btnHuyDichVu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(61, 61, 61))))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
@@ -219,9 +209,7 @@ public class DatLichNguoiDung extends javax.swing.JInternalFrame {
                         .addComponent(btnHuyDichVu, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btnLamMoi, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(11, 11, 11)
-                        .addComponent(btnDatLich, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(30, 30, 30))
+                        .addGap(91, 91, 91))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(34, 34, 34)
                         .addComponent(jLabel3)
@@ -241,11 +229,6 @@ public class DatLichNguoiDung extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnDatLichActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDatLichActionPerformed
-
-
-    }//GEN-LAST:event_btnDatLichActionPerformed
-
     private void btnTaoHoaDonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTaoHoaDonActionPerformed
         if (this.ValidateFrom() == true) {
             this.TaoHoaDon();
@@ -262,7 +245,6 @@ public class DatLichNguoiDung extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnDatLich;
     private javax.swing.JButton btnHuyDichVu;
     private javax.swing.JButton btnLamMoi;
     private javax.swing.JButton btnTaoHoaDon;
@@ -386,9 +368,9 @@ public class DatLichNguoiDung extends javax.swing.JInternalFrame {
         hd.setNgayTao(sdf.parse(ngay));
         hd.setDatCoc(tongtien * 20 / 100);
         hd.setThanhToan(tongtien);
-        hd.setTrangThaiTT("Chưa thanh toán");
-        hd.setTrangThai("Chưa đặt cọc");
-        hd.setDanhGia(null);
+        hd.setTrangThaiTT("Chưa đặt cọc");
+        hd.setTrangThai("Chưa thanh toán");
+        hd.setDanhGia("0");
         hd.setPhanHoi("Phản hồi");
         hd.setGioHen(gioHen);
         return hd;

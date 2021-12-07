@@ -63,7 +63,7 @@ public class HoaDonDAO extends BarberDAO<HoaDon, String> {
     }
 
     @Override
-    public List<HoaDon> selectAll() {
+    public List<Model.HoaDon> selectAll() {
         return this.selectBySql(SELECT_ALL_SQL);
     }
 
@@ -165,7 +165,7 @@ public class HoaDonDAO extends BarberDAO<HoaDon, String> {
     }
 
     public List<HoaDon> SelectByThoCat(int id) {
-        return this.selectBySql("Select * from HoaDon where Id_TC = ? and TrangThaiTT = ?", id, "Chưa thanh toán");
+        return this.selectBySql("Select * from HoaDon where Id_TC = ? and TrangThai = ?", id, "Chưa thanh toán");
     }
 
 }

@@ -76,8 +76,6 @@ public class TaiKhoan extends javax.swing.JInternalFrame {
         btnSua = new javax.swing.JButton();
         btnXoa = new javax.swing.JButton();
 
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/178831-200.png"))); // NOI18N
@@ -355,7 +353,16 @@ public class TaiKhoan extends javax.swing.JInternalFrame {
                 .addGap(0, 19, Short.MAX_VALUE))
         );
 
-        getContentPane().add(jDesktopPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jDesktopPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jDesktopPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -370,9 +377,10 @@ public class TaiKhoan extends javax.swing.JInternalFrame {
 
     private void btnDoiMKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDoiMKActionPerformed
         // TODO add your handling code here:
-        DoiMatKhau dmk = new DoiMatKhau();
-        jDesktopPane1.add(dmk);
-        dmk.show();
+        DoiMatKhau dc = new DoiMatKhau();
+        jDesktopPane1.add(dc); 
+        dc.setLocation(((jDesktopPane1.getWidth()-dc.getWidth())/2),((jDesktopPane1.getHeight()-dc.getHeight())/2));
+        dc.show();
     }//GEN-LAST:event_btnDoiMKActionPerformed
 
     private void btnKHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKHActionPerformed
@@ -451,11 +459,11 @@ public class TaiKhoan extends javax.swing.JInternalFrame {
 
     TTKhachHang getFormKH() {
         int id_tk = XAuth.user.getId();
-        int id_kh = dao.selectById(id_tk).getId();
+        int id_kh = dao.selectById(id_tk+"").getId();
         String email = txtEmail.getText();
         String sdt = txtSDT.getText();
         String trangThai = "Đang hoạt động";
-        return new TTKhachHang(id_kh, sdt, email, trangThai);
+        return new TTKhachHang(id_kh, sdt, email);
     }
 
     NhanVien getFormNV() {
@@ -475,12 +483,13 @@ public class TaiKhoan extends javax.swing.JInternalFrame {
         if (XAuth.user.getVaiTro() == 3) {
             txtEmail.setText(tblBang.getValueAt(index, 0) + "");
             txtSDT.setText(tblBang.getValueAt(index, 1) + "");
-            String id = String.valueOf(XAuth.user.getId());
-            txtTen.setText(dao.selectById(id).getHoTen());
+            int id = XAuth.user.getId();
+            System.out.println("id khách hàng:"+id);
+            txtTen.setText(dao.selectById(id+"").getHoTen());
         } else {
             txtEmail.setText(tblBang.getValueAt(index, 0) + "");
             txtSDT.setText(tblBang.getValueAt(index, 1) + "");
-            String id = String.valueOf(XAuth.user.getId());
+            int id = XAuth.user.getId();
             txtTen.setText(nvdao.selectById(id).getHoTen());
         }
     }

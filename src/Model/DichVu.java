@@ -16,18 +16,21 @@ public class DichVu {
     private String hinh;
     private String moTa;
     private String trangThai;
+    private int thoiGian;
 
     public DichVu() {
     }
 
-    public DichVu(String Id, String tenDV, int giaTien, String hinh, String moTa, String trangThai) {
+    public DichVu(String Id, String tenDV, int giaTien, String hinh, String moTa, String trangThai, int thoiGian) {
         this.Id = Id;
         this.tenDV = tenDV;
         this.giaTien = giaTien;
         this.hinh = hinh;
         this.moTa = moTa;
         this.trangThai = trangThai;
+        this.thoiGian = thoiGian;
     }
+    
 
     public String getId() {
         return Id;
@@ -76,6 +79,15 @@ public class DichVu {
     public void setTrangThai(String trangThai) {
         this.trangThai = trangThai;
     }
+
+    public int getThoiGian() {
+        return thoiGian;
+    }
+
+    public void setThoiGian(int thoiGian) {
+        this.thoiGian = thoiGian;
+    }
+    
 
     @Override
     public String toString() {

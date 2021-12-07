@@ -1,4 +1,3 @@
-
 package UI.LeTan;
 
 /**
@@ -6,8 +5,9 @@ package UI.LeTan;
  * @author DELL
  */
 public class Time {
-    private int minute; 
-    private int hour; 
+
+    private int minute;
+    private int hour;
 
     public Time() {
         this.minute = 0;
@@ -18,6 +18,7 @@ public class Time {
         this.minute = minute;
         this.hour = hour;
     }
+
     public Time(String str) {
         String ThoiGian[] = str.split(":");
         int gio = Integer.valueOf(ThoiGian[0]);
@@ -71,26 +72,23 @@ public class Time {
         }
     }
 
+    public void CongThoiGian(int phut) {
+        int a = phut;
+        if (a < 60) {
+            this.setMinute(this.minute + phut);
+        } else if (a < 0) {
+            this.setMinute(this.minute + 0);
+        } else {
+            a = phut - 60;
+            tangGio();
+            CongThoiGian(a);
+        }
+
+    }
+
     public void tangGio() {
         this.setHour(this.hour + 1);
     }
 
-    public int SoSanh(String str) {
-        String ThoiGian[] = str.split(":");
-        int gio = Integer.valueOf(ThoiGian[0]);
-        int phut = Integer.valueOf(ThoiGian[1]);
-        if (hour < gio) {
-            return -1;
-        } else if (hour > gio) {
-            return 1;
-        } else {
-            if (minute < phut) {
-                return -1;
-            } else if (minute > phut) {
-                return 1;
-            } else {
-                return 0;
-            }
-        }
-    }
+  
 }

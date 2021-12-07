@@ -22,14 +22,14 @@ public class HoaDonDAO extends BarberDAO<HoaDon, String> {
     String UPDATE_SQL = "UPDATE HoaDon set TrangThaiTT=?,TrangThai=? where Id=?";
     String SELECT_ALL_SQL = "select * from HoaDon";
     String SELECT_BY_ID_SQL = "select * from HoaDon where Id=?";
-    String Insert = "Insert into HoaDon(Id_KH,Id_NV,Id_TC,NgayHen,GioHen,NgayTao,DatCoc,ThanhToan,TrangThaiTT,TrangThai,DanhGia,PhanHoi)"
-            + "values(?,?,?,?,?,?,?,?,?,?,?,?)";
+    String Insert = "Insert into HoaDon(Id_KH,Id_NV,Id_TC,NgayHen,GioHen,GioKT,NgayTao,DatCoc,ThanhToan,TrangThaiTT,TrangThai,DanhGia,PhanHoi)"
+            + "values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
     @Override
     public void insert(HoaDon entity) {
-       try {
+        try {
             JDBCHelper.update(Insert, entity.getId_KH(),
-                    entity.getId_NV(), entity.getId_TC(), entity.getNgayHen(), entity.getGioHen(),
+                    entity.getId_NV(), entity.getId_TC(), entity.getNgayHen(), entity.getGioHen(), entity.getGioKetThuc(),
                     entity.getNgayTao(), entity.getDatCoc(), entity.getThanhToan(),
                     entity.getTrangThaiTT(), entity.getTrangThai(), entity.getDanhGia(), entity.getPhanHoi());
         } catch (SQLException ex) {
@@ -87,6 +87,7 @@ public class HoaDonDAO extends BarberDAO<HoaDon, String> {
                 entity.setTrangThaiTT(rs.getString("TrangThaiTT"));
                 entity.setTrangThai(rs.getString("TrangThai"));
                 entity.setGioHen(rs.getString("GioHen"));
+                entity.setGioKetThuc(rs.getString("GioKT"));
                 list.add(entity);
             }
             rs.getStatement().getConnection().close();
@@ -114,41 +115,47 @@ public class HoaDonDAO extends BarberDAO<HoaDon, String> {
     }
 
     public HoaDon SelectHoaDonByGioHen(HoaDon hd) {
-        List<HoaDon> list = this.selectBySql("Select * from HoaDon where Id_TC = ? and NgayHen = ? and GioHen = ?", hd.getId_TC(), hd.getNgayHen(), hd.getGioHen());
+        List<HoaDon> list = this.selectBySql("Select * from HoaDon where Id_TC = ? and NgayHen = ?", hd.getId_TC(), hd.getNgayHen());
         if (list.isEmpty()) {
             return null;
         }
         return list.get(0);
     }
 
-    public List<Model.HoaDon> SelectHoaDonNguoiDung(String tentk) {
-            List<Model.HoaDon> list = this.selectBySql("select * from HoaDon join KhachHang on KhachHang.Id = HoaDon.Id_KH \n" +
-            "join TaiKhoan on TaiKhoan.Id = KhachHang.Id_TK where HoaDon.TrangThai=N'Đã thanh toán' and TenTK = ?", tentk);
+    public List<HoaDon> SelectHoaDonByNgay(HoaDon hd) {
+        List<HoaDon> list = this.selectBySql("Select * from HoaDon where Id_TC = ? and NgayHen = ?", hd.getId_TC(), hd.getNgayHen());
         if (list.isEmpty()) {
             return null;
         }
         return list;
     }
-    
-    public Model.HoaDon TimKiemHoaDonNguoiDung(String tk, String id) {
-        List<Model.HoaDon> ls = this.selectBySql("Select HoaDon.* from HoaDon join KhachHang on KhachHang.Id = HoaDon.Id_KH join TaiKhoan on KhachHang.Id_TK = TaiKhoan.Id where TaiKhoan.TenTK = ? and HoaDon.Id = ? and HoaDon.TrangThai = N'Đã thanh toán'", tk , id);
-        if(ls.size() == 0) {
+
+    public List<Model.HoaDon> SelectHoaDonNguoiDung(String tentk) {
+        List<Model.HoaDon> list = this.selectBySql("select * from HoaDon join KhachHang on KhachHang.Id = HoaDon.Id_KH \n"
+                + "join TaiKhoan on TaiKhoan.Id = KhachHang.Id_TK where HoaDon.TrangThaiTT=N'Đã thanh toán' and TenTK = ?", tentk);
+        if (list.isEmpty()) {
             return null;
-        }else {
+        }
+        return list;
+    }
+
+    public Model.HoaDon TimKiemHoaDonNguoiDung(String tk, String id) {
+        List<Model.HoaDon> ls = this.selectBySql("Select HoaDon.* from HoaDon join KhachHang on KhachHang.Id = HoaDon.Id_KH join TaiKhoan on KhachHang.Id_TK = TaiKhoan.Id where TaiKhoan.TenTK = ? and HoaDon.Id = ? and HoaDon.TrangThaiTT = N'Đã thanh toán'", tk, id);
+        if (ls.size() == 0) {
+            return null;
+        } else {
             return ls.get(0);
         }
     }
-    
-    
-    
+
     public void InsertHDCT(HoaDon hd, DichVu dv) {
         try {
             JDBCHelper.update("insert into HoaDonChiTiet(Id_DV, Id_HD, GiaTien, TrangThai) values (?,?,?,?)", dv.getId(), hd.getId(), dv.getGiaTien(), hd.getTrangThai());
         } catch (SQLException ex) {
             Logger.getLogger(NhanVienDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }  
+        }
     }
-    
+
     public HoaDon selectHD_CuoiCung() {
         List<HoaDon> list = this.selectBySql("SELECT TOP 1 * FROM HoaDon ORDER BY Id DESC ");
         if (list.isEmpty()) {
@@ -156,7 +163,7 @@ public class HoaDonDAO extends BarberDAO<HoaDon, String> {
         }
         return list.get(0);
     }
-    
+
     public List<HoaDon> SelectByThoCat(int id) {
         return this.selectBySql("Select * from HoaDon where Id_TC = ? and TrangThai = ?", id, "Chưa thanh toán");
     }

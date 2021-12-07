@@ -7,13 +7,12 @@ package Model;
 
 import java.util.Date;
 
-
-
 /**
  *
  * @author Administrator
  */
 public class HoaDon {
+
     private int id;
     private Integer id_KH;
     private Integer id_TC;
@@ -27,6 +26,7 @@ public class HoaDon {
     private String phanHoi;
     private String trangThaiTT;
     private String trangThai;
+    private String gioKetThuc;
 
     public HoaDon() {
     }
@@ -46,7 +46,6 @@ public class HoaDon {
         this.trangThaiTT = trangThaiTT;
         this.trangThai = trangThai;
     }
-    
 
     public int getId() {
         return id;
@@ -80,8 +79,6 @@ public class HoaDon {
         this.id_NV = id_NV;
     }
 
-   
-
     public Date getNgayHen() {
         return ngayHen;
     }
@@ -97,8 +94,6 @@ public class HoaDon {
     public void setNgayTao(Date ngayTao) {
         this.ngayTao = ngayTao;
     }
-
-
 
     public int getDatCoc() {
         return datCoc;
@@ -156,17 +151,17 @@ public class HoaDon {
         this.GioHen = GioHen;
     }
 
+    public String getGioKetThuc() {
+        return gioKetThuc;
+    }
 
+    public void setGioKetThuc(String gioKetThuc) {
+        this.gioKetThuc = gioKetThuc;
+    }
 
     @Override
     public String toString() {
         return "HoaDon{" + "id=" + id + ", id_KH=" + id_KH + ", id_TC=" + id_TC + ", id_NV=" + id_NV + ", ngayHen=" + ngayHen + ", GioHen=" + GioHen + ", ngayTao=" + ngayTao + ", datCoc=" + datCoc + ", thanhToan=" + thanhToan + ", danhGia=" + danhGia + ", phanHoi=" + phanHoi + ", trangThaiTT=" + trangThaiTT + ", trangThai=" + trangThai + '}';
     }
-    
-    
-    
-    
-   
-    
-    
+
 }

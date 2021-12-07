@@ -29,6 +29,7 @@ import javax.swing.JFrame;
 public class LeTanHome extends javax.swing.JFrame {
 
     NhanVienDAO nvdao = new NhanVienDAO();
+
     public LeTanHome() {
         initComponents();
         this.init();
@@ -372,16 +373,20 @@ public class LeTanHome extends javax.swing.JFrame {
         QLDichVu dv = new QLDichVu();
         PNchinh.add(dv);
         dv.show();
-        Model.TaiKhoan tk = XAuth.user;
-        if (tk == null) {
-            this.SetHinh("178831-200.png");
-        } else {
-            Model.NhanVien nv = nvdao.SelectByTenTK(tk.getTenTK());
-            this.lblHoTen.setText(nv.getHoTen());
-            if (tk.getHinh() == null) {
+        try {
+            Model.TaiKhoan tk = XAuth.user;
+            if (tk == null) {
                 this.SetHinh("178831-200.png");
+            } else {
+                Model.NhanVien nv = nvdao.SelectByTenTK(tk.getTenTK());
+                this.lblHoTen.setText(nv.getHoTen());
+                if (tk.getHinh() == null) {
+                    this.SetHinh("178831-200.png");
+                }
+                this.SetHinh(tk.getHinh());
             }
-            this.SetHinh(tk.getHinh());
+        } catch (Exception e) {
+
         }
     }//GEN-LAST:event_formWindowOpened
 
@@ -521,7 +526,6 @@ public class LeTanHome extends javax.swing.JFrame {
         try {
             bufferedImage = ImageIO.read(new File("src\\Image\\" + fileName));
         } catch (IOException e) {
-            e.printStackTrace();
         }
         Image scaledImage = bufferedImage.getScaledInstance(lblHinh.getWidth(), lblHinh.getHeight(), Image.SCALE_SMOOTH);
         ImageIcon image = new ImageIcon(scaledImage);

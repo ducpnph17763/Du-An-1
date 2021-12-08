@@ -5,7 +5,6 @@
  */
 package UI.ChucNang;
 
-import Dao.KhachHangDAO;
 import Dao.NhanVienDAO;
 import Dao.QLTaiKhoanDAO;
 import Dao.TaiKhoanDAO;
@@ -20,6 +19,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.swing.JOptionPane;
+
 
 /**
  *
@@ -287,8 +287,8 @@ public class QuenMatKhau extends javax.swing.JDialog {
             return;
         }
         if (cboND.isSelected()) {
-            for (Model.TTKhachHang x : listKH) {
-                if (mail.equals(x.getEmail())) {
+            for (int i = 0; i < listKH.size(); i++) {
+                if (mail.equals(listKH.get(i).getEmail())) {
                     index = 1;
                     break;
                 }
@@ -296,8 +296,8 @@ public class QuenMatKhau extends javax.swing.JDialog {
             return;
         }
         if (cboNV.isSelected()) {
-            for (Model.NhanVien x : listNV) {
-                if (mail.equals(x.getEmail())) {
+            for (int i = 0; i < listNV.size(); i++) {
+                if (mail.equals(listNV.get(i).getEmail())) {
                     index = 1;
                     break;
                 }
@@ -308,9 +308,9 @@ public class QuenMatKhau extends javax.swing.JDialog {
 
     public void guiMKMoi() {
         try {
-            String host = "smtp.gmail.com";
-            String user = "trantuyetnhi185@gmail.com";
-            String pass = "Maihuong123225";
+            String host = "smtp.mailtrap.io";
+            String user = "0c3a56210743a8";
+            String pass = "7d1448679b3e3a";
             String to = txtMail.getText();
             String subject = "Reseting Code";
             String message = "Your new password is " + newPass;

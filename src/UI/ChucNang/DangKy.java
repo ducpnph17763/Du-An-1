@@ -291,9 +291,9 @@ public class DangKy extends javax.swing.JFrame {
         try {
                     Random rand = new Random();
                     randomCode = rand.nextInt(899999) + 100000;
-                    String host = "smtp.gmail.com";
-                    String user = "trantuyetnhi185@gmail.com";
-                    String pass = "Maihuong123225";
+                    String host = "smtp.mailtrap.io";
+                    String user = "0c3a56210743a8";
+                    String pass = "7d1448679b3e3a";
                     String to = txtEmail.getText();
                     String subject = "Reseting Code";
                     String message = "Your reset code is " + randomCode;

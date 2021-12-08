@@ -84,7 +84,6 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
         btnLamMoi = new javax.swing.JButton();
         btnThemDichVu = new javax.swing.JButton();
         btnHuyDicVu = new javax.swing.JButton();
-        btnDatLich = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         txtSDT = new javax.swing.JTextField();
 
@@ -147,7 +146,7 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
         jScrollPane1.setViewportView(tblLichDat);
 
         btnTaoLichDat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/add.png"))); // NOI18N
-        btnTaoLichDat.setText("Tạo");
+        btnTaoLichDat.setText("Tạo lịch");
         btnTaoLichDat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTaoLichDatActionPerformed(evt);
@@ -170,14 +169,6 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
         btnHuyDicVu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnHuyDicVuActionPerformed(evt);
-            }
-        });
-
-        btnDatLich.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/calendar.png"))); // NOI18N
-        btnDatLich.setText("Đặt lịch");
-        btnDatLich.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDatLichActionPerformed(evt);
             }
         });
 
@@ -204,9 +195,8 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 147, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnLamMoi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnThemDichVu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnThemDichVu, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
                     .addComponent(btnHuyDicVu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnDatLich, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnTaoLichDat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(61, 61, 61))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -245,12 +235,9 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
                     .addComponent(cboThoCat, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnHuyDicVu, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(27, 27, 27)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cboThoiGian, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnDatLich, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cboThoiGian, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(68, 68, 68))
@@ -283,34 +270,6 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnDatLichActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDatLichActionPerformed
-        // TODO add your handling code here:
-        list=hddao.selectAll();
-        System.out.println("độ dài:"+list.size());
-        for (int i = list.size()-1; i >= 0; i--) {
-            Object[]row={
-                list.get(i).getId(),list.get(i).getTrangThaiTT()
-            };                        
-        }       
-        if(list.get(list.size()-1).getTrangThaiTT().equals("Đã đặt cọc(chờ xác nhận)")){
-            MsgBox.alert(this, "Lịch đặt đã đặt cọc rồi đang chờ xác nhận!");
-            return;
-        }else if(list.get(list.size()-1).getTrangThaiTT().equals("Đã đặt cọc")){
-            MsgBox.alert(this, "Lịch đặt đã đặt cọc trước đó!");
-            return;
-        }else if(list.get(list.size()-1).getTrangThaiTT().equals("Đã huỷ lịch")){
-            MsgBox.alert(this, "Lịch đặt đã huỷ trước đó trước đó!");
-            return;
-        }else{
-            DatCoc dc=new DatCoc(list.get(list.size()-1).getId()+"");
-            System.out.println("đặt cọc:"+dc);
-            jDesktopPane1.add(dc);
-            dc.setLocation(((jDesktopPane1.getWidth()-dc.getWidth())/2),((jDesktopPane1.getHeight()-dc.getHeight())/2));
-            dc.show();
-            System.out.println("tên TK"+tenTK);
-        }           
-    }//GEN-LAST:event_btnDatLichActionPerformed
 
     private void cboNgayDatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboNgayDatActionPerformed
         // TODO add your handling code here:    
@@ -351,7 +310,6 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnTaoLichDatActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnDatLich;
     private javax.swing.JButton btnHuyDicVu;
     private javax.swing.JButton btnLamMoi;
     private javax.swing.JButton btnTaoLichDat;

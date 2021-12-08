@@ -516,11 +516,25 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
 
     private void btnXacNhanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXacNhanActionPerformed
         DefaultTableModel mol = (DefaultTableModel) tblLichDat.getModel();
+        int index=-1;      
         index = tblLichDat.getSelectedRow();
+        if(index>=0){ 
         String ma = tblLichDat.getValueAt(index, 0) + "";
         HoaDon hd = hddao.selectById(ma);
-        hd.setTrangThaiTT("Đã đặt cọc (Đã xác nhận)");
+        if(hd.getTrangThaiTT().equals("Đã đặt cọc(đã xác nhận)")){
+            MsgBox.alert(this, "Lịch đặt đã xác nhận rồi!");
+            return;
+        }else{
+            hd.setTrangThaiTT("Đã đặt cọc(đã xác nhận)");
         hddao.update(hd);
+        MsgBox.alert(this, "Xác nhận thành công!");
+        layThongTinLichDat();
+        }       
+        }else{
+            MsgBox.alert(this, "Bạn chưa chọn lịch đặt để xác nhận!");
+            return;
+        }
+        
     }//GEN-LAST:event_btnXacNhanActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

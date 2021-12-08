@@ -69,11 +69,11 @@ public class QLDichVu extends javax.swing.JInternalFrame {
             this.setHinh(filename);
         }
     }
-    
+   
     public void setHinh(String fileName) {
         BufferedImage bufferedImage = null;
         try {
-            bufferedImage = ImageIO.read(new File(fileName));
+            bufferedImage = ImageIO.read(new File("src\\Image\\" + fileName));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -92,7 +92,12 @@ public class QLDichVu extends javax.swing.JInternalFrame {
         dv.setTenDV(txtTenDV.getText());
         dv.setGiaTien(Integer.parseInt(txtGiaTien.getText()));
         dv.setMoTa(txtGioiThieu.getText());
-        dv.setHinh(lblAnh.getToolTipText());
+        if(dv.getHinh()==null){
+            dv.setHinh("email.png");
+        }else{
+            dv.setHinh(lblAnh.getToolTipText());
+        }
+        
         return dv;
     }
     
@@ -135,9 +140,13 @@ public class QLDichVu extends javax.swing.JInternalFrame {
     
     }
    
+    
     void clearForm(){
         DichVu dv=new DichVu();
         setForm(dv);
+        if (dv.getHinh() == null) {
+            setHinh("email.png");
+        }
         index=-1;
         updateStatus();
     }

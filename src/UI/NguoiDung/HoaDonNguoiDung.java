@@ -54,7 +54,7 @@ public class HoaDonNguoiDung extends javax.swing.JInternalFrame {
 "	join NhanVien on HoaDon.Id_TC=NhanVien.Id\n" +
 "	join KhachHang on KhachHang.Id=HoaDon.Id_KH\n" +
 "	join TaiKhoan on TaiKhoan.Id=KhachHang.Id_TK where HoaDon.Id_TC=NhanVien.Id and HoaDon.TrangThai=N'Đã thanh toán' \n" +
-"	and TrangThaiTT=N'Đã đặt cọc' \n" +
+"	and TrangThaiTT=N'Đã đặt cọc(đã xác nhận)' \n" +
 "	and TaiKhoan.TenTK=N'"+TenTK+"'";
         ResultSet rs= JDBCHelper.query(sql);
         DefaultTableModel mol =(DefaultTableModel)tblHoaDon.getModel();

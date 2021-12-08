@@ -50,7 +50,7 @@ public class DSLichThoCat extends javax.swing.JInternalFrame {
                 + "Join NhanVien on NhanVien.Id=HoaDon.Id_TC\n"
                 + "join TaiKhoan on TaiKhoan.Id=NhanVien.Id_TK\n"
                 + "where NhanVien.Id=HoaDon.Id_TC and HoaDon.TrangThai=N'Chưa thanh toán' \n"
-                + "and (HoaDon.TrangThaiTT=N'Đã đặt cọc' or HoaDon.TrangThaiTT=N'Đã đặt cọc(chờ xác nhận)') and TaiKhoan.TenTK=N'"+tenTK+"'";
+                + "and (HoaDon.TrangThaiTT=N'Đã đặt cọc(đã xác nhận)' or HoaDon.TrangThaiTT=N'Đã đặt cọc(chờ xác nhận)') and TaiKhoan.TenTK=N'"+tenTK+"'";
         ResultSet rs=JDBCHelper.query(sql);
         DefaultTableModel model=(DefaultTableModel)tblLichDat.getModel();
         model.setRowCount(0);

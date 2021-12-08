@@ -47,7 +47,7 @@ public class HoaDon extends javax.swing.JInternalFrame {
                 + "from HoaDon\n"
                 + "join KhachHang on KhachHang.Id=HoaDon.Id_KH\n"
                 + "Join NhanVien on NhanVien.Id=HoaDon.Id_TC\n"
-                + "where NhanVien.Id=HoaDon.Id_TC and HoaDon.TrangThai=N'Đã thanh toán' and HoaDon.TrangThaiTT=N'Đã đặt cọc' and HoaDon.id="+id;
+                + "where NhanVien.Id=HoaDon.Id_TC and HoaDon.TrangThai=N'Đã thanh toán' and HoaDon.TrangThaiTT=N'Đã đặt cọc(đã xác nhận)' and HoaDon.id="+id;
         ResultSet rs=JDBCHelper.query(sql);
         DefaultTableModel model=(DefaultTableModel)tblHoaDon.getModel();
         model.setRowCount(0);
@@ -71,7 +71,7 @@ public class HoaDon extends javax.swing.JInternalFrame {
     void layHoaDonKHNull(){
         String sql = "select HoaDon.Id,HoaDon.Id_TC,null HoTen,NhanVien.HoTen,NgayHen,ThanhToan,DanhGia\n"
                 + "from HoaDon join NhanVien on NhanVien.Id=HoaDon.Id_TC\n"
-                + "where NhanVien.Id=HoaDon.Id_TC and HoaDon.TrangThai=N'Đã thanh toán' and HoaDon.TrangThaiTT=N'Đã đặt cọc' ";
+                + "where NhanVien.Id=HoaDon.Id_TC and HoaDon.TrangThai=N'Đã thanh toán' and HoaDon.TrangThaiTT=N'Đã đặt cọc(đã xác nhận)' ";
         ResultSet rs=JDBCHelper.query(sql);
         DefaultTableModel model=(DefaultTableModel)tblHoaDon.getModel();
         model.setRowCount(0);
@@ -96,7 +96,7 @@ public class HoaDon extends javax.swing.JInternalFrame {
         String sql = "select HoaDon.Id,HoaDon.Id_KH,HoaDon.Id_TC,NhanVien.HoTen,HoaDon.NgayHen,HoaDon.ThanhToan,HoaDon.DanhGia\n"
                 + "            from HoaDon join NhanVien on HoaDon.Id_TC=NhanVien.Id		\n"
                 + "            where  NhanVien.Id=HoaDon.Id_TC \n"
-                + "            and HoaDon.TrangThai LIKE N'Đã thanh toán'  and HoaDon.TrangThaiTT like N'Đã đặt cọc'";
+                + "            and HoaDon.TrangThai LIKE N'Đã thanh toán'  and HoaDon.TrangThaiTT like N'Đã đặt cọc(Đã xác nhận)'";
         ResultSet rs=JDBCHelper.query(sql);
         DefaultTableModel model=(DefaultTableModel)tblHoaDon.getModel();
         model.setRowCount(0);

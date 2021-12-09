@@ -245,7 +245,6 @@ public class KichHoatTK extends javax.swing.JFrame {
         KhachHang kh = new KhachHang();
         kh.setId_tk(getMaTK());
         kh.setHoTen(hoten);
-        kh.setHinh("");
         kh.setTrangThai("Hoạt động");
         return kh;
     }

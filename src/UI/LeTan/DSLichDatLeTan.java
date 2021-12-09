@@ -148,6 +148,7 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jDesktopPane1 = new javax.swing.JDesktopPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblCTLichDat = new javax.swing.JTable();
@@ -225,7 +226,7 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
         });
 
         btnThanhToan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/receipt.png"))); // NOI18N
-        btnThanhToan.setText("Thanh toán");
+        btnThanhToan.setText("Check in");
         btnThanhToan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnThanhToanActionPerformed(evt);
@@ -247,7 +248,7 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1310, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -258,7 +259,7 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
                         .addComponent(btnHuyLich, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(200, 200, 200)
                         .addComponent(btnHuyDV, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 225, Short.MAX_VALUE)
                         .addComponent(btnXacNhan, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(187, 187, 187)
                         .addComponent(btnThanhToan, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -287,7 +288,30 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1330, 800));
+        jDesktopPane1.setLayer(jPanel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
+        jDesktopPane1.setLayout(jDesktopPane1Layout);
+        jDesktopPane1Layout.setHorizontalGroup(
+            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1330, Short.MAX_VALUE)
+            .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+        jDesktopPane1Layout.setVerticalGroup(
+            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 800, Short.MAX_VALUE)
+            .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+
+        getContentPane().add(jDesktopPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1330, 800));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -477,7 +501,7 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
                         while (rs.next()) {
                             Object[] item = new Object[1];
                             item[0] = rs.getString("id");
-                            String sql = "update HoaDon set Id_NV=" + item[0] + ",TrangThaiTT=N'Đã đặt cọc', TrangThai=N'Đã thanh toán' where HoaDon.Id=" + mahd;
+                            String sql = "update HoaDon set Id_NV=" + item[0] + ", TrangThai=N'Chờ thanh toán' where HoaDon.Id=" + mahd;
                             JDBCHelper.update(sql);
                         }
                     } catch (Exception e) {
@@ -486,7 +510,7 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
                    
                     DefaultTableModel mol = (DefaultTableModel) tblCTLichDat.getModel();
                     mol.setRowCount(0);
-                    MsgBox.alert(this, "Thanh toán thành công!");
+                    MsgBox.alert(this, "Check in thành công!");
                 }
             } else if (TrangThai.equals("Đã thanh toán")) {
                 MsgBox.alert(this, "Lịch đặt này đã thanh toán rồi!");
@@ -496,17 +520,34 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
                 return;
             }
         } catch (Exception e) {
-            MsgBox.alert(this, "Bạn chưa chọn hoá đơn thanh toán!");
+            MsgBox.alert(this, "Bạn chưa chọn lịch đặt để check in!");
         }
     }//GEN-LAST:event_btnThanhToanActionPerformed
 
     private void tblLichDatMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLichDatMousePressed
-        // TODO add your handling code here:   
+        // TODO add your handling code here: 
+       if(evt.getClickCount()==2){
+           int index=tblLichDat.getSelectedRow();
+            
+            try {
+                String id_Hd =tblLichDat.getValueAt(index, 0).toString();
+                String id_KH=tblLichDat.getValueAt(index, 1).toString();
+                HienThiThongTin a=new HienThiThongTin(id_Hd,id_KH);
+                jDesktopPane1.add(a);
+                a.setLocation(((jDesktopPane1.getWidth()-a.getWidth())/2),((jDesktopPane1.getHeight()-a.getHeight())/2));
+                a.show();
+           } catch (Exception e) {
+           }
+          
+       }
     }//GEN-LAST:event_tblLichDatMousePressed
 
     private void tblLichDatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLichDatMouseClicked
         // TODO add your handling code here:  
         LayTTBangCTLichDat1();
+        
+            
+        
     }//GEN-LAST:event_tblLichDatMouseClicked
 
     private void tblCTLichDatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCTLichDatMouseClicked
@@ -542,6 +583,7 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnHuyLich;
     private javax.swing.JButton btnThanhToan;
     private javax.swing.JButton btnXacNhan;
+    private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;

@@ -25,8 +25,8 @@ import java.util.logging.Logger;
  */
 public class KhachHangDAO extends BarberDAO<KhachHang, String>{
 
-    String INSERT_SQL = "  Insert into KhachHang(Id_TK,HoTen,Hinh) values(?,?,?)";
-    String UPDATE_SQL = "  UPDATE KhachHang set HoTen = ?,Hinh=? where Id_TK = ?";
+    String INSERT_SQL = "  Insert into KhachHang(Id_TK,HoTen) values(?,?)";
+    String UPDATE_SQL = "  UPDATE KhachHang set HoTen = ? where Id_TK = ?";
     String DELETE_SQL = " DELETE From KhachHang";
     String SELECT_ALL_SQL = " select * from KhachHang";
     String SELECT_BY_ID_SQL = " select * from KhachHang where Id_TK = ?";
@@ -36,7 +36,7 @@ public class KhachHangDAO extends BarberDAO<KhachHang, String>{
     @Override
     public void insert(KhachHang entity) {
         try {
-            JDBCHelper.update(INSERT_SQL, entity.getId_tk(), entity.getHoTen(), entity.getHinh());
+            JDBCHelper.update(INSERT_SQL, entity.getId_tk(), entity.getHoTen());
         } catch (SQLException ex) {
             Logger.getLogger(KhachHangDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -45,7 +45,7 @@ public class KhachHangDAO extends BarberDAO<KhachHang, String>{
     @Override
     public void update(KhachHang entity) {
         try {
-            JDBCHelper.update(UPDATE_SQL,  entity.getHoTen(),entity.getHinh(), entity.getId_tk());
+            JDBCHelper.update(UPDATE_SQL,  entity.getHoTen(), entity.getId_tk());
         } catch (SQLException ex) {
             Logger.getLogger(KhachHangDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -103,7 +103,6 @@ public class KhachHangDAO extends BarberDAO<KhachHang, String>{
                 entity.setId(rs.getInt("Id"));
                 entity.setId_tk(rs.getInt("Id_TK"));
                 entity.setHoTen(rs.getString("HoTen"));
-                entity.setHinh(rs.getString("Hinh"));
                 entity.setTrangThai(rs.getString("TrangThai"));
                 list.add(entity);
 

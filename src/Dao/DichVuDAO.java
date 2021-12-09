@@ -86,7 +86,7 @@ public class DichVuDAO extends BarberDAO<DichVu, String> {
             ResultSet rs = JDBCHelper.query(sql, args);
             while (rs.next()) {
                 DichVu entity = new DichVu();
-                entity.setId(rs.getString("Id"));
+                entity.setId(rs.getInt("Id"));
                 entity.setTenDV(rs.getString("TenDV"));
                 entity.setGiaTien(rs.getInt("GiaTien"));
                 entity.setHinh(rs.getString("Hinh"));

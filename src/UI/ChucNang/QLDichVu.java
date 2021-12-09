@@ -72,7 +72,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
    
     public void setHinh(String fileName) {
         BufferedImage bufferedImage = null;
-        try {
+        try {            
             bufferedImage = ImageIO.read(new File("src\\Image\\" + fileName));
         } catch (IOException e) {
             e.printStackTrace();
@@ -87,7 +87,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
         index=0;
         String id = (String) tblDichVu.getValueAt(index, 0);
         System.out.println("id để sửa:"+id);
-        dv.setId(lblID.getText());
+        dv.setId(Integer.valueOf(lblID.getText()));
         System.out.println("id"+dv.getId());
         dv.setTenDV(txtTenDV.getText());
         dv.setGiaTien(Integer.parseInt(txtGiaTien.getText()));
@@ -103,7 +103,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
     
     void setForm(Model.DichVu dv) {
        
-        lblID.setText(dv.getId());
+        lblID.setText(dv.getId()+"");
         txtTenDV.setText(dv.getTenDV());
         txtGiaTien.setText(dv.getGiaTien() + "");
         txtGioiThieu.setText(dv.getMoTa());
@@ -136,8 +136,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
         boolean edit=(this.index>=0);
         btnThem.setEnabled(!edit);
         btnSua.setEnabled(edit);
-        btnXoa.setEnabled(edit);
-    
+        btnXoa.setEnabled(edit); 
     }
    
     

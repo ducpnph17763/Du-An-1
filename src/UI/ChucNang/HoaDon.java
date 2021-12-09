@@ -287,12 +287,12 @@ public class HoaDon extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 551, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
+                        .addComponent(btnThanhToan)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnTim, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btnReset)
-                        .addGap(27, 27, 27)
-                        .addComponent(btnThanhToan)
-                        .addGap(18, 18, 18)
+                        .addGap(26, 26, 26)
                         .addComponent(btnChonAnh))
                     .addComponent(jScrollPane1))
                 .addContainerGap(27, Short.MAX_VALUE))
@@ -442,11 +442,16 @@ public class HoaDon extends javax.swing.JInternalFrame {
     private void btnChonAnhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChonAnhActionPerformed
         // TODO add your handling code here:
         int index=tblHoaDon.getSelectedRow();
-        String mahd =tblHoaDon.getValueAt(index, 0).toString();
-        AnhChup a=new AnhChup(mahd);
-        jDesktopPane1.add(a);
-        a.setLocation(((jDesktopPane1.getWidth()-a.getWidth())/2),((jDesktopPane1.getHeight()-a.getHeight())/2));
-        a.show();
+        if(index>=0){
+            String mahd =tblHoaDon.getValueAt(index, 0).toString();
+            AnhChup a=new AnhChup(mahd);
+            jDesktopPane1.add(a);
+            a.setLocation(((jDesktopPane1.getWidth()-a.getWidth())/2),((jDesktopPane1.getHeight()-a.getHeight())/2));
+            a.show();
+        }else{
+            MsgBox.alert(this, "Bạn chưa chọn hoá đơn!");
+        }
+        
     }//GEN-LAST:event_btnChonAnhActionPerformed
   
 

@@ -20,8 +20,9 @@ import java.sql.*;
 public class AnhDAO extends BarberDAO<Anh, String>{
 
     String INSERT_SQL="insert into AnhChup(Id_HD,Anh) values(?,?)";
-    String UPDATE_SQL ="update AnhChup set Anh=? where Id_HD=?";
-    String SELECT_BY_ID_SQL="select*from AnhChup where Id_HD=?";
+    String UPDATE_SQL ="update AnhChup set Anh=? where Id=?";
+    String DELETE_SQL ="delete from AnhChup where Id=?";
+    String SELECT_BY_ID_SQL="select*from AnhChup where Id=?";
     
     @Override
     public void insert(Anh entity) {
@@ -35,7 +36,7 @@ public class AnhDAO extends BarberDAO<Anh, String>{
     @Override
     public void update(Anh entity) {
         try {
-            JDBCHelper.update(UPDATE_SQL, entity.getAnh(),entity.getId_HD());
+            JDBCHelper.update(UPDATE_SQL, entity.getAnh(),entity.getId());
         } catch (SQLException ex) {
             Logger.getLogger(AnhDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -43,7 +44,11 @@ public class AnhDAO extends BarberDAO<Anh, String>{
 
     @Override
     public void delete(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         try {
+            JDBCHelper.update(DELETE_SQL,id);
+        } catch (SQLException ex) {
+            Logger.getLogger(AnhDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -68,6 +73,7 @@ public class AnhDAO extends BarberDAO<Anh, String>{
             ResultSet rs = JDBCHelper.query(sql, args);
             while (rs.next()) {
                Anh entity = new Anh();
+               entity.setId(rs.getString("id"));
                entity.setId_HD(rs.getInt("Id_HD"));
                entity.setAnh(rs.getString("Anh"));
                list.add(entity);

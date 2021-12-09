@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  */
 public class HoaDonDAO extends BarberDAO<HoaDon, String> {
 
-    String UPDATE_SQL = "UPDATE HoaDon set TrangThaiTT=?,TrangThai=? where Id=?";
+    String UPDATE_SQL = "UPDATE HoaDon set Id_TC=?,NgayHen=?,GioHen=?,GioKT=? where Id=?";
     String SELECT_ALL_SQL = "select * from HoaDon";
     String SELECT_BY_ID_SQL = "select * from HoaDon where Id=?";
     String Insert = "Insert into HoaDon(Id_KH,Id_NV,Id_TC,NgayHen,GioHen,GioKT,NgayTao,DatCoc,ThanhToan,TrangThaiTT,TrangThai,DanhGia,PhanHoi)"
@@ -41,7 +41,7 @@ public class HoaDonDAO extends BarberDAO<HoaDon, String> {
     public void update(HoaDon entity) {
 
         try {
-            JDBCHelper.update(UPDATE_SQL, entity.getTrangThaiTT(), entity.getTrangThai(), entity.getId());
+            JDBCHelper.update(UPDATE_SQL, entity.getId_TC(),entity.getNgayHen(),entity.getGioHen(),entity.getGioKetThuc(), entity.getId());
         } catch (SQLException ex) {
             Logger.getLogger(HoaDonDAO.class.getName()).log(Level.SEVERE, null, ex);
         }

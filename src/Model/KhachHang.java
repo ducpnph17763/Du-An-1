@@ -12,17 +12,15 @@ package Model;
 public class KhachHang {
     private Integer id,id_tk;
     private String hoTen;
-    private String hinh;
     private String trangThai;
 
     public KhachHang() {
     }
 
-    public KhachHang(Integer id, Integer id_tk, String hoTen, String hinh, String trangThai) {
+    public KhachHang(Integer id, Integer id_tk, String hoTen, String trangThai) {
         this.id = id;
         this.id_tk = id_tk;
         this.hoTen = hoTen;
-        this.hinh = hinh;
         this.trangThai = trangThai;
     }
 
@@ -48,14 +46,6 @@ public class KhachHang {
 
     public void setHoTen(String hoTen) {
         this.hoTen = hoTen;
-    }
-
-    public String getHinh() {
-        return hinh;
-    }
-
-    public void setHinh(String hinh) {
-        this.hinh = hinh;
     }
 
     public String getTrangThai() {

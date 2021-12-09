@@ -51,11 +51,11 @@ public class KhachHang extends javax.swing.JInternalFrame {
     
      void init() {
         layTTKK();
-        updateStatus();
+        
     }
 
     void layTTKK() {
-        String sql = "select KhachHang.Id,Hoten,Email,SoDienThoai,KhachHang.Hinh from KhachHang join ThongTinKhachHang\n"
+        String sql = "select KhachHang.Id,Hoten,Email,SoDienThoai from KhachHang join ThongTinKhachHang\n"
                 + "on ThongTinKhachHang.Id_KH=KhachHang.Id\n"
                 + "join TaiKhoan on TaiKhoan.Id=KhachHang.Id_TK";
         ResultSet rs = JDBCHelper.query(sql);
@@ -68,15 +68,14 @@ public class KhachHang extends javax.swing.JInternalFrame {
                 item[1] = rs.getString("HoTen");
                 item[2] = rs.getString("SoDienThoai");
                 item[3] = rs.getString("Email");
-                item[4] = rs.getString("Hinh");
                 mol.addRow(item);
 
             }
         } catch (Exception e) {
         }
     }
-       void layTaiKhoan() {
-
+       
+    void layTaiKhoan() {
         String sdt = txtSdt.getText();
         String sql = "select  TaiKhoan.id,TenTK,MatKhau from TaiKhoan join KhachHang on KhachHang.Id_TK=TaiKhoan.Id \n"
                 + "join ThongTinKhachHang on KhachHang.Id=ThongTinKhachHang.Id_KH where ThongTinKhachHang.SoDienThoai=N'" + sdt + "'";
@@ -91,7 +90,6 @@ public class KhachHang extends javax.swing.JInternalFrame {
                 lblID.setText(kh+"");             
                 txtTaiKhoan.setText(item[1] + "");
                 txtMatKhau.setText(item[2] + "");
-
             }
         } catch (Exception e) {
         }
@@ -110,23 +108,14 @@ public class KhachHang extends javax.swing.JInternalFrame {
 
     }
     
-    void updateStatus(){
-        boolean edit=(this.index>=0);
-        btnThem.setEnabled(edit);
-        btnSua.setEnabled(!edit);
+    void clearForm(){
+        txtEmail.setText("");
+        txtHoTen.setText("");
+        txtMatKhau.setText("");
+        txtSdt.setText("");
+        txtTaiKhoan.setText("");
+        lblAnh.setText("");       
     }
-    
-//    void clearForm(){
-////        txtEmail.setText("");
-////        txtHoTen.setText("");
-////        txtMatKhau.setText("");
-////        txtSdt.setText("");
-////        txtTaiKhoan.setText("");
-////        lblAnh.setText("");
-//        Model.KhachHang kh =new Model.KhachHang();
-//       
-//        updateStatus();
-//    }
     
     
      
@@ -203,7 +192,6 @@ public class KhachHang extends javax.swing.JInternalFrame {
         } catch (Exception e) {
         }
         kh.setHoTen(txtHoTen.getText());
-        kh.setHinh(lblAnh.getToolTipText());
         return kh;
     }
 
@@ -310,7 +298,6 @@ public class KhachHang extends javax.swing.JInternalFrame {
         jPanel2 = new javax.swing.JPanel();
         lblAnh = new javax.swing.JLabel();
         txtHoTen = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
         txtTaiKhoan = new javax.swing.JTextField();
         lblID = new javax.swing.JLabel();
 
@@ -405,14 +392,16 @@ public class KhachHang extends javax.swing.JInternalFrame {
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
+        lblAnh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/man-icon-1 (1).png"))); // NOI18N
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lblAnh, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(lblAnh, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(14, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -422,7 +411,7 @@ public class KhachHang extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1015, 22, -1, 322));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1015, 22, 270, 322));
 
         txtHoTen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -430,9 +419,6 @@ public class KhachHang extends javax.swing.JInternalFrame {
             }
         });
         jPanel1.add(txtHoTen, new org.netbeans.lib.awtextra.AbsoluteConstraints(99, 22, 538, -1));
-
-        jLabel7.setText("Hình");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(983, 22, -1, -1));
 
         txtTaiKhoan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -518,10 +504,6 @@ public class KhachHang extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
           int index;
         Model.KhachHang kh = new Model.KhachHang();
-        if (kh.getHinh() != null) {
-            lblAnh.setToolTipText(kh.getHinh());
-            lblAnh.setIcon(XImage.read(kh.getHinh()));
-        }
         index = tblKhachHang.getSelectedRow();
         txtHoTen.setText(tblKhachHang.getValueAt(index, 1).toString());
 
@@ -533,7 +515,7 @@ public class KhachHang extends javax.swing.JInternalFrame {
 
     private void btnLamMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLamMoiActionPerformed
         // TODO add your handling code here:
-//        clearForm();
+        clearForm();
     }//GEN-LAST:event_btnLamMoiActionPerformed
 
 
@@ -546,7 +528,6 @@ public class KhachHang extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;

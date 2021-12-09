@@ -92,11 +92,11 @@ public class QLDichVu extends javax.swing.JInternalFrame {
         dv.setTenDV(txtTenDV.getText());
         dv.setGiaTien(Integer.parseInt(txtGiaTien.getText()));
         dv.setMoTa(txtGioiThieu.getText());
-        if(dv.getHinh()==null){
-            dv.setHinh("email.png");
-        }else{
+//        if(dv.getHinh()==null){
+//            dv.setHinh("email.png");
+//        }else{
             dv.setHinh(lblAnh.getToolTipText());
-        }
+//        }
         
         return dv;
     }
@@ -242,7 +242,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
         jPanel4.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(81, 244, 464, 125));
 
         lblAnh.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
-        jPanel4.add(lblAnh, new org.netbeans.lib.awtextra.AbsoluteConstraints(869, 11, 243, 358));
+        jPanel4.add(lblAnh, new org.netbeans.lib.awtextra.AbsoluteConstraints(842, 39, 270, 330));
 
         btnLamMoi.setBackground(new java.awt.Color(57, 70, 138));
         btnLamMoi.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -322,7 +322,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())

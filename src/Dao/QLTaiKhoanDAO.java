@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 public class QLTaiKhoanDAO extends BarberDAO<TTKhachHang, Object> {
 
     String DELETE_SQL = "delete from ThongTinKhachHang where SoDienThoai=?";
-    String INSERT_SQL = "insert into ThongTinKhachHang (Id_KH,SoDienThoai,Email,TrangThai) values (?,?,?,?)";
+    String INSERT_SQL = "insert into ThongTinKhachHang (Id_KH,SoDienThoai,Email) values (?,?,?)";
     String UPDATE_SQL = "update ThongTinKhachHang set Email=?, SoDienThoai=? where SoDienThoai=? ";
     String SELECT_ALL_SQL = "select * from ThongTinKhachHang";
     String getId = "Select * from ThongTinKhachHang where SoDienThoai=?";

@@ -371,7 +371,7 @@ public class ThoCatHome extends javax.swing.JFrame {
     public void SetHinh(String fileName) {
         BufferedImage bufferedImage = null;
         try {
-            bufferedImage = ImageIO.read(new File("src\\Image\\" + fileName));
+            bufferedImage = ImageIO.read(new File("logos\\" + fileName));
         } catch (IOException e) {
             e.printStackTrace();
         }

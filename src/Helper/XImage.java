@@ -28,8 +28,7 @@ public class XImage {
         File dts=new File("logos",src.getName());
         if(!dts.getParentFile().exists()){
             dts.getParentFile().mkdirs();
-        }
-        
+        }        
         try {
             Path from=Paths.get(src.getAbsolutePath());
             Path to=Paths.get(dts.getAbsolutePath());

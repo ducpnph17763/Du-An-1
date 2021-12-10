@@ -13,7 +13,6 @@ import Helper.XAuth;
 import Model.HoaDon;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 import java.sql.*;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
@@ -45,11 +44,9 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
 //        layLichDat();
     }
 
-    
     void layThongTinLichDat() {
-        
-        
-               String sql = "select HoaDon.Id,HoaDon.NgayHen,HoaDon.Id_KH,HoaDon.Id_TC,HoaDon.DatCoc,\n"
+
+        String sql = "select HoaDon.Id,HoaDon.NgayHen,HoaDon.Id_KH,HoaDon.Id_TC,HoaDon.DatCoc,\n"
                 + "           HoaDon.ThanhToan,HoaDon.TrangThaiTT,HoaDon.TrangThai\n"
                 + "           from HoaDon \n"
                 + "           join NhanVien on HoaDon.Id_TC=NhanVien.Id		\n"
@@ -57,7 +54,7 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
                 + "           and (HoaDon.TrangThai LIKE N'Chưa thanh toán' or HoaDon.TrangThai LIKE N'Đã huỷ lịch')";
         ResultSet rs = JDBCHelper.query(sql);
         Object[] row = new Object[]{
-            "Mã lịch đặt",  "Mã khách hàng ","Ngày hẹn", "Id Thợ cắt", "Đặt cọc", "Tổng tiền", "Trạng thái TT", "Trạng thái hoá đơn"
+            "Mã lịch đặt", "Mã khách hàng ", "Ngày hẹn", "Id Thợ cắt", "Đặt cọc", "Tổng tiền", "Trạng thái TT", "Trạng thái hoá đơn"
         };
         DefaultTableModel mol = new DefaultTableModel(row, 0);
         tblLichDat.setModel(mol);
@@ -65,11 +62,11 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
             while (rs.next()) {
                 Object[] item = new Object[8];
                 item[0] = rs.getInt("Id");
-                item[1]=rs.getString("Id_KH");
-                item[2] = rs.getString("NgayHen");                             
+                item[1] = rs.getString("Id_KH");
+                item[2] = rs.getString("NgayHen");
                 item[3] = rs.getString("Id_TC");
-                item[4] = rs.getInt("DatCoc");
-                item[5] = rs.getString("ThanhToan");
+                item[4] = themPhay(rs.getInt("DatCoc"));
+                item[5] = themPhay(rs.getInt("ThanhToan"));
                 item[6] = rs.getString("TrangThaiTT");
                 item[7] = rs.getString("TrangThai");
                 mol.addRow(item);
@@ -78,8 +75,7 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
         } catch (SQLException e) {
             System.out.println(e);
         }
-       
-    
+
     }
 
     void LayTTBangCTLichDat() {
@@ -101,7 +97,7 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
                 item[2] = rs.getString("Id_HD");
                 item[3] = rs.getString("Id_DV");
                 item[4] = rs.getString("TenDV");
-                item[5] = rs.getString("GiaTien");
+                item[5] = themPhay(rs.getInt("GiaTien"));
                 mol.addRow(item);
 
             }
@@ -130,7 +126,7 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
                 item[2] = rs.getString("Id_HD");
                 item[3] = rs.getString("Id_DV");
                 item[4] = rs.getString("TenDV");
-                item[5] = rs.getInt("GiaTien");
+                item[5] = themPhay(rs.getInt("GiaTien"));
                 mol.addRow(item);
 
             }
@@ -139,8 +135,6 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
         }
     }
 
-    
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -340,7 +334,7 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
             String mahd = tblLichDat.getValueAt(this.index, 0).toString();
             String trangThai = tblLichDat.getValueAt(this.index, 7).toString();
             String trangThaiTT = tblLichDat.getValueAt(this.index, 6).toString();
-            String datCoc =tblLichDat.getValueAt(this.index, 4).toString();
+            String datCoc = tblLichDat.getValueAt(this.index, 4).toString();
             if (this.index >= 0) {
                 boolean kt1 = MsgBox.confirm(this, "Bạn có chắc chắn huỷ lịch không?");
                 if (kt1 == true) {
@@ -353,29 +347,27 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
                     } else if (trangThai.equals("Chưa thanh toán")) {
                         String cautruyvan1 = "delete from HoaDonChiTiet where Id_HD=" + mahd;
                         JDBCHelper.update(cautruyvan1);
-                        if(trangThaiTT.equals("Chưa đặt cọc")){
-                           String sql = "update HoaDon set DatCoc=0,ThanhToan=0,TrangThai=N'Đã huỷ lịch' where Id=" + mahd;
-                           JDBCHelper.update(sql);
-                           layThongTinLichDat();
-                           DefaultTableModel mol = (DefaultTableModel) tblCTLichDat.getModel();
-                           mol.setRowCount(0);
-                           MsgBox.alert(this, "Hủy lịch thành công!");
-                        }if(trangThaiTT.equals("Đã đặt cọc(đã xác nhận)")){
-                            String sql = "update HoaDon set ThanhToan="+datCoc+",TrangThai=N'Đã huỷ lịch' where Id=" + mahd;
+                        if (trangThaiTT.equals("Chưa đặt cọc")) {
+                            String sql = "update HoaDon set DatCoc=0,ThanhToan=0,TrangThai=N'Đã huỷ lịch' where Id=" + mahd;
                             JDBCHelper.update(sql);
                             layThongTinLichDat();
                             DefaultTableModel mol = (DefaultTableModel) tblCTLichDat.getModel();
                             mol.setRowCount(0);
                             MsgBox.alert(this, "Hủy lịch thành công!");
-                        }else{
-                            TinhTien a=new TinhTien(mahd);
+                        }
+                        if (trangThaiTT.equals("Đã đặt cọc(đã xác nhận)")) {
+                            String sql = "update HoaDon set ThanhToan=" + datCoc + ",TrangThai=N'Đã huỷ lịch' where Id=" + mahd;
+                            JDBCHelper.update(sql);
+                            layThongTinLichDat();
+                            DefaultTableModel mol = (DefaultTableModel) tblCTLichDat.getModel();
+                            mol.setRowCount(0);
+                            MsgBox.alert(this, "Hủy lịch thành công!");
+                        } else {
+                            TinhTien a = new TinhTien(mahd);
                             jDesktopPane1.add(a);
-                            a.setLocation(((jDesktopPane1.getWidth()-a.getWidth())/2),((jDesktopPane1.getHeight()-a.getHeight())/2));
+                            a.setLocation(((jDesktopPane1.getWidth() - a.getWidth()) / 2), ((jDesktopPane1.getHeight() - a.getHeight()) / 2));
                             a.show();
                         }
-                       
-                
-                        
 
                     }
 
@@ -404,7 +396,7 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
                     String update = "update HoaDon set DatCoc=0,TrangThai=N'Đã huỷ lịch' where Id=" + mahd;
                     JDBCHelper.update(update);
                     layThongTinLichDat();
-                   
+
                     DefaultTableModel mol = (DefaultTableModel) tblCTLichDat.getModel();
                     mol.setRowCount(0);
                     MsgBox.alert(this, "Lịch này đã bị huỷ!");
@@ -413,7 +405,7 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
                     String update = "update HoaDon set DatCoc=" + tongTien + " where Id=" + mahd;
                     JDBCHelper.update(update);
                     layThongTinLichDat();
-                    
+
                 }
             }
         } catch (Exception e) {
@@ -498,7 +490,7 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
                     String update = "update HoaDon set ThanhToan=0,TrangThai=N'Đã huỷ lịch' where Id=" + mahd;
                     JDBCHelper.update(update);
                     layThongTinLichDat();
-                 
+
                     DefaultTableModel mol = (DefaultTableModel) tblCTLichDat.getModel();
                     mol.setRowCount(0);
                     MsgBox.alert(this, "Lịch này đã bị huỷ!");
@@ -540,7 +532,7 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
                     } catch (Exception e) {
                     }
                     layThongTinLichDat();
-                   
+
                     DefaultTableModel mol = (DefaultTableModel) tblCTLichDat.getModel();
                     mol.setRowCount(0);
                     MsgBox.alert(this, "Check in thành công!");
@@ -559,27 +551,26 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
 
     private void tblLichDatMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLichDatMousePressed
         // TODO add your handling code here: 
-       if(evt.getClickCount()==2){
-           int index=tblLichDat.getSelectedRow();
+        if (evt.getClickCount() == 2) {
+            int index = tblLichDat.getSelectedRow();
             try {
-                String id_Hd =tblLichDat.getValueAt(index, 0).toString();
-                String id_KH=tblLichDat.getValueAt(index, 1).toString();
-                HienThiThongTin a=new HienThiThongTin(id_Hd,id_KH);
+                String id_Hd = tblLichDat.getValueAt(index, 0).toString();
+                String id_KH = tblLichDat.getValueAt(index, 1).toString();
+                HienThiThongTin a = new HienThiThongTin(id_Hd, id_KH);
                 jDesktopPane1.add(a);
-                a.setLocation(((jDesktopPane1.getWidth()-a.getWidth())/2),((jDesktopPane1.getHeight()-a.getHeight())/2));
+                a.setLocation(((jDesktopPane1.getWidth() - a.getWidth()) / 2), ((jDesktopPane1.getHeight() - a.getHeight()) / 2));
                 a.show();
-           } catch (Exception e) {
-           }
-          
-       }
+            } catch (Exception e) {
+            }
+
+        }
     }//GEN-LAST:event_tblLichDatMousePressed
 
     private void tblLichDatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLichDatMouseClicked
         // TODO add your handling code here:  
         LayTTBangCTLichDat1();
-        
-            
-        
+
+
     }//GEN-LAST:event_tblLichDatMouseClicked
 
     private void tblCTLichDatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCTLichDatMouseClicked
@@ -589,47 +580,50 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
 
     private void btnXacNhanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXacNhanActionPerformed
         DefaultTableModel mol = (DefaultTableModel) tblLichDat.getModel();
-        int index=-1;      
+        int index = -1;
         index = tblLichDat.getSelectedRow();
-        if(index>=0){ 
-        String ma = tblLichDat.getValueAt(index, 0) + "";
-        HoaDon hd = hddao.selectById(ma);
-        if(hd.getTrangThaiTT().equals("Đã đặt cọc(đã xác nhận)")){
-            MsgBox.alert(this, "Lịch đặt đã xác nhận rồi!");
-            return;
-        }else{
-           
-        String sql ="update HoaDon set TrangThaiTT=N'Đã đặt cọc(đã xác nhận)' where Id="+ma;
-            try {
-                JDBCHelper.update(sql);
-            } catch (SQLException ex) {
-                Logger.getLogger(DSLichDatLeTan.class.getName()).log(Level.SEVERE, null, ex);
+        if (index >= 0) {
+            String ma = tblLichDat.getValueAt(index, 0) + "";
+            HoaDon hd = hddao.selectById(ma);
+            if (hd.getTrangThaiTT().equals("Đã đặt cọc(đã xác nhận)")) {
+                MsgBox.alert(this, "Lịch đặt đã xác nhận rồi!");
+                return;
+            } else {
+
+                String sql = "update HoaDon set TrangThaiTT=N'Đã đặt cọc(đã xác nhận)' where Id=" + ma;
+                try {
+                    JDBCHelper.update(sql);
+                } catch (SQLException ex) {
+                    Logger.getLogger(DSLichDatLeTan.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                MsgBox.alert(this, "Xác nhận thành công!");
+                layThongTinLichDat();
             }
-        MsgBox.alert(this, "Xác nhận thành công!");
-        layThongTinLichDat();
-        }       
-        }else{
+        } else {
             MsgBox.alert(this, "Bạn chưa chọn lịch đặt để xác nhận!");
             return;
         }
-        
+
     }//GEN-LAST:event_btnXacNhanActionPerformed
 
     private void btnDoiLichActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDoiLichActionPerformed
         // TODO add your handling code here:
-        int index=tblLichDat.getSelectedRow();
-        if(index>=0){            
-        String id=tblLichDat.getValueAt(index, 0).toString();      
-        DoiLich dllt=new DoiLich(id);
-        jDesktopPane1.add(dllt);
-        dllt.setLocation(((jDesktopPane1.getWidth()-dllt.getWidth())/2),((jDesktopPane1.getHeight()-dllt.getHeight())/2));
-        dllt.show();
-        }else{
+        int index = tblLichDat.getSelectedRow();
+        if (index >= 0) {
+            String id = tblLichDat.getValueAt(index, 0).toString();
+            DoiLich dllt = new DoiLich(id);
+            jDesktopPane1.add(dllt);
+            dllt.setLocation(((jDesktopPane1.getWidth() - dllt.getWidth()) / 2), ((jDesktopPane1.getHeight() - dllt.getHeight()) / 2));
+            dllt.show();
+        } else {
             MsgBox.alert(this, "Bạn chưa chọn lịch để đổi!");
         }
-        
-    }//GEN-LAST:event_btnDoiLichActionPerformed
 
+    }//GEN-LAST:event_btnDoiLichActionPerformed
+    public String themPhay(int tien) {
+        double money = Double.valueOf(tien);
+        return String.format("%,.0f", money);
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDoiLich;
     private javax.swing.JButton btnHuyDV;

@@ -127,7 +127,7 @@ public class HoaDon extends javax.swing.JInternalFrame {
                 item[2] = rs.getString("Id_TC");
                 item[3] = rs.getString("HoTen");
                 item[4] = rs.getString("NgayHen");
-                item[5] = rs.getString("ThanhToan");
+                item[5] = themPhay(rs.getInt("ThanhToan"));
                 item[6] = rs.getString("DanhGia").equals("0") ? "Hài lòng" : rs.getString("DanhGia").equals("1") ? "Rất hài lòng" : "không hài lòng";
                 item[7] = rs.getString("TrangThaiTT");
                 item[8] = rs.getString("TrangThai");
@@ -152,7 +152,7 @@ public class HoaDon extends javax.swing.JInternalFrame {
                 Object[] item = new Object[3];
                 item[0] = rs.getString("Id");
                 item[1] = rs.getString("TenDV");
-                item[2] = rs.getInt("GiaTien");
+                item[2] = themPhay(rs.getInt("GiaTien"));
                 mol.addRow(item);
             }
         } catch (SQLException e) {
@@ -576,6 +576,11 @@ public class HoaDon extends javax.swing.JInternalFrame {
         } else {
             JOptionPane.showMessageDialog(this, "Chọn hóa đơn cần xuất");
         }
+    }
+
+    public String themPhay(int tien) {
+        double money = Double.valueOf(tien);
+        return String.format("%,.0f", money);
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnChonAnh;

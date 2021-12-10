@@ -27,11 +27,12 @@ public class DSLichDatNguoiDung extends javax.swing.JInternalFrame {
     /**
      * Creates new form DSLichDat
      */
-    int index=0;
-    HoaDonDAO hddao=new HoaDonDAO();
-    DichVuDAO dvdao=new DichVuDAO();
-    List<Model.DichVu>listDV=new ArrayList<>();
-    String tenTK=XAuth.user.getTenTK();
+    int index = 0;
+    HoaDonDAO hddao = new HoaDonDAO();
+    DichVuDAO dvdao = new DichVuDAO();
+    List<Model.DichVu> listDV = new ArrayList<>();
+    String tenTK = XAuth.user.getTenTK();
+
     public DSLichDatNguoiDung() {
         initComponents();
         this.setBorder(null);
@@ -40,10 +41,10 @@ public class DSLichDatNguoiDung extends javax.swing.JInternalFrame {
         init();
     }
 
-    void init(){
+    void init() {
         layThongTinLichDat();
     }
-    
+
     void layThongTinLichDat() {
         System.out.println("tên TK:" + tenTK);
         String sql = "	select HoaDon.Id,HoaDon.NgayHen,KhachHang.HoTen,HoaDon.Id_TC,HoaDon.DatCoc,\n"
@@ -51,87 +52,88 @@ public class DSLichDatNguoiDung extends javax.swing.JInternalFrame {
                 + "     from HoaDon join KhachHang on HoaDon.Id_KH=KhachHang.Id\n"
                 + "     join NhanVien on HoaDon.Id_TC=NhanVien.Id		\n"
                 + "     join TaiKhoan on TaiKhoan.Id=KhachHang.Id_TK\n"
-                + "     where HoaDon.Id_KH=KhachHang.Id and NhanVien.Id=HoaDon.Id_TC \n"                + " \n"
-                + "     and (HoaDon.TrangThai LIKE N'Chưa thanh toán' or HoaDon.TrangThai LIKE N'Đã huỷ lịch') and TaiKhoan.TenTK='"+tenTK+"'";
-        ResultSet rs=JDBCHelper.query(sql);
-        Object[]row=new Object[]{
-          "Mã lịch đặt","Ngày hẹn","Khách hàng","Id Thợ cắt","Đặt cọc","Tổng tiền","Trạng thái TT","Trạng thái hoá đơn"  
+                + "     where HoaDon.Id_KH=KhachHang.Id and NhanVien.Id=HoaDon.Id_TC \n" + " \n"
+                + "     and (HoaDon.TrangThai LIKE N'Chưa thanh toán' or HoaDon.TrangThai LIKE N'Đã huỷ lịch') and TaiKhoan.TenTK='" + tenTK + "'";
+        ResultSet rs = JDBCHelper.query(sql);
+        Object[] row = new Object[]{
+            "Mã lịch đặt", "Ngày hẹn", "Khách hàng", "Id Thợ cắt", "Đặt cọc", "Tổng tiền", "Trạng thái TT", "Trạng thái hoá đơn"
         };
-        DefaultTableModel mol=new DefaultTableModel(row,0);
+        DefaultTableModel mol = new DefaultTableModel(row, 0);
         tblLichDat.setModel(mol);
         try {
-            while (rs.next()) {                
-                Object[] item=new Object[8];
-                item[0]=rs.getInt("Id");
-                item[1]=rs.getString("NgayHen");
-                item[2]=rs.getString("HoTen");
-                item[3]=rs.getString("Id_TC");
-                item[4]=rs.getInt("DatCoc");
-                item[5]=rs.getString("ThanhToan");
-                item[6]=rs.getString("TrangThaiTT");
-                item[7]=rs.getString("TrangThai");
+            while (rs.next()) {
+                Object[] item = new Object[8];
+                item[0] = rs.getInt("Id");
+                item[1] = rs.getString("NgayHen");
+                item[2] = rs.getString("HoTen");
+                item[3] = rs.getString("Id_TC");
+                item[4] = themPhay(rs.getInt("DatCoc"));
+                item[5] = themPhay(rs.getInt("ThanhToan"));
+                item[6] = rs.getString("TrangThaiTT");
+                item[7] = rs.getString("TrangThai");
                 mol.addRow(item);
-                
+
             }
         } catch (SQLException e) {
             System.out.println(e);
         }
-        
+
     }
-     void TinhTongTien(){
-        int index=tblCTLichDat.getSelectedRow();
-        String mahd=tblCTLichDat.getValueAt(index, 2).toString();
-        System.out.println("mã hoá đơn:"+mahd);
+
+    void TinhTongTien() {
+        int index = tblCTLichDat.getSelectedRow();
+        String mahd = tblCTLichDat.getValueAt(index, 2).toString();
+        System.out.println("mã hoá đơn:" + mahd);
         String sql = "select sum(HoaDonChiTiet.GiaTien) as TongTienHienTai from HoaDon\n"
                 + "join HoaDonChiTiet on HoaDon.Id=HoaDonChiTiet.Id_HD\n"
-                + "where HoaDon.Id="+mahd;
-        ResultSet rs=JDBCHelper.query(sql);
-        System.out.println("ResultSet:"+rs);
+                + "where HoaDon.Id=" + mahd;
+        ResultSet rs = JDBCHelper.query(sql);
+        System.out.println("ResultSet:" + rs);
         try {
-            if(rs.next()){
+            if (rs.next()) {
                 String tongTien;
-                tongTien=rs.getString("TongTienHienTai");
-                System.out.println("Tổng tiền:"+tongTien);
-                if(tongTien==null){
-                    String update="update HoaDon set ThanhToan=0,TrangThai=N'Đã huỷ lịch' where Id="+mahd;
+                tongTien = rs.getString("TongTienHienTai");
+                System.out.println("Tổng tiền:" + tongTien);
+                if (tongTien == null) {
+                    String update = "update HoaDon set ThanhToan=0,TrangThai=N'Đã huỷ lịch' where Id=" + mahd;
                     JDBCHelper.update(update);
                     layThongTinLichDat();
-                    DefaultTableModel mol =(DefaultTableModel)tblCTLichDat.getModel();
+                    DefaultTableModel mol = (DefaultTableModel) tblCTLichDat.getModel();
                     mol.setRowCount(0);
                     MsgBox.alert(this, "Lịch này đã bị huỷ!");
                     LayTTBangCTLichDat();
                 }
-                String update="update HoaDon set ThanhToan="+tongTien+" where Id="+mahd;
+                String update = "update HoaDon set ThanhToan=" + tongTien + " where Id=" + mahd;
                 JDBCHelper.update(update);
                 layThongTinLichDat();
             }
         } catch (SQLException e) {
-            
+
         }
 
     }
-     
-     void TinhTienCoc(){
-        int index=tblCTLichDat.getSelectedRow();
-        String mahd=tblCTLichDat.getValueAt(index, 2).toString();
+
+    void TinhTienCoc() {
+        int index = tblCTLichDat.getSelectedRow();
+        String mahd = tblCTLichDat.getValueAt(index, 2).toString();
         String sql = "select (sum(HoaDonChiTiet.GiaTien)/100)*20 as TongTienDatCoc from HoaDon\n"
                 + "   join HoaDonChiTiet on HoaDon.Id=HoaDonChiTiet.Id_HD\n"
-                + "   where HoaDon.Id="+mahd;
-        ResultSet rs=JDBCHelper.query(sql);
+                + "   where HoaDon.Id=" + mahd;
+        ResultSet rs = JDBCHelper.query(sql);
         try {
-            if(rs.next()){
+            if (rs.next()) {
                 String tongTien;
-                tongTien=rs.getString("TongTienDatCoc");
-                if(tongTien==null){
-                    String update="update HoaDon set DatCoc=0,TrangThai=N'Đã huỷ lịch' where Id="+mahd;
+                tongTien = rs.getString("TongTienDatCoc");
+                if (tongTien == null) {
+                    String update = "update HoaDon set DatCoc=0,TrangThai=N'Đã huỷ lịch' where Id=" + mahd;
                     JDBCHelper.update(update);
                     layThongTinLichDat();
-                    DefaultTableModel mol =(DefaultTableModel)tblCTLichDat.getModel();
+                    DefaultTableModel mol = (DefaultTableModel) tblCTLichDat.getModel();
                     mol.setRowCount(0);
                     MsgBox.alert(this, "Lịch này đã bị huỷ!");
                     LayTTBangCTLichDat();
-                }else{
-                    String update="update HoaDon set DatCoc="+tongTien+" where Id="+mahd;
+                } else {
+                    String update = "update HoaDon set DatCoc=" + tongTien + " where Id=" + mahd;
                     JDBCHelper.update(update);
                     layThongTinLichDat();
                 }
@@ -139,64 +141,64 @@ public class DSLichDatNguoiDung extends javax.swing.JInternalFrame {
         } catch (Exception e) {
         }
     }
-     
-     
-    void LayTTBangCTLichDat(){
+
+    void LayTTBangCTLichDat() {
         String mahd = tblCTLichDat.getValueAt(this.index, 2).toString();
         String sql = "select HoaDonChiTiet.Id,HoaDonChiTiet.Id_HD,HoaDonChiTiet.Id_DV,DichVu.TenDV,DichVu.GiaTien from HoaDonChiTiet join DichVu\n"
-                + "on HoaDonChiTiet.Id_DV=DichVu.Id where HoaDonChiTiet.Id_HD="+mahd;
-        ResultSet rs=JDBCHelper.query(sql);
-        Object[]row=new Object[]{
-          "STT","mã hoá đơn chi tiết","mã hoá đơn","mã dịch vụ","Tên dịch vụ","Giá tiền"
+                + "on HoaDonChiTiet.Id_DV=DichVu.Id where HoaDonChiTiet.Id_HD=" + mahd;
+        ResultSet rs = JDBCHelper.query(sql);
+        Object[] row = new Object[]{
+            "STT", "mã hoá đơn chi tiết", "mã hoá đơn", "mã dịch vụ", "Tên dịch vụ", "Giá tiền"
         };
-        DefaultTableModel mol=new DefaultTableModel(row,0);
+        DefaultTableModel mol = new DefaultTableModel(row, 0);
         tblCTLichDat.setModel(mol);
-        int c=0;
+        int c = 0;
         try {
-            while (rs.next()) {                
-                Object[]item=new Object[6];
-                item[0]=c;
-                item[1]=rs.getString("Id");
-                item[2]=rs.getString("Id_HD");
-                item[3]=rs.getString("Id_DV");
-                item[4]=rs.getString("TenDV");
-                item[5]=rs.getString("GiaTien");
+            while (rs.next()) {
+                Object[] item = new Object[6];
+                item[0] = c;
+                item[1] = rs.getString("Id");
+                item[2] = rs.getString("Id_HD");
+                item[3] = rs.getString("Id_DV");
+                item[4] = rs.getString("TenDV");
+                item[5] = themPhay(rs.getInt("GiaTien"));
                 mol.addRow(item);
-                
+
             }
         } catch (Exception e) {
         }
     }
 
-    void LayTTBangCTLichDat1(){
-        int row1=tblLichDat.getSelectedRow();
+    void LayTTBangCTLichDat1() {
+        int row1 = tblLichDat.getSelectedRow();
         String mahd = tblLichDat.getValueAt(row1, 0).toString();
         String sql = "select HoaDonChiTiet.Id,HoaDonChiTiet.Id_HD,HoaDonChiTiet.Id_DV,DichVu.TenDV,DichVu.GiaTien from HoaDonChiTiet join DichVu\n"
-                + "on HoaDonChiTiet.Id_DV=DichVu.Id where HoaDonChiTiet.Id_HD="+mahd;
-        ResultSet rs=JDBCHelper.query(sql);
-        Object[]row=new Object[]{
-          "STT","mã hoá đơn chi tiết","Mã hoá đơn","mã dịch vụ","Tên dịch vụ","Giá tiền"
+                + "on HoaDonChiTiet.Id_DV=DichVu.Id where HoaDonChiTiet.Id_HD=" + mahd;
+        ResultSet rs = JDBCHelper.query(sql);
+        Object[] row = new Object[]{
+            "STT", "mã hoá đơn chi tiết", "Mã hoá đơn", "mã dịch vụ", "Tên dịch vụ", "Giá tiền"
         };
-        DefaultTableModel mol=new DefaultTableModel(row,0);
+        DefaultTableModel mol = new DefaultTableModel(row, 0);
         tblCTLichDat.setModel(mol);
-        int c=0;
+        int c = 0;
         try {
             while (rs.next()) {
                 c++;
-                Object[]item=new Object[6];
-                item[0]=c;
-                item[1]=rs.getString("Id");
-                item[2]=rs.getString("Id_HD");
-                item[3]=rs.getString("Id_DV");
-                item[4]=rs.getString("TenDV");
-                item[5]=rs.getInt("GiaTien");
+                Object[] item = new Object[6];
+                item[0] = c;
+                item[1] = rs.getString("Id");
+                item[2] = rs.getString("Id_HD");
+                item[3] = rs.getString("Id_DV");
+                item[4] = rs.getString("TenDV");
+                item[5] = themPhay(rs.getInt("GiaTien"));
                 mol.addRow(item);
-                
+
             }
         } catch (SQLException e) {
             System.out.println(e);
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -363,7 +365,7 @@ public class DSLichDatNguoiDung extends javax.swing.JInternalFrame {
 
     private void btnHuyLichActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHuyLichActionPerformed
         // TODO add your handling code here:
-       try {
+        try {
 
             index = tblLichDat.getSelectedRow();
             String mahd = tblLichDat.getValueAt(this.index, 0).toString();
@@ -440,10 +442,10 @@ public class DSLichDatNguoiDung extends javax.swing.JInternalFrame {
                             String sql = "delete from HoaDonChiTiet where Id=" + mahdct;
                             JDBCHelper.update(sql);
                             TinhTongTien();
-                            TinhTienCoc();                       
+                            TinhTienCoc();
                             DefaultTableModel mol = (DefaultTableModel) tblCTLichDat.getModel();
                             mol.setRowCount(0);
-                            MsgBox.alert(this, "Huỷ dịch vụ thành công!");                       
+                            MsgBox.alert(this, "Huỷ dịch vụ thành công!");
                         }
                     } catch (SQLException e) {
                         System.out.println(e);
@@ -458,30 +460,32 @@ public class DSLichDatNguoiDung extends javax.swing.JInternalFrame {
 
     private void btnDatCocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDatCocActionPerformed
         // TODO add your handling code here:
-        int index=-1;       
+        int index = -1;
         try {
-            index=tblLichDat.getSelectedRow();
-            String mahd=tblLichDat.getValueAt(index, 0).toString();
-            String TrangThaiTT=tblLichDat.getValueAt(index, 6).toString();
-            String TrangThai=tblLichDat.getValueAt(index, 7).toString();
-            if(TrangThaiTT.equals("Đã đặt cọc(chờ xác nhận)")){
+            index = tblLichDat.getSelectedRow();
+            String mahd = tblLichDat.getValueAt(index, 0).toString();
+            String TrangThaiTT = tblLichDat.getValueAt(index, 6).toString();
+            String TrangThai = tblLichDat.getValueAt(index, 7).toString();
+            if (TrangThaiTT.equals("Đã đặt cọc(chờ xác nhận)")) {
                 MsgBox.alert(this, "Lịch đặt đã đặt cọc rồi đang chờ xác nhận!");
                 return;
-            }if(TrangThaiTT.equals("Đã đặt cọc")){
+            }
+            if (TrangThaiTT.equals("Đã đặt cọc")) {
                 MsgBox.alert(this, "Lịch đặt đã đặt cọc trước đó");
                 return;
-            }if(TrangThai.equals("Đã huỷ lịch")){
+            }
+            if (TrangThai.equals("Đã huỷ lịch")) {
                 MsgBox.alert(this, "Lịch đặt đã bị huỷ trước đó!");
                 return;
-            }            
-            if(index>=0){
-            DatCoc dc=new DatCoc(mahd);
-            jDesktopPane1.add(dc);
-            dc.setLocation(((jDesktopPane1.getWidth()-dc.getWidth())/2),((jDesktopPane1.getHeight()-dc.getHeight())/2));
-            dc.show();
-        }
+            }
+            if (index >= 0) {
+                DatCoc dc = new DatCoc(mahd);
+                jDesktopPane1.add(dc);
+                dc.setLocation(((jDesktopPane1.getWidth() - dc.getWidth()) / 2), ((jDesktopPane1.getHeight() - dc.getHeight()) / 2));
+                dc.show();
+            }
         } catch (Exception e) {
-             MsgBox.alert(this, "Bạn chưa chọn hoá đơn!");
+            MsgBox.alert(this, "Bạn chưa chọn hoá đơn!");
         }
     }//GEN-LAST:event_btnDatCocActionPerformed
 
@@ -500,7 +504,10 @@ public class DSLichDatNguoiDung extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_tblCTLichDatMouseClicked
 
-
+    public String themPhay(int tien) {
+        double money = Double.valueOf(tien);
+        return String.format("%,.0f", money);
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDatCoc;
     private javax.swing.JButton btnHuyDV;

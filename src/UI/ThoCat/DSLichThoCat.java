@@ -36,47 +36,47 @@ public class DSLichThoCat extends javax.swing.JInternalFrame {
         bui.setNorthPane(null);
         this.init();
     }
-    
-    private void init(){
+
+    private void init() {
         LayDuLieuHoaDon();
     }
-    
-    void LayDuLieuHoaDon(){
-        String tenTK=XAuth.user.getTenTK();
-        System.out.println("tên tk"+tenTK);
+
+    void LayDuLieuHoaDon() {
+        String tenTK = XAuth.user.getTenTK();
+        System.out.println("tên tk" + tenTK);
         String sql = "select HoaDon.Id,HoaDon.Id_KH,NgayHen,GioHen \n"
                 + "              from HoaDon\n"
                 + "              Join NhanVien on NhanVien.Id=HoaDon.Id_TC\n"
                 + "              join TaiKhoan on TaiKhoan.Id=NhanVien.Id_TK\n"
                 + "              where NhanVien.Id=HoaDon.Id_TC and HoaDon.TrangThai=N'Chưa thanh toán' \n"
-                + "              and (HoaDon.TrangThaiTT=N'Đã đặt cọc(đã xác nhận)' or HoaDon.TrangThaiTT=N'Đã đặt cọc(chờ xác nhận)') and TaiKhoan.TenTK=N'"+tenTK+"'";
-        ResultSet rs=JDBCHelper.query(sql);
-        DefaultTableModel model=(DefaultTableModel)tblLichDat.getModel();
+                + "              and (HoaDon.TrangThaiTT=N'Đã đặt cọc(đã xác nhận)' or HoaDon.TrangThaiTT=N'Đã đặt cọc(chờ xác nhận)') and TaiKhoan.TenTK=N'" + tenTK + "'";
+        ResultSet rs = JDBCHelper.query(sql);
+        DefaultTableModel model = (DefaultTableModel) tblLichDat.getModel();
         model.setRowCount(0);
         try {
-            while(rs.next()){
-                Object[] item=new Object[4];
-                item[0]=rs.getString("Id");
-                item[1]=rs.getString("ID_KH");
-                item[2]=rs.getString("NgayHen");
-                item[3]=rs.getString("GioHen");
+            while (rs.next()) {
+                Object[] item = new Object[4];
+                item[0] = rs.getString("Id");
+                item[1] = rs.getString("ID_KH");
+                item[2] = rs.getString("NgayHen");
+                item[3] = rs.getString("GioHen");
                 model.addRow(item);
             }
         } catch (SQLException e) {
             System.out.println(e);
         }
-        
+
     }
-    
-    void LayDuLieuHoaDonChiTiet(){
-        int row=tblLichDat.getSelectedRow();
-        String mahd=tblLichDat.getValueAt(row, 0).toString();
+
+    void LayDuLieuHoaDonChiTiet() {
+        int row = tblLichDat.getSelectedRow();
+        String mahd = tblLichDat.getValueAt(row, 0).toString();
         String sql = "select DichVu.Id,TenDV,DichVu.GiaTien from DichVu join HoaDonChiTiet on DichVu.Id=HoaDonChiTiet.Id_DV\n"
                 + "  where HoaDonChiTiet.Id_HD=" + mahd;
-        ResultSet rs=JDBCHelper.query(sql);
-        DefaultTableModel mol=(DefaultTableModel)tblCTLichDat.getModel();
+        ResultSet rs = JDBCHelper.query(sql);
+        DefaultTableModel mol = (DefaultTableModel) tblCTLichDat.getModel();
         mol.setRowCount(0);
-        int c=0;
+        int c = 0;
         try {
             while (rs.next()) {
                 Object[] item = new Object[4];
@@ -84,13 +84,14 @@ public class DSLichThoCat extends javax.swing.JInternalFrame {
                 item[0] = c;
                 item[1] = rs.getString("Id");
                 item[2] = rs.getString("TenDV");
-                item[3] = rs.getInt("GiaTien");
+                item[3] = themPhay(rs.getInt("GiaTien"));
                 mol.addRow(item);
             }
         } catch (SQLException e) {
             System.out.println(e);
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -217,19 +218,19 @@ public class DSLichThoCat extends javax.swing.JInternalFrame {
 
     private void tblLichDatMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLichDatMousePressed
         // TODO add your handling code here:   
-        if(evt.getClickCount()==2){
-           int index=tblLichDat.getSelectedRow();
+        if (evt.getClickCount() == 2) {
+            int index = tblLichDat.getSelectedRow();
             try {
-                String id_Hd =tblLichDat.getValueAt(index, 0).toString();
-                String id_KH=tblLichDat.getValueAt(index, 1).toString();
-                HienThiThongTinKH a=new HienThiThongTinKH(id_Hd,id_KH);
+                String id_Hd = tblLichDat.getValueAt(index, 0).toString();
+                String id_KH = tblLichDat.getValueAt(index, 1).toString();
+                HienThiThongTinKH a = new HienThiThongTinKH(id_Hd, id_KH);
                 jDesktopPane1.add(a);
-                a.setLocation(((jDesktopPane1.getWidth()-a.getWidth())/2),((jDesktopPane1.getHeight()-a.getHeight())/2));
+                a.setLocation(((jDesktopPane1.getWidth() - a.getWidth()) / 2), ((jDesktopPane1.getHeight() - a.getHeight()) / 2));
                 a.show();
-           } catch (Exception e) {
-           }
-          
-       }
+            } catch (Exception e) {
+            }
+
+        }
     }//GEN-LAST:event_tblLichDatMousePressed
 
     private void tblLichDatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLichDatMouseClicked
@@ -240,7 +241,10 @@ public class DSLichThoCat extends javax.swing.JInternalFrame {
     private void tblCTLichDatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCTLichDatMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_tblCTLichDatMouseClicked
-
+    public String themPhay(int tien) {
+        double money = Double.valueOf(tien);
+        return String.format("%,.0f", money);
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
@@ -252,5 +256,4 @@ public class DSLichThoCat extends javax.swing.JInternalFrame {
     private javax.swing.JTable tblLichDat;
     // End of variables declaration//GEN-END:variables
 
-   
 }

@@ -440,6 +440,7 @@ public class QuanLyHome extends javax.swing.JFrame {
     }//GEN-LAST:event_lblDangXuatMouseExited
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        System.out.println(lblHinh.getSize());
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         jLabel2.setBackground(new java.awt.Color(17, 16, 99));
         jLabel2.setOpaque(true);
@@ -586,7 +587,7 @@ public class QuanLyHome extends javax.swing.JFrame {
     public void SetHinh(String fileName) {
         BufferedImage bufferedImage = null;
         try {
-            bufferedImage = ImageIO.read(new File("src\\Image\\" + fileName));
+            bufferedImage = ImageIO.read(new File("logos\\" + fileName));
         } catch (IOException e) {
             
         }

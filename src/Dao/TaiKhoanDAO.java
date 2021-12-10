@@ -26,12 +26,22 @@ public class TaiKhoanDAO extends BarberDAO<TaiKhoan, Object> {
     String INSERT_SQL = "INSERT INTO TaiKhoan(TenTK,MatKhau,VaiTro,TrangThai,Hinh) values(?,?,?,?,?)";
     String UPDATE_SQL = "UPDATE TaiKhoan set MatKhau=?,TrangThai=? where TenTK=?";
     String DELETE_SQL = "DELETE FROM TaiKhoan Where TenTK=?";
-    String SELECT_ALL_SQL = "SELECT*FROM TaiKhoan";
-    String SELECT_BY_ID_SQL = "SELECT*FROM TaiKhoan where Id=?";
+    String SELECT_ALL_SQL = "SELECT * FROM TaiKhoan";
+    String SELECT_BY_ID_SQL = "SELECT * FROM TaiKhoan where Id=?";
     String SELECT_BY_tenTK = "Select * form TaiKhoan where tenTK = ?";
     String SELECT_BY_MATKHAU = " Select * from TaiKhoan where MATKHAU=?";
     String INSERT_KH_SQL = "INSERT INTO KhachHang (HoTen)" + "values(?)";
     String INSERT_TT_KH_SQL = "INSERT INTO ThongTinKhachHang (Id_KH,SoDienThoai,Email)" + "values(?,?,?)";
+    String UPDATE_ANH = "update TaiKhoan set hinh = ? where TenTK = ?";
+
+    public void setHinh(TaiKhoan entity) {
+        try {
+            JDBCHelper.update(UPDATE_ANH, entity.getHinh(), entity.getTenTK()
+            );
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
 
     public TaiKhoan getTenTKKH(String email) {
         String sql1 = "Select x.* from TaiKhoan x join KhachHang y on x.Id=y.Id_TK join ThongTinKhachHang z on y.Id=z.Id_KH where z.Email=?";
@@ -78,14 +88,13 @@ public class TaiKhoanDAO extends BarberDAO<TaiKhoan, Object> {
                     entity.getTenTK()
             );
         } catch (SQLException ex) {
-//            Logger.getLogger(TaiKhoanDAO.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
         }
     }
 
     @Override
     public TaiKhoan selectById(Object id) {
-        List<TaiKhoan> list = this.selectBySql(SELECT_BY_ID_SQL);
+        List<TaiKhoan> list = this.selectBySql(SELECT_BY_ID_SQL, id);
         if (list.isEmpty()) {
             return null;
         }
@@ -172,8 +181,6 @@ public class TaiKhoanDAO extends BarberDAO<TaiKhoan, Object> {
         }
         return list.get(0);
     }
-    
-    
 
     @Override
     public void delete(Object id) {

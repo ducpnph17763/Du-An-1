@@ -6,18 +6,28 @@
 package UI.ChucNang;
 
 import Dao.HoaDonDAO;
+import Dao.KhachHangDAO;
+import Dao.QLTaiKhoanDAO;
 import Helper.JDBCHelper;
 import Helper.MsgBox;
 import Helper.XAuth;
-import java.awt.Font;
+import Model.TTKhachHang;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import javax.swing.JTextField;
+import javax.swing.JOptionPane;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 import javax.swing.table.DefaultTableModel;
-
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  *
@@ -29,8 +39,12 @@ public class HoaDon extends javax.swing.JInternalFrame {
      * Creates new form HoaDon
      */
     int maTK = XAuth.user.getId();
-    HoaDonDAO hddao=new HoaDonDAO();
-    List<Model.DichVu>list=new ArrayList<>();
+    HoaDonDAO hddao = new HoaDonDAO();
+    KhachHangDAO khdao = new KhachHangDAO();
+    QLTaiKhoanDAO qldao = new QLTaiKhoanDAO();
+    List<Model.DichVu> list = new ArrayList<>();
+    Date ngay;
+
     public HoaDon() {
         initComponents();
         this.setBorder(null);
@@ -39,99 +53,99 @@ public class HoaDon extends javax.swing.JInternalFrame {
         init();
     }
 
-     void init(){
+    void init() {
         LayDuLieuHoaDon();
-      
+
     }
-    
-      void timKiemHoaDon(String id){
-        System.out.println("id"+id);
-         String sql = "select HoaDon.Id,KhachHang.id,HoaDon.Id_TC,NhanVien.HoTen,NgayHen,ThanhToan,DanhGia,HoaDon.TrangThaiTT,HoaDon.TrangThai \n"
+
+    void timKiemHoaDon(String id) {
+        System.out.println("id" + id);
+        String sql = "select HoaDon.Id,KhachHang.id,HoaDon.Id_TC,NhanVien.HoTen,NgayHen,ThanhToan,DanhGia,HoaDon.TrangThaiTT,HoaDon.TrangThai \n"
                 + "from HoaDon\n"
                 + "join KhachHang on KhachHang.Id=HoaDon.Id_KH\n"
                 + "Join NhanVien on NhanVien.Id=HoaDon.Id_TC\n"
-                + "where NhanVien.Id=HoaDon.Id_TC and (HoaDon.TrangThai=N'Đã thanh toán' or HoaDon.TrangThai=N'Chờ thanh toán') and HoaDon.id="+id;
-        ResultSet rs=JDBCHelper.query(sql);
-        DefaultTableModel model=(DefaultTableModel)tblHoaDon.getModel();
+                + "where NhanVien.Id=HoaDon.Id_TC and (HoaDon.TrangThai=N'Đã thanh toán' or HoaDon.TrangThai=N'Chờ thanh toán') and HoaDon.id=" + id;
+        ResultSet rs = JDBCHelper.query(sql);
+        DefaultTableModel model = (DefaultTableModel) tblHoaDon.getModel();
         model.setRowCount(0);
         try {
-            while(rs.next()){
-                Object[] item=new Object[9];
-                item[0]=rs.getString("Id");
-                item[1]=rs.getString("Id");
-                item[2]=rs.getString("Id_TC");
-                item[3]=rs.getString("HoTen");
-                item[4]=rs.getString("NgayHen");
-                item[5]=rs.getString("ThanhToan");
-                item[6]=rs.getString("DanhGia");
-                item[7]=rs.getString("TrangThaiTT");
-                item[8]=rs.getString("TrangThai");
+            while (rs.next()) {
+                Object[] item = new Object[9];
+                item[0] = rs.getString("Id");
+                item[1] = rs.getString("Id");
+                item[2] = rs.getString("Id_TC");
+                item[3] = rs.getString("HoTen");
+                item[4] = rs.getString("NgayHen");
+                item[5] = rs.getString("ThanhToan");
+                item[6] = rs.getString("DanhGia");
+                item[7] = rs.getString("TrangThaiTT");
+                item[8] = rs.getString("TrangThai");
                 model.addRow(item);
             }
         } catch (SQLException e) {
             System.out.println(e);
         }
     }
-     
-    void layHoaDonKHNull(){
+
+    void layHoaDonKHNull() {
         String sql = "select HoaDon.Id,HoaDon.Id_TC,null HoTen,NhanVien.HoTen,NgayHen,ThanhToan,DanhGia\n"
                 + "from HoaDon join NhanVien on NhanVien.Id=HoaDon.Id_TC\n"
                 + "where NhanVien.Id=HoaDon.Id_TC and HoaDon.TrangThai=N'Đã thanh toán' and HoaDon.TrangThaiTT=N'Đã đặt cọc(đã xác nhận)' ";
-        ResultSet rs=JDBCHelper.query(sql);
-        DefaultTableModel model=(DefaultTableModel)tblHoaDon.getModel();
+        ResultSet rs = JDBCHelper.query(sql);
+        DefaultTableModel model = (DefaultTableModel) tblHoaDon.getModel();
         model.setRowCount(0);
         try {
-            while(rs.next()){
-                Object[] item=new Object[7];
-                item[0]=rs.getString("Id");
-                item[1]=rs.getString("Id");
-                item[2]=rs.getString("Id_TC");
-                item[3]=rs.getString("HoTen");
-                item[4]=rs.getString("NgayHen");
-                item[5]=rs.getString("ThanhToan");
-                item[6]=rs.getString("DanhGia").equals("0")?"Hài lòng":rs.getString("DanhGia").equals("1")?"Rất hài lòng":"không hài lòng";                
+            while (rs.next()) {
+                Object[] item = new Object[7];
+                item[0] = rs.getString("Id");
+                item[1] = rs.getString("Id");
+                item[2] = rs.getString("Id_TC");
+                item[3] = rs.getString("HoTen");
+                item[4] = rs.getString("NgayHen");
+                item[5] = rs.getString("ThanhToan");
+                item[6] = rs.getString("DanhGia").equals("0") ? "Hài lòng" : rs.getString("DanhGia").equals("1") ? "Rất hài lòng" : "không hài lòng";
                 model.addRow(item);
             }
         } catch (SQLException e) {
             System.out.println(e);
         }
-    } 
-    
+    }
+
     void LayDuLieuHoaDon() {
         String sql = "select HoaDon.Id,HoaDon.Id_KH,HoaDon.Id_TC,NhanVien.HoTen,HoaDon.NgayHen,HoaDon.ThanhToan,HoaDon.DanhGia,HoaDon.TrangThaiTT,HoaDon.TrangThai\n"
                 + "         from HoaDon join NhanVien on HoaDon.Id_TC=NhanVien.Id		\n"
                 + "         where  NhanVien.Id=HoaDon.Id_TC \n"
                 + "         and HoaDon.TrangThai LIKE N'Đã thanh toán'  or HoaDon.TrangThai like N'Chờ thanh toán'";
         ResultSet rs = JDBCHelper.query(sql);
-        DefaultTableModel model=(DefaultTableModel)tblHoaDon.getModel();
+        DefaultTableModel model = (DefaultTableModel) tblHoaDon.getModel();
         model.setRowCount(0);
         try {
-            while(rs.next()){
-                Object[] item=new Object[9];
-                item[0]=rs.getString("Id");
-                item[1]=rs.getString("Id_KH");
-                item[2]=rs.getString("Id_TC");
-                item[3]=rs.getString("HoTen");
-                item[4]=rs.getString("NgayHen");
-                item[5]=rs.getString("ThanhToan");
-                item[6]=rs.getString("DanhGia").equals("0")?"Hài lòng":rs.getString("DanhGia").equals("1")?"Rất hài lòng":"không hài lòng";                
-                item[7]=rs.getString("TrangThaiTT");
-                item[8]=rs.getString("TrangThai");
+            while (rs.next()) {
+                Object[] item = new Object[9];
+                item[0] = rs.getString("Id");
+                item[1] = rs.getString("Id_KH");
+                item[2] = rs.getString("Id_TC");
+                item[3] = rs.getString("HoTen");
+                item[4] = rs.getString("NgayHen");
+                item[5] = rs.getString("ThanhToan");
+                item[6] = rs.getString("DanhGia").equals("0") ? "Hài lòng" : rs.getString("DanhGia").equals("1") ? "Rất hài lòng" : "không hài lòng";
+                item[7] = rs.getString("TrangThaiTT");
+                item[8] = rs.getString("TrangThai");
                 model.addRow(item);
             }
         } catch (SQLException e) {
             System.out.println(e);
         }
-        
+
     }
-    
-    void LayDuLieuHoaDonChiTiet(){
-        int row=tblHoaDon.getSelectedRow();
-        String mahd=tblHoaDon.getValueAt(row, 0).toString();
+
+    void LayDuLieuHoaDonChiTiet() {
+        int row = tblHoaDon.getSelectedRow();
+        String mahd = tblHoaDon.getValueAt(row, 0).toString();
         String sql = "select DichVu.Id,TenDV,DichVu.GiaTien from DichVu join HoaDonChiTiet on DichVu.Id=HoaDonChiTiet.Id_DV\n"
                 + "  where HoaDonChiTiet.Id_HD=" + mahd;
-        ResultSet rs=JDBCHelper.query(sql);
-        DefaultTableModel mol=(DefaultTableModel)tblHDCT.getModel();
+        ResultSet rs = JDBCHelper.query(sql);
+        DefaultTableModel mol = (DefaultTableModel) tblHDCT.getModel();
         mol.setRowCount(0);
         try {
             while (rs.next()) {
@@ -145,9 +159,7 @@ public class HoaDon extends javax.swing.JInternalFrame {
             System.out.println(e);
         }
     }
-    
-    
-     
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -171,6 +183,7 @@ public class HoaDon extends javax.swing.JInternalFrame {
         btnReset = new javax.swing.JButton();
         btnThanhToan = new javax.swing.JButton();
         btnChonAnh = new javax.swing.JButton();
+        btnXuat = new javax.swing.JButton();
 
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
             public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
@@ -272,6 +285,13 @@ public class HoaDon extends javax.swing.JInternalFrame {
             }
         });
 
+        btnXuat.setText("Xuất");
+        btnXuat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXuatActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -287,13 +307,15 @@ public class HoaDon extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 551, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnThanhToan)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnTim, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnReset)
-                        .addGap(26, 26, 26)
-                        .addComponent(btnChonAnh))
+                        .addComponent(btnThanhToan)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnXuat)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnChonAnh)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnReset))
                     .addComponent(jScrollPane1))
                 .addContainerGap(27, Short.MAX_VALUE))
         );
@@ -307,16 +329,17 @@ public class HoaDon extends javax.swing.JInternalFrame {
                     .addComponent(btnTim)
                     .addComponent(btnReset)
                     .addComponent(btnThanhToan)
-                    .addComponent(btnChonAnh))
+                    .addComponent(btnChonAnh)
+                    .addComponent(btnXuat))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 331, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         jDesktopPane1.setLayer(jPanel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -325,23 +348,20 @@ public class HoaDon extends javax.swing.JInternalFrame {
         jDesktopPane1.setLayout(jDesktopPane1Layout);
         jDesktopPane1Layout.setHorizontalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1340, Short.MAX_VALUE)
-            .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane1Layout.createSequentialGroup()
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+            .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jDesktopPane1Layout.setVerticalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 785, Short.MAX_VALUE)
-            .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane1Layout.createSequentialGroup()
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addContainerGap()))
+            .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
-        getContentPane().add(jDesktopPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-8, 11, 1340, 785));
+        getContentPane().add(jDesktopPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-8, -4, 1340, 820));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -355,7 +375,7 @@ public class HoaDon extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtTimKiemFocusGained
 
     private void txtTimKiemFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTimKiemFocusLost
-        
+
     }//GEN-LAST:event_txtTimKiemFocusLost
 
     private void formInternalFrameActivated(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
@@ -364,24 +384,25 @@ public class HoaDon extends javax.swing.JInternalFrame {
 
     private void btnTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimActionPerformed
         // TODO add your handling code here:
-        String tk=txtTimKiem.getText();
-        String rxgS="\\d+";
-        if(tk.equals("")){
+        String tk = txtTimKiem.getText();
+        String rxgS = "\\d+";
+        if (tk.equals("")) {
             MsgBox.alert(this, "Vui lòng nhập mã hoá đơn tìm kiếm!");
             txtTimKiem.requestFocus();
             return;
-        }if(tk.matches(rxgS)==false){
+        }
+        if (tk.matches(rxgS) == false) {
             MsgBox.alert(this, "Mã hoá đơn không đúng định dạng!");
             txtTimKiem.requestFocus();
             return;
-        }else{
-           timKiemHoaDon(tk);
-           DefaultTableModel mol=(DefaultTableModel)tblHDCT.getModel();
-           mol.setRowCount(0);
-         
+        } else {
+            timKiemHoaDon(tk);
+            DefaultTableModel mol = (DefaultTableModel) tblHDCT.getModel();
+            mol.setRowCount(0);
+
         }
-        
-      
+
+
     }//GEN-LAST:event_btnTimActionPerformed
 
     private void tblHoaDonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonMouseClicked
@@ -422,7 +443,7 @@ public class HoaDon extends javax.swing.JInternalFrame {
                     } catch (Exception e) {
                     }
                     LayDuLieuHoaDon();
-                   
+
                     DefaultTableModel mol = (DefaultTableModel) tblHDCT.getModel();
                     mol.setRowCount(0);
                     MsgBox.alert(this, "Thanh toán thành công!");
@@ -441,25 +462,127 @@ public class HoaDon extends javax.swing.JInternalFrame {
 
     private void btnChonAnhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChonAnhActionPerformed
         // TODO add your handling code here:
-        int index=tblHoaDon.getSelectedRow();
-        if(index>=0){
-            String mahd =tblHoaDon.getValueAt(index, 0).toString();
-            AnhChup a=new AnhChup(mahd);
+        int index = tblHoaDon.getSelectedRow();
+        if (index >= 0) {
+            String mahd = tblHoaDon.getValueAt(index, 0).toString();
+            AnhChup a = new AnhChup(mahd);
             jDesktopPane1.add(a);
-            a.setLocation(((jDesktopPane1.getWidth()-a.getWidth())/2),((jDesktopPane1.getHeight()-a.getHeight())/2));
+            a.setLocation(((jDesktopPane1.getWidth() - a.getWidth()) / 2), ((jDesktopPane1.getHeight() - a.getHeight()) / 2));
             a.show();
-        }else{
+        } else {
             MsgBox.alert(this, "Bạn chưa chọn hoá đơn!");
         }
-        
-    }//GEN-LAST:event_btnChonAnhActionPerformed
-  
 
+    }//GEN-LAST:event_btnChonAnhActionPerformed
+
+    private void btnXuatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXuatActionPerformed
+        xuatExcel();
+        System.out.println(tblHDCT.getRowCount());
+    }//GEN-LAST:event_btnXuatActionPerformed
+
+    public void xuatExcel() {
+        int index = tblHoaDon.getSelectedRow();
+        if (index >= 0) {
+            TTKhachHang listTT = qldao.selectById(khdao.selectKH(String.valueOf(tblHoaDon.getValueAt(index, 0))).getId());
+            ngay = hddao.selectById(String.valueOf(tblHoaDon.getValueAt(index, 0))).getNgayHen();
+            try {
+                XSSFWorkbook wb = new XSSFWorkbook();
+                XSSFSheet sheet = wb.createSheet("Hóa đơn");
+                XSSFRow row = null;
+                Cell cell = null;
+                row = sheet.createRow(3);
+                cell = row.createCell(0, CellType.STRING);
+                cell.setCellValue("Tên khách hàng: " + khdao.selectKH(String.valueOf(tblHoaDon.getValueAt(index, 0))).getHoTen());
+
+                cell = row.createCell(1, CellType.STRING);
+                cell.setCellValue("");
+
+                cell = row.createCell(2, CellType.STRING);
+                cell.setCellValue("");
+
+                //row4
+                row = sheet.createRow(4);
+                cell = row.createCell(0, CellType.STRING);
+                cell.setCellValue("Số điện thoại: " + listTT.getSdt());
+
+                cell = row.createCell(1, CellType.STRING);
+                cell.setCellValue("");
+
+                cell = row.createCell(2, CellType.STRING);
+                cell.setCellValue("");
+
+                //row5
+                row = sheet.createRow(5);
+                cell = row.createCell(0, CellType.STRING);
+                cell.setCellValue("Thợ cắt: " + String.valueOf(tblHoaDon.getValueAt(index, 3)));
+
+                cell = row.createCell(1, CellType.STRING);
+                cell.setCellValue("");
+
+                cell = row.createCell(2, CellType.STRING);
+                cell.setCellValue("");
+
+                //row6
+                row = sheet.createRow(6);
+                cell = row.createCell(0, CellType.STRING);
+                cell.setCellValue("Ngày thanh toán: " + ngay);
+
+                cell = row.createCell(1, CellType.STRING);
+                cell.setCellValue("");
+
+                cell = row.createCell(2, CellType.STRING);
+                cell.setCellValue("");
+
+                //row 7
+                row = sheet.createRow(7);
+                cell = row.createCell(0, CellType.STRING);
+                cell.setCellValue("Mã dịch vụ");
+
+                cell = row.createCell(1, CellType.STRING);
+                cell.setCellValue("Tên dịch vụ");
+
+                cell = row.createCell(2, CellType.STRING);
+                cell.setCellValue("Giá tiền");
+
+                for (int i = 0; i < tblHDCT.getRowCount(); i++) {
+                    row = sheet.createRow(8 + i);
+
+                    cell = row.createCell(0, CellType.STRING);
+                    cell.setCellValue(String.valueOf(tblHDCT.getValueAt(i, 0)));
+
+                    cell = row.createCell(1, CellType.STRING);
+                    cell.setCellValue(String.valueOf(tblHDCT.getValueAt(i, 1)));
+
+                    cell = row.createCell(2, CellType.STRING);
+                    cell.setCellValue(String.valueOf(tblHDCT.getValueAt(i, 2)));
+                }
+
+                row = sheet.createRow(8 + tblHDCT.getRowCount());
+                cell = row.createCell(0, CellType.STRING);
+                cell.setCellValue("Tổng tiền: " + String.valueOf(tblHoaDon.getValueAt(index, 5)));
+
+                File f = new File("D://Hóa Đơn " + String.valueOf(tblHoaDon.getValueAt(index, 0)) + ".xlsx");
+                try {
+                    FileOutputStream fo = new FileOutputStream(f);
+                    wb.write(fo);
+                    fo.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                JOptionPane.showMessageDialog(this, "Xuất thành công");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Chọn hóa đơn cần xuất");
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnChonAnh;
     private javax.swing.JButton btnReset;
     private javax.swing.JButton btnThanhToan;
     private javax.swing.JButton btnTim;
+    private javax.swing.JButton btnXuat;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

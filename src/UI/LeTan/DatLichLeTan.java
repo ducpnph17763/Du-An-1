@@ -522,7 +522,6 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
             }
             ls.add(cbodv);
             fillTable1();
-
         }
     }
 

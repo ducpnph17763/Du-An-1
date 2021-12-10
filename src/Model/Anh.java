@@ -10,15 +10,25 @@ package Model;
  * @author dell
  */
 public class Anh {
+    String id ;
     int id_HD;
     String anh ;
 
     public Anh() {
     }
 
-    public Anh(int id_HD, String anh) {
+    public Anh(String id, int id_HD, String anh) {
+        this.id = id;
         this.id_HD = id_HD;
         this.anh = anh;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public int getId_HD() {
@@ -36,6 +46,9 @@ public class Anh {
     public void setAnh(String anh) {
         this.anh = anh;
     }
-    
+
+   
+
+   
     
 }

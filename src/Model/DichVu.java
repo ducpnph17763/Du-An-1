@@ -10,7 +10,7 @@ package Model;
  * @author dell
  */
 public class DichVu {
-    private String Id;
+    private int Id;
     private String tenDV;
     private int giaTien;
     private String hinh;
@@ -21,7 +21,7 @@ public class DichVu {
     public DichVu() {
     }
 
-    public DichVu(String Id, String tenDV, int giaTien, String hinh, String moTa, String trangThai, int thoiGian) {
+    public DichVu(int Id, String tenDV, int giaTien, String hinh, String moTa, String trangThai, int thoiGian) {
         this.Id = Id;
         this.tenDV = tenDV;
         this.giaTien = giaTien;
@@ -32,11 +32,11 @@ public class DichVu {
     }
     
 
-    public String getId() {
+    public int getId() {
         return Id;
     }
 
-    public void setId(String Id) {
+    public void setId(int Id) {
         this.Id = Id;
     }
 

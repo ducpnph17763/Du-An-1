@@ -19,7 +19,7 @@ public class Time {
         this.hour = hour;
     }
 
-    public Time(String str) {
+    public Time(String str){
         String ThoiGian[] = str.split(":");
         int gio = Integer.valueOf(ThoiGian[0]);
         int phut = Integer.valueOf(ThoiGian[1]);

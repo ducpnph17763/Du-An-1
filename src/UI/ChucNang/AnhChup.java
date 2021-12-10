@@ -28,12 +28,11 @@ public class AnhChup extends javax.swing.JInternalFrame {
 
     /**
      * Creates new form AnhChup
-     */
+     */ 
     AnhDAO adao =new AnhDAO();
     public AnhChup(String contructor) {
         initComponents();
-        lblId.setText(contructor);
-       
+        txtId_HD.setText(contructor);    
     }
 
     
@@ -51,7 +50,6 @@ public class AnhChup extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
-        lblId = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         btnThem = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
@@ -60,10 +58,13 @@ public class AnhChup extends javax.swing.JInternalFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblAnh = new javax.swing.JTable();
         btnShow = new javax.swing.JButton();
+        txtId_HD = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        txtId = new javax.swing.JTextField();
+        btnSua = new javax.swing.JButton();
+        btnXoa = new javax.swing.JButton();
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-
-        lblId.setText("jLabel2");
 
         jLabel1.setText("Mã hoá đơn: ");
 
@@ -88,11 +89,11 @@ public class AnhChup extends javax.swing.JInternalFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(lblAnh, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
+            .addComponent(lblAnh, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(lblAnh, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
+            .addComponent(lblAnh, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
         );
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/muiTen.png"))); // NOI18N
@@ -104,21 +105,42 @@ public class AnhChup extends javax.swing.JInternalFrame {
 
         tblAnh.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Mã hoá đơn", "Tên ảnh"
+                "Mã ảnh", "Mã hoá đơn", "Tên ảnh"
             }
         ));
+        tblAnh.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblAnhMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblAnh);
 
         btnShow.setText("show");
         btnShow.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnShowActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Mã ảnh:");
+
+        btnSua.setText("Cập nhật");
+        btnSua.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSuaActionPerformed(evt);
+            }
+        });
+
+        btnXoa.setText("Xoá");
+        btnXoa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXoaActionPerformed(evt);
             }
         });
 
@@ -138,16 +160,24 @@ public class AnhChup extends javax.swing.JInternalFrame {
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(jLabel1)
-                                        .addGap(36, 36, 36)
-                                        .addComponent(lblId))
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel1)
+                                            .addComponent(jLabel2))
                                         .addGap(18, 18, 18)
-                                        .addComponent(btnShow)))))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(txtId_HD)
+                                            .addComponent(txtId, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(btnSua))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 78, Short.MAX_VALUE)
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(btnXoa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(btnShow, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE))))))
+                        .addGap(0, 16, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -157,20 +187,28 @@ public class AnhChup extends javax.swing.JInternalFrame {
                 .addComponent(jLabel4)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(31, 31, 31)
+                        .addGap(28, 28, 28)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
-                            .addComponent(lblId))
-                        .addGap(100, 100, 100)
+                            .addComponent(txtId_HD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(66, 66, 66)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnThem)
-                            .addComponent(btnShow)))
+                            .addComponent(btnShow))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnSua)
+                            .addComponent(btnXoa)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(7, 7, 7)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(26, 26, 26)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(53, 53, 53))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -181,9 +219,7 @@ public class AnhChup extends javax.swing.JInternalFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 591, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -213,18 +249,11 @@ public class AnhChup extends javax.swing.JInternalFrame {
         lblAnh.setIcon(image);
     }
     
-    private void lblAnhMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblAnhMouseClicked
-//        // TODO add your handling code here:
-        try {
-            chonAnh();
-        } catch (Exception e) {
-        }
-    }//GEN-LAST:event_lblAnhMouseClicked
-
     
     Anh getForm(){
         Anh a=new Anh();
-        a.setId_HD(Integer.valueOf(lblId.getText()));
+        a.setId(txtId.getText());
+        a.setId_HD(Integer.valueOf(txtId_HD.getText()));
 //        if(a.getAnh()==null){
 //            a.setAnh("email.png");
 //        }else{
@@ -238,7 +267,7 @@ public class AnhChup extends javax.swing.JInternalFrame {
         try {            
             Anh a =getForm();
             if(a.getAnh()==null){
-                MsgBox.alert(this, "Bạn chưa chọn ảnh!");
+               a.setAnh("man-icon-1 (1)");
             }else{
                 adao.insert(a);
                  MsgBox.alert(this, "Thêm ảnh thành công!");
@@ -258,13 +287,14 @@ public class AnhChup extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         DefaultTableModel mol =(DefaultTableModel) tblAnh.getModel();
         mol.setRowCount(0);
-        String sql ="select*from AnhChup where Id_HD="+lblId.getText();
+        String sql ="select*from AnhChup where Id_HD="+txtId_HD.getText();
         try {
             ResultSet rs=JDBCHelper.query(sql);
             while (rs.next()) {                
-                Object[]item=new Object[2];
-                item[0]=rs.getInt("Id_HD");
-                item[1]=rs.getString("Anh");
+                Object[]item=new Object[3];
+                item[0]=rs.getInt("Id");
+                item[1]=rs.getInt("Id_HD");
+                item[2]=rs.getString("Anh");
                 mol.addRow(item);
             }
         } catch (Exception e) {
@@ -272,17 +302,74 @@ public class AnhChup extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_btnShowActionPerformed
 
+    private void lblAnhMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblAnhMouseClicked
+        //        // TODO add your handling code here:
+        try {
+            chonAnh();
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_lblAnhMouseClicked
+
+    
+    void setForm(Model.Anh dv) {
+       
+        txtId.setText(dv.getId()+"");
+        txtId_HD.setText(dv.getId_HD()+"");
+        if (dv.getAnh()!= null) {
+            lblAnh.setToolTipText(dv.getAnh());
+            lblAnh.setIcon(XImage.read(dv.getAnh()));
+        }
+
+    }
+    
+    void edit(){
+        int index=tblAnh.getSelectedRow();
+        String Id =tblAnh.getValueAt(index, 0).toString();
+        System.out.println("mã ảnh chụp:"+Id);
+        Anh dv=adao.selectById(Id);
+        setForm(dv);   
+       
+    }
+    private void tblAnhMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblAnhMouseClicked
+        // TODO add your handling code here:
+       
+//        int  index =tblAnh.getSelectedRow();
+//        txtId.setText(tblAnh.getValueAt(index, 0).toString());
+        if(evt.getClickCount()==1){
+             edit();
+        }
+       
+       
+    }//GEN-LAST:event_tblAnhMouseClicked
+
+    private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
+        // TODO add your handling code here:
+        Anh a=getForm();
+        adao.update(a);
+        btnShowActionPerformed(evt);
+    }//GEN-LAST:event_btnSuaActionPerformed
+
+    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
+        // TODO add your handling code here:
+        adao.delete(txtId.getText());
+        MsgBox.alert(this, "Xoá thành công!");
+    }//GEN-LAST:event_btnXoaActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnShow;
+    private javax.swing.JButton btnSua;
     private javax.swing.JButton btnThem;
+    private javax.swing.JButton btnXoa;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblAnh;
-    private javax.swing.JLabel lblId;
     private javax.swing.JTable tblAnh;
+    private javax.swing.JTextField txtId;
+    private javax.swing.JTextField txtId_HD;
     // End of variables declaration//GEN-END:variables
 }

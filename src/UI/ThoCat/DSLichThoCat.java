@@ -44,13 +44,12 @@ public class DSLichThoCat extends javax.swing.JInternalFrame {
     void LayDuLieuHoaDon(){
         String tenTK=XAuth.user.getTenTK();
         System.out.println("tên tk"+tenTK);
-        String sql = "select HoaDon.Id,KhachHang.HoTen,NgayHen,GioHen \n"
-                + "from HoaDon\n"
-                + "join KhachHang on KhachHang.Id=HoaDon.Id_KH\n"
-                + "Join NhanVien on NhanVien.Id=HoaDon.Id_TC\n"
-                + "join TaiKhoan on TaiKhoan.Id=NhanVien.Id_TK\n"
-                + "where NhanVien.Id=HoaDon.Id_TC and HoaDon.TrangThai=N'Chưa thanh toán' \n"
-                + "and (HoaDon.TrangThaiTT=N'Đã đặt cọc(đã xác nhận)' or HoaDon.TrangThaiTT=N'Đã đặt cọc(chờ xác nhận)') and TaiKhoan.TenTK=N'"+tenTK+"'";
+        String sql = "select HoaDon.Id,HoaDon.Id_KH,NgayHen,GioHen \n"
+                + "              from HoaDon\n"
+                + "              Join NhanVien on NhanVien.Id=HoaDon.Id_TC\n"
+                + "              join TaiKhoan on TaiKhoan.Id=NhanVien.Id_TK\n"
+                + "              where NhanVien.Id=HoaDon.Id_TC and HoaDon.TrangThai=N'Chưa thanh toán' \n"
+                + "              and (HoaDon.TrangThaiTT=N'Đã đặt cọc(đã xác nhận)' or HoaDon.TrangThaiTT=N'Đã đặt cọc(chờ xác nhận)') and TaiKhoan.TenTK=N'"+tenTK+"'";
         ResultSet rs=JDBCHelper.query(sql);
         DefaultTableModel model=(DefaultTableModel)tblLichDat.getModel();
         model.setRowCount(0);
@@ -58,7 +57,7 @@ public class DSLichThoCat extends javax.swing.JInternalFrame {
             while(rs.next()){
                 Object[] item=new Object[4];
                 item[0]=rs.getString("Id");
-                item[1]=rs.getString("HoTen");
+                item[1]=rs.getString("ID_KH");
                 item[2]=rs.getString("NgayHen");
                 item[3]=rs.getString("GioHen");
                 model.addRow(item);
@@ -101,6 +100,7 @@ public class DSLichThoCat extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jDesktopPane1 = new javax.swing.JDesktopPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblCTLichDat = new javax.swing.JTable();
@@ -187,13 +187,49 @@ public class DSLichThoCat extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1330, 800));
+        jDesktopPane1.setLayer(jPanel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
+        jDesktopPane1.setLayout(jDesktopPane1Layout);
+        jDesktopPane1Layout.setHorizontalGroup(
+            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1330, Short.MAX_VALUE)
+            .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+        jDesktopPane1Layout.setVerticalGroup(
+            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 800, Short.MAX_VALUE)
+            .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+
+        getContentPane().add(jDesktopPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1330, 800));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void tblLichDatMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLichDatMousePressed
         // TODO add your handling code here:   
+        if(evt.getClickCount()==2){
+           int index=tblLichDat.getSelectedRow();
+            try {
+                String id_Hd =tblLichDat.getValueAt(index, 0).toString();
+                String id_KH=tblLichDat.getValueAt(index, 1).toString();
+                HienThiThongTinKH a=new HienThiThongTinKH(id_Hd,id_KH);
+                jDesktopPane1.add(a);
+                a.setLocation(((jDesktopPane1.getWidth()-a.getWidth())/2),((jDesktopPane1.getHeight()-a.getHeight())/2));
+                a.show();
+           } catch (Exception e) {
+           }
+          
+       }
     }//GEN-LAST:event_tblLichDatMousePressed
 
     private void tblLichDatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLichDatMouseClicked
@@ -206,6 +242,7 @@ public class DSLichThoCat extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_tblCTLichDatMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;

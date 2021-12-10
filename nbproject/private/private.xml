@@ -7,24 +7,18 @@
             <file>file:/D:/Code_Du_An_1/Du-An-1/src/Helper/XImage.java</file>
             <file>file:/D:/Code_Du_An_1/Du-An-1/src/Dao/ThongKeDAO.java</file>
             <file>file:/D:/Code_Du_An_1/Du-An-1/src/Dao/TaiKhoanDAO.java</file>
-            <file>file:/D:/Code_Du_An_1/Du-An-1/src/Dao/AnhDAO.java</file>
-            <file>file:/D:/Code_Du_An_1/Du-An-1/src/UI/ChucNang/DatCoc.java</file>
+            <file>file:/D:/Code_Du_An_1/Du-An-1/src/Helper/MsgBox.java</file>
             <file>file:/D:/Code_Du_An_1/Du-An-1/src/UI/ManHinhChao.java</file>
             <file>file:/D:/Code_Du_An_1/Du-An-1/src/UI/LeTan/DatLichLeTan.java</file>
             <file>file:/D:/Code_Du_An_1/Du-An-1/src/UI/ChucNang/HoaDon.java</file>
             <file>file:/D:/Code_Du_An_1/Du-An-1/src/Model/Anh.java</file>
-            <file>file:/D:/Code_Du_An_1/Du-An-1/src/UI/ChucNang/AnhChup.java</file>
-            <file>file:/D:/Code_Du_An_1/Du-An-1/src/Image/man-icon-1%20(1).png</file>
             <file>file:/D:/Code_Du_An_1/Du-An-1/src/UI/NguoiDung/DSLichDatNguoiDung.java</file>
             <file>file:/D:/Code_Du_An_1/Du-An-1/src/UI/QuanLy/QuanLyHome.java</file>
             <file>file:/D:/Code_Du_An_1/Du-An-1/src/UI/ChucNang/TaiKhoan.java</file>
             <file>file:/D:/Code_Du_An_1/Du-An-1/src/UI/ChucNang/QLDichVu.java</file>
-            <file>file:/D:/Code_Du_An_1/Du-An-1/src/Helper/JDBCHelper.java</file>
-            <file>file:/D:/Code_Du_An_1/Du-An-1/src/UI/ChucNang/KhachHang.java</file>
-            <file>file:/D:/Code_Du_An_1/Du-An-1/src/Model/KhachHang.java</file>
-            <file>file:/D:/Code_Du_An_1/Du-An-1/src/Dao/KhachHangDAO.java</file>
+            <file>file:/D:/Code_Du_An_1/Du-An-1/src/Dao/HoaDonDAO.java</file>
+            <file>file:/D:/Code_Du_An_1/Du-An-1/src/UI/LeTan/Time.java</file>
             <file>file:/D:/Code_Du_An_1/Du-An-1/src/Dao/NhanVienDAO.java</file>
-            <file>file:/D:/Code_Du_An_1/Du-An-1/src/UI/ChucNang/KichHoatTK.java</file>
         </group>
     </open-files>
 </project-private>

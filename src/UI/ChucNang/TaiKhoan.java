@@ -410,8 +410,6 @@ public class TaiKhoan extends javax.swing.JInternalFrame {
 
     private void btnKHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKHActionPerformed
         chonAnh();
-        JOptionPane.showMessageDialog(this, "Đổi ảnh thành công, đăng nhập lại để load ảnh đại diện");
-//        System.out.println(lblAnh.getSize());
     }//GEN-LAST:event_btnKHActionPerformed
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
@@ -570,6 +568,7 @@ public class TaiKhoan extends javax.swing.JInternalFrame {
                 TTTK.setHinh(filename);
                 tkdao.setHinh(TTTK);
                 this.setHinh(filename);
+                JOptionPane.showMessageDialog(this, "Đổi ảnh thành công, đăng nhập lại để load ảnh đại diện");
             } catch (Exception e) {
                 e.printStackTrace();
             }

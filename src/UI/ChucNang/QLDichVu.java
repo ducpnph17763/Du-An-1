@@ -30,49 +30,51 @@ public class QLDichVu extends javax.swing.JInternalFrame {
     /**
      * Creates new form QLDichVu
      */
-    int index=-1;
-    DichVuDAO dvdao=new DichVuDAO();
-    List<Model.DichVu>list=new ArrayList<>();
-    JFileChooser fileChoose=new JFileChooser();
+    int index = -1;
+    DichVuDAO dvdao = new DichVuDAO();
+    List<Model.DichVu> list = new ArrayList<>();
+    JFileChooser fileChoose = new JFileChooser();
+
     public QLDichVu() {
         initComponents();
-        BasicInternalFrameUI bui=(BasicInternalFrameUI)this.getUI();
+        BasicInternalFrameUI bui = (BasicInternalFrameUI) this.getUI();
         bui.setNorthPane(null);
         init();
-    }    
-   
-    void init(){
+    }
+
+    void init() {
         fillTable();
-        index=-1;
+        index = -1;
         updateStatus();
     }
-    void fillTable(){
-        DefaultTableModel mol=(DefaultTableModel)tblDichVu.getModel();
+
+    void fillTable() {
+        DefaultTableModel mol = (DefaultTableModel) tblDichVu.getModel();
         mol.setRowCount(0);
-        List<Model.DichVu>list=dvdao.selectAll();
+        List<Model.DichVu> list = dvdao.selectAll();
         for (DichVu dichVu : list) {
-            Object[]row={
-              dichVu.getId(),dichVu.getTenDV(),dichVu.getGiaTien(),dichVu.getHinh(),dichVu.getMoTa()
+            Object[] row = {
+                dichVu.getId(), dichVu.getTenDV(), themPhay(dichVu.getGiaTien()), dichVu.getHinh(), dichVu.getMoTa()
             };
             mol.addRow(row);
         }
     }
-    
-    void chonAnh(){
-        if(fileChoose.showOpenDialog(this)==JFileChooser.APPROVE_OPTION){
-            File file=fileChoose.getSelectedFile();
+
+    void chonAnh() {
+        if (fileChoose.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            File file = fileChoose.getSelectedFile();
             XImage.save(file);
-            ImageIcon icon=XImage.read(file.getName());
+            ImageIcon icon = XImage.read(file.getName());
             lblAnh.setIcon(icon);
-            lblAnh.setToolTipText(file.getName()); 
+            lblAnh.setToolTipText(file.getName());
             String filename = file.getAbsolutePath();
             this.setHinh(filename);
         }
     }
-   
+
     public void setHinh(String fileName) {
         BufferedImage bufferedImage = null;
-        try {            
+        try {
             bufferedImage = ImageIO.read(new File("src\\Image\\" + fileName));
         } catch (IOException e) {
             e.printStackTrace();
@@ -81,81 +83,69 @@ public class QLDichVu extends javax.swing.JInternalFrame {
         ImageIcon image = new ImageIcon(scaledImage);
         lblAnh.setIcon(image);
     }
-    
-   Model.DichVu getForm() {
+
+    Model.DichVu getForm() {
         DichVu dv = new DichVu();
-        index=0;
+        index = 0;
         String id = (String) tblDichVu.getValueAt(index, 0);
-        System.out.println("id để sửa:"+id);
+        System.out.println("id để sửa:" + id);
         dv.setId(Integer.valueOf(lblID.getText()));
-        System.out.println("id"+dv.getId());
+        System.out.println("id" + dv.getId());
         dv.setTenDV(txtTenDV.getText());
         dv.setGiaTien(Integer.parseInt(txtGiaTien.getText()));
         dv.setMoTa(txtGioiThieu.getText());
-//        if(dv.getHinh()==null){
-//            dv.setHinh("email.png");
-//        }else{
-            dv.setHinh(lblAnh.getToolTipText());
-//        }
-        
+        dv.setHinh(lblAnh.getToolTipText());
         return dv;
     }
-    
+
     void setForm(Model.DichVu dv) {
-       
-        lblID.setText(dv.getId()+"");
+        lblID.setText(dv.getId() + "");
         txtTenDV.setText(dv.getTenDV());
-        txtGiaTien.setText(dv.getGiaTien() + "");
+        txtGiaTien.setText(themPhay(dv.getGiaTien()));
+        System.out.println(dv.getGiaTien());
         txtGioiThieu.setText(dv.getMoTa());
         if (dv.getHinh() != null) {
             lblAnh.setToolTipText(dv.getHinh());
             lblAnh.setIcon(XImage.read(dv.getHinh()));
         }
-
     }
-    
-    void edit(){
-        String madv=(String)tblDichVu.getValueAt(index, 0);
-        DichVu dv=dvdao.selectById(madv);
+
+    void edit() {
+        String madv = String.valueOf(tblDichVu.getValueAt(index, 0));
+        DichVu dv = dvdao.selectById(madv);
         setForm(dv);
         updateStatus();
-       
     }
-    void insert(){
-        DichVu dv=getForm();
+
+    void insert() {
+        DichVu dv = getForm();
         dvdao.insert(dv);
         fillTable();
     }
-    void update(){
-        DichVu dv=getForm();
+
+    void update() {
+        DichVu dv = getForm();
         dvdao.update(dv);
         fillTable();
     }
 
-    void updateStatus(){
-        boolean edit=(this.index>=0);
+    void updateStatus() {
+        boolean edit = (this.index >= 0);
         btnThem.setEnabled(!edit);
         btnSua.setEnabled(edit);
-        btnXoa.setEnabled(edit); 
+        btnXoa.setEnabled(edit);
     }
-   
-    
-    void clearForm(){
-        DichVu dv=new DichVu();
+
+    void clearForm() {
+        DichVu dv = new DichVu();
         setForm(dv);
         if (dv.getHinh() == null) {
             setHinh("email.png");
         }
-        index=-1;
+        index = -1;
         updateStatus();
     }
-    
-    
-    
-    
-    
-    
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -352,16 +342,16 @@ public class QLDichVu extends javax.swing.JInternalFrame {
 
     private void tblDichVuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDichVuMouseClicked
         // TODO add your handling code here:
-        if(evt.getClickCount()==1){
-            this.index=tblDichVu.getSelectedRow();
+        if (evt.getClickCount() == 1) {
+            this.index = tblDichVu.getSelectedRow();
             edit();
         }
     }//GEN-LAST:event_tblDichVuMouseClicked
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         // TODO add your handling code here:
-      if(ValidateHelper.checkNullText(txtTenDV)&&ValidateHelper.checkNullText(txtGiaTien)&&ValidateHelper.checkNullGioiThieu(txtGioiThieu)){
-            if(ValidateHelper.checkTenDV(txtTenDV)&&ValidateHelper.checkGiaTien(txtGiaTien)&&ValidateHelper.checkGioiThieu(txtGioiThieu)){
+        if (ValidateHelper.checkNullText(txtTenDV) && ValidateHelper.checkNullText(txtGiaTien) && ValidateHelper.checkNullGioiThieu(txtGioiThieu)) {
+            if (ValidateHelper.checkTenDV(txtTenDV) && ValidateHelper.checkGiaTien(txtGiaTien) && ValidateHelper.checkGioiThieu(txtGioiThieu)) {
                 insert();
                 clearForm();
                 MsgBox.alert(this, "Thêm dịch vụ thành công!");
@@ -371,7 +361,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
 
     private void btnChonAnhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChonAnhActionPerformed
         // TODO add your handling code here:
-         try {
+        try {
             chonAnh();
         } catch (Exception e) {
             System.out.println(e);
@@ -380,7 +370,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
         // TODO add your handling code here:
-         if (ValidateHelper.checkNullText(txtTenDV) && ValidateHelper.checkNullText(txtGiaTien)&&ValidateHelper.checkNullGioiThieu(txtGioiThieu)) {
+        if (ValidateHelper.checkNullText(txtTenDV) && ValidateHelper.checkNullText(txtGiaTien) && ValidateHelper.checkNullGioiThieu(txtGioiThieu)) {
             if (ValidateHelper.checkTenDV(txtTenDV) && ValidateHelper.checkGiaTien(txtGiaTien) && ValidateHelper.checkGioiThieu(txtGioiThieu)) {
                 try {
                     update();
@@ -396,7 +386,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
         // TODO add your handling code here:
         String index1 = (String) tblDichVu.getValueAt(index, 0);
-        if (ValidateHelper.checkNullText(txtTenDV) && ValidateHelper.checkNullText(txtGiaTien)&&ValidateHelper.checkNullGioiThieu(txtGioiThieu)) {
+        if (ValidateHelper.checkNullText(txtTenDV) && ValidateHelper.checkNullText(txtGiaTien) && ValidateHelper.checkNullGioiThieu(txtGioiThieu)) {
             if (ValidateHelper.checkTenDV(txtTenDV) && ValidateHelper.checkGiaTien(txtGiaTien) && ValidateHelper.checkGioiThieu(txtGioiThieu)) {
                 try {
 
@@ -410,7 +400,10 @@ public class QLDichVu extends javax.swing.JInternalFrame {
             }
         }
     }//GEN-LAST:event_btnXoaActionPerformed
-
+    public String themPhay(int tien) {
+        double money = Double.valueOf(tien);
+        return String.format("%,.0f", money);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnChonAnh;

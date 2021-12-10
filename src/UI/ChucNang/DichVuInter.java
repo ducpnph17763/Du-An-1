@@ -20,30 +20,32 @@ public class DichVuInter extends javax.swing.JInternalFrame {
     /**
      * Creates new form DichVuInter
      */
-    int index=0;
-    DichVuDAO dvdao=new DichVuDAO();
+    int index = 0;
+    DichVuDAO dvdao = new DichVuDAO();
+
     public DichVuInter() {
         initComponents();
-        BasicInternalFrameUI bui=(BasicInternalFrameUI)this.getUI();
+        BasicInternalFrameUI bui = (BasicInternalFrameUI) this.getUI();
         bui.setNorthPane(null);
         init();
     }
 
-    void init(){
+    void init() {
         fillTable();
     }
-    void fillTable(){
-        DefaultTableModel mol=(DefaultTableModel)tblDichVu.getModel();
+
+    void fillTable() {
+        DefaultTableModel mol = (DefaultTableModel) tblDichVu.getModel();
         mol.setRowCount(0);
-        List<Model.DichVu>list=dvdao.selectAll();
+        List<Model.DichVu> list = dvdao.selectAll();
         for (DichVu dichVu : list) {
-            Object[]row={
-              dichVu.getId(),dichVu.getTenDV(),dichVu.getGiaTien()
+            Object[] row = {
+                dichVu.getId(), dichVu.getTenDV(), themPhay(dichVu.getGiaTien())
             };
             mol.addRow(row);
         }
     }
-    
+
     void setForm(Model.DichVu dv) {
 
         lblTenDV.setText(dv.getTenDV());
@@ -55,13 +57,14 @@ public class DichVuInter extends javax.swing.JInternalFrame {
         }
 
     }
-    
-    void edit(){
-        String madv=(String)tblDichVu.getValueAt(index, 0);
-        DichVu dv=dvdao.selectById(madv);
+
+    void edit() {
+        String madv = (String) tblDichVu.getValueAt(index, 0);
+        DichVu dv = dvdao.selectById(madv);
         setForm(dv);
-       
+
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -176,12 +179,15 @@ public class DichVuInter extends javax.swing.JInternalFrame {
 
     private void tblDichVuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDichVuMouseClicked
         // TODO add your handling code here:
-        if(evt.getClickCount()==1){
-            index=tblDichVu.getSelectedRow();
+        if (evt.getClickCount() == 1) {
+            index = tblDichVu.getSelectedRow();
             edit();
         }
     }//GEN-LAST:event_tblDichVuMouseClicked
-
+    public String themPhay(int tien) {
+        double money = Double.valueOf(tien);
+        return String.format("%,.0f", money);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel6;

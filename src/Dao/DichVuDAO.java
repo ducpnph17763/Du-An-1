@@ -21,13 +21,13 @@ import java.util.logging.Logger;
  */
 public class DichVuDAO extends BarberDAO<DichVu, String> {
 
-    String INSERT_SQL = "INSERT INTO DichVu(TenDV,GiaTien,Hinh,MoTa) Values(?,?,?,?)";
-    String UPDATE_SQL = "UPDATE DichVu set TenDV=?,GiaTien=?,Hinh=?,MoTa=? WHERE Id=?";
+    String INSERT_SQL = "INSERT INTO DichVu(TenDV,GiaTien,Hinh,MoTa,ThoiGian) Values(?,?,?,?,?)";
+    String UPDATE_SQL = "UPDATE DichVu set TenDV=?,GiaTien=?,Hinh=?,MoTa=?,ThoiGian=? WHERE Id=?";
     String DELETE_SQL = "DELETE FROM DichVu where Id=?";
     String SELECT_ALL_SQL = "Select*from DichVu";
     String SELECT_BY_ID_SQL = "select*from DichVu where Id=?";
 
-    public void insert1(DichVu entity) {
+    public void insert1(DichVu entity){
         String sql = "insert into DichVu(TenDV,GiaTien) values(?,?)";
         try {
             JDBCHelper.update(sql, entity.getTenDV(), entity.getGiaTien());
@@ -37,10 +37,10 @@ public class DichVuDAO extends BarberDAO<DichVu, String> {
     }
 
     @Override
-    public void insert(DichVu entity) {
+    public void insert(DichVu entity){
         try {
             JDBCHelper.update(INSERT_SQL, entity.getTenDV(), entity.getGiaTien(),
-                    entity.getHinh(), entity.getMoTa());
+                    entity.getHinh(), entity.getMoTa(),entity.getThoiGian());
         } catch (SQLException ex) {
             Logger.getLogger(DichVuDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -50,7 +50,7 @@ public class DichVuDAO extends BarberDAO<DichVu, String> {
     public void update(DichVu entity) {
         try {
             JDBCHelper.update(UPDATE_SQL, entity.getTenDV(), entity.getGiaTien(),
-                    entity.getHinh(), entity.getMoTa(), entity.getId());
+                    entity.getHinh(), entity.getMoTa(),entity.getThoiGian(), entity.getId());
         } catch (SQLException ex) {
             Logger.getLogger(DichVuDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -121,5 +121,6 @@ public class DichVuDAO extends BarberDAO<DichVu, String> {
                 + "join HoaDon on HoaDon.id = HoaDonChiTiet.Id_HD where HoaDon.Id = ?";
         return this.selectBySql(sql, id);
     }
+
 
 }

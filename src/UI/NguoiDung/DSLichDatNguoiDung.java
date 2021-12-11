@@ -7,6 +7,7 @@ package UI.NguoiDung;
 
 import Dao.DichVuDAO;
 import Dao.HoaDonDAO;
+import Dao.KhachHangDAO;
 import Helper.JDBCHelper;
 import Helper.MsgBox;
 import Helper.XAuth;
@@ -32,6 +33,8 @@ public class DSLichDatNguoiDung extends javax.swing.JInternalFrame {
     DichVuDAO dvdao = new DichVuDAO();
     List<Model.DichVu> listDV = new ArrayList<>();
     String tenTK = XAuth.user.getTenTK();
+    KhachHangDAO khdao=new KhachHangDAO();
+     Model.KhachHang kh = khdao.SelectByTenTK(tenTK);
 
     public DSLichDatNguoiDung() {
         initComponents();
@@ -47,7 +50,7 @@ public class DSLichDatNguoiDung extends javax.swing.JInternalFrame {
 
     void layThongTinLichDat() {
         System.out.println("tên TK:" + tenTK);
-        String sql = "	select HoaDon.Id,HoaDon.NgayHen,KhachHang.HoTen,HoaDon.Id_TC,HoaDon.DatCoc,\n"
+        String sql = "	select HoaDon.Id,HoaDon.NgayHen,HoaDon.Id_TC,HoaDon.DatCoc,\n"
                 + "     HoaDon.ThanhToan,HoaDon.TrangThaiTT,HoaDon.TrangThai\n"
                 + "     from HoaDon join KhachHang on HoaDon.Id_KH=KhachHang.Id\n"
                 + "     join NhanVien on HoaDon.Id_TC=NhanVien.Id		\n"
@@ -62,17 +65,15 @@ public class DSLichDatNguoiDung extends javax.swing.JInternalFrame {
         tblLichDat.setModel(mol);
         try {
             while (rs.next()) {
-                Object[] item = new Object[8];
+                Object[] item = new Object[7];
                 item[0] = rs.getInt("Id");
                 item[1] = rs.getString("NgayHen");
-                item[2] = rs.getString("HoTen");
-                item[3] = rs.getString("Id_TC");
-                item[4] = themPhay(rs.getInt("DatCoc"));
-                item[5] = themPhay(rs.getInt("ThanhToan"));
-                item[6] = rs.getString("TrangThaiTT");
-                item[7] = rs.getString("TrangThai");
+                item[2] = rs.getString("Id_TC");
+                item[3] = themPhay(rs.getInt("DatCoc"));
+                item[4] = themPhay(rs.getInt("ThanhToan"));
+                item[5] = rs.getString("TrangThaiTT");
+                item[6] = rs.getString("TrangThai");
                 mol.addRow(item);
-
             }
         } catch (SQLException e) {
             System.out.println(e);
@@ -304,14 +305,14 @@ public class DSLichDatNguoiDung extends javax.swing.JInternalFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
-                            .addComponent(jLabel2))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnHuyLich, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(373, 373, 373)
-                        .addComponent(btnHuyDV, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 414, Short.MAX_VALUE)
-                        .addComponent(btnDatCoc, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel2)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnHuyLich, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(373, 373, 373)
+                                .addComponent(btnHuyDV, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(60, 60, 60)
+                                .addComponent(btnDatCoc, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 354, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -328,9 +329,10 @@ public class DSLichDatNguoiDung extends javax.swing.JInternalFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnHuyDV, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnHuyDV, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnDatCoc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(btnDatCoc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnHuyLich, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -479,10 +481,34 @@ public class DSLichDatNguoiDung extends javax.swing.JInternalFrame {
                 return;
             }
             if (index >= 0) {
-                DatCoc dc = new DatCoc(mahd);
-                jDesktopPane1.add(dc);
-                dc.setLocation(((jDesktopPane1.getWidth() - dc.getWidth()) / 2), ((jDesktopPane1.getHeight() - dc.getHeight()) / 2));
-                dc.show();
+                String sql = "select count(Id_KH) as SoLan from HoaDon\n"
+                        + "join KhachHang on KhachHang.Id=HoaDon.Id_KH\n"
+                        + "where TrangThaiTT=N'Đã đặt cọc(đã xác nhận)' and KhachHang.HoTen=N'" + kh.getHoTen() + "'";
+                try {
+                    ResultSet rs = JDBCHelper.query(sql);
+                    String soLanDat;
+                    if (rs.next()) {
+                        soLanDat = rs.getString("SoLan");
+                        Integer sl = Integer.valueOf(soLanDat);
+                        if (sl >= 3) {
+                            boolean kt = MsgBox.confirm(this, "Bạn đã đặt cọc 3 lần trở lên!\nBạn có thể không đặt cọc!\n Bạn có muốn đặt cọc không?");
+                            if (kt == false) {
+                                return;
+                            } else {
+                                DatCoc dc = new DatCoc(mahd);
+                                jDesktopPane1.add(dc);
+                                dc.setLocation(((jDesktopPane1.getWidth() - dc.getWidth()) / 2), ((jDesktopPane1.getHeight() - dc.getHeight()) / 2));
+                                dc.show();
+                            }
+                        } else {
+                            DatCoc dc = new DatCoc(mahd);
+                            jDesktopPane1.add(dc);
+                            dc.setLocation(((jDesktopPane1.getWidth() - dc.getWidth()) / 2), ((jDesktopPane1.getHeight() - dc.getHeight()) / 2));
+                            dc.show();
+                        }
+                    }
+                } catch (Exception e) {
+                }
             }
         } catch (Exception e) {
             MsgBox.alert(this, "Bạn chưa chọn hoá đơn!");

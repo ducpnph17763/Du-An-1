@@ -336,6 +336,11 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
             String trangThai = tblLichDat.getValueAt(this.index, 7).toString();
             String trangThaiTT = tblLichDat.getValueAt(this.index, 6).toString();
             String datCoc = tblLichDat.getValueAt(this.index, 4).toString();
+            String[] parts = datCoc.split(",");
+            String chuoi1 = parts[0];
+            String chuoi2=parts[1];
+            String haichuoi =chuoi1+chuoi2;
+            System.out.println("đặt cọc:"+haichuoi);
             if (this.index >= 0) {
                 boolean kt1 = MsgBox.confirm(this, "Bạn có chắc chắn huỷ lịch không?");
                 if (kt1 == true) {
@@ -356,14 +361,14 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
                             mol.setRowCount(0);
                             MsgBox.alert(this, "Hủy lịch thành công!");
                         }
-                        if (trangThaiTT.equals("Đã đặt cọc(đã xác nhận)")) {
-                            String sql = "update HoaDon set ThanhToan=" + datCoc + ",TrangThai=N'Đã huỷ lịch' where Id=" + mahd;
+                        else if (trangThaiTT.equals("Đã đặt cọc(đã xác nhận)")) {
+                            String sql = "update HoaDon set ThanhToan=" + haichuoi + ",TrangThai=N'Đã huỷ lịch' where Id=" + mahd;
                             JDBCHelper.update(sql);
                             layThongTinLichDat();
                             DefaultTableModel mol = (DefaultTableModel) tblCTLichDat.getModel();
                             mol.setRowCount(0);
                             MsgBox.alert(this, "Hủy lịch thành công!");
-                        } else {
+                        } else if (trangThaiTT.equals("Đã đặt cọc(chờ xác nhận)")) {
                             TinhTien a = new TinhTien(mahd);
                             jDesktopPane1.add(a);
                             a.setLocation(((jDesktopPane1.getWidth() - a.getWidth()) / 2), ((jDesktopPane1.getHeight() - a.getHeight()) / 2));
@@ -376,10 +381,8 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
 
             }
         } catch (Exception e) {
-            MsgBox.alert(this, "Bạn chưa chọn lịch đặt để huỷ!");
+         e.printStackTrace();
         }
-
-
     }//GEN-LAST:event_btnHuyLichActionPerformed
 
     void TinhTienCoc() {

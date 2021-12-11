@@ -34,20 +34,20 @@ public class QLDichVu extends javax.swing.JInternalFrame {
     DichVuDAO dvdao = new DichVuDAO();
     List<Model.DichVu> list = new ArrayList<>();
     JFileChooser fileChoose = new JFileChooser();
-
+    
     public QLDichVu() {
         initComponents();
         BasicInternalFrameUI bui = (BasicInternalFrameUI) this.getUI();
         bui.setNorthPane(null);
         init();
     }
-
+    
     void init() {
         fillTable();
         index = -1;
         updateStatus();
     }
-
+    
     void fillTable() {
         DefaultTableModel mol = (DefaultTableModel) tblDichVu.getModel();
         mol.setRowCount(0);
@@ -59,7 +59,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
             mol.addRow(row);
         }
     }
-
+    
     void chonAnh() {
         if (fileChoose.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             File file = fileChoose.getSelectedFile();
@@ -71,7 +71,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
             this.setHinh(filename);
         }
     }
-
+    
     public void setHinh(String fileName) {
         BufferedImage bufferedImage = null;
         try {
@@ -83,11 +83,11 @@ public class QLDichVu extends javax.swing.JInternalFrame {
         ImageIcon image = new ImageIcon(scaledImage);
         lblAnh.setIcon(image);
     }
-
+    
     Model.DichVu getForm() {
         DichVu dv = new DichVu();
         index = 0;
-        String id =  tblDichVu.getValueAt(index, 0).toString();
+        String id = tblDichVu.getValueAt(index, 0).toString();
         System.out.println("id để sửa:" + id);
         dv.setId(Integer.valueOf(lblID.getText()));
         System.out.println("id" + dv.getId());
@@ -97,11 +97,11 @@ public class QLDichVu extends javax.swing.JInternalFrame {
         dv.setHinh(lblAnh.getToolTipText());
         return dv;
     }
-
+    
     void setForm(Model.DichVu dv) {
         lblID.setText(dv.getId() + "");
         txtTenDV.setText(dv.getTenDV());
-        txtGiaTien.setText(dv.getGiaTien()+"");
+        txtGiaTien.setText(dv.getGiaTien() + "");
         System.out.println(dv.getGiaTien());
         txtGioiThieu.setText(dv.getMoTa());
         if (dv.getHinh() != null) {
@@ -109,33 +109,33 @@ public class QLDichVu extends javax.swing.JInternalFrame {
             lblAnh.setIcon(XImage.read(dv.getHinh()));
         }
     }
-
+    
     void edit() {
         String madv = String.valueOf(tblDichVu.getValueAt(index, 0));
         DichVu dv = dvdao.selectById(madv);
         setForm(dv);
         updateStatus();
     }
-
+    
     void insert() {
         DichVu dv = getForm();
         dvdao.insert(dv);
         fillTable();
     }
-
+    
     void update() {
         DichVu dv = getForm();
         dvdao.update(dv);
         fillTable();
     }
-
+    
     void updateStatus() {
         boolean edit = (this.index >= 0);
         btnThem.setEnabled(!edit);
         btnSua.setEnabled(edit);
         btnXoa.setEnabled(edit);
     }
-
+    
     void clearForm() {
         DichVu dv = new DichVu();
         setForm(dv);
@@ -389,7 +389,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
         if (ValidateHelper.checkNullText(txtTenDV) && ValidateHelper.checkNullText(txtGiaTien) && ValidateHelper.checkNullGioiThieu(txtGioiThieu)) {
             if (ValidateHelper.checkTenDV(txtTenDV) && ValidateHelper.checkGiaTien(txtGiaTien) && ValidateHelper.checkGioiThieu(txtGioiThieu)) {
                 try {
-
+                    
                     dvdao.delete(index1);
                     fillTable();
                     clearForm();

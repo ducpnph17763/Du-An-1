@@ -24,7 +24,7 @@ public class KichHoatTK extends javax.swing.JFrame {
     List<KhachHang> listKH;
     KhachHangDAO khDAO = new KhachHangDAO();
     int randomCode;
-    String tentk, mk,hoten, email, sdt;
+    String tentk, mk, hoten, email, sdt;
     TaiKhoan tk = new TaiKhoan();
     KhachHang kh = new KhachHang();
     ThongTinKhachHang tt = new ThongTinKhachHang();
@@ -65,6 +65,11 @@ public class KichHoatTK extends javax.swing.JFrame {
         btnKichHoat = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         btnBack.setBackground(new java.awt.Color(102, 102, 102));
         btnBack.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
@@ -157,8 +162,7 @@ public class KichHoatTK extends javax.swing.JFrame {
                 MsgBox.alert(this, "Mã code chỉ có 6 số");
                 this.txtMaCode.requestFocus();
                 return;
-            }
-            else {
+            } else {
                 xacNhan();
             }
         } catch (Exception e) {
@@ -168,6 +172,10 @@ public class KichHoatTK extends javax.swing.JFrame {
             return;
         }
     }//GEN-LAST:event_btnKichHoatActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        this.setLocationRelativeTo(null);
+    }//GEN-LAST:event_formWindowOpened
 
     /**
      * @param args the command line arguments
@@ -212,17 +220,17 @@ public class KichHoatTK extends javax.swing.JFrame {
             if (Integer.valueOf(txtMaCode.getText()) == randomCode) {
                 TaiKhoan tk2 = getForm();
                 tkd.insert(tk2);
-                
+
                 KhachHang kh2 = getFormKH();
                 khDAO.insert(kh2);
-                
+
                 ThongTinKhachHang tt2 = getFormTT();
                 tkd.insertTTKH(tt2);
-                
-                MsgBox.alert(this, "Đăng ký tài khoản thành công!");
+
+                MsgBox.alert(this, "Đăng ký tài khoản thành công! Vui lòng đăng nhập");
                 this.dispose();
-                NguoiDungHome ngdung = new NguoiDungHome();
-                ngdung.setVisible(true);
+                DangNhap main = new DangNhap();
+                main.setVisible(true);
             } else {
                 MsgBox.alert(this, "Mã code sai");
             }
@@ -265,12 +273,12 @@ public class KichHoatTK extends javax.swing.JFrame {
         }
         return 0;
     }
-    
+
     int getMaKH() {
         listKH = khDAO.selectAll();
 
-        for (KhachHang kh: listKH) {
-            if(kh.getId_tk()==getMaTK()){
+        for (KhachHang kh : listKH) {
+            if (kh.getId_tk() == getMaTK()) {
                 return kh.getId();
             }
         }

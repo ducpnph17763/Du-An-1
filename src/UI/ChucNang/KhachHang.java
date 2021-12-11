@@ -21,6 +21,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 import javax.swing.table.DefaultTableModel;
 
@@ -33,25 +34,25 @@ public class KhachHang extends javax.swing.JInternalFrame {
     /**
      * Creates new form KhachHang
      */
-     int index = 0;
+    int index = 0;
     JFileChooser fileChoose = new JFileChooser();
     List<Model.TaiKhoan> listTK = new ArrayList<>();
     KhachHangDAO khdao = new KhachHangDAO();
     TTKhachHangDAO ttdao = new TTKhachHangDAO();
     TaiKhoanDAO tkdao = new TaiKhoanDAO();
     QLTaiKhoanDAO qldao = new QLTaiKhoanDAO();
+
     public KhachHang() {
         initComponents();
         this.setBorder(null);
-        BasicInternalFrameUI bui=(BasicInternalFrameUI)this.getUI();
+        BasicInternalFrameUI bui = (BasicInternalFrameUI) this.getUI();
         bui.setNorthPane(null);
         init();
     }
-    
-    
-     void init() {
+
+    void init() {
         layTTKK();
-        
+
     }
 
     void layTTKK() {
@@ -74,7 +75,7 @@ public class KhachHang extends javax.swing.JInternalFrame {
         } catch (Exception e) {
         }
     }
-       
+
     void layTaiKhoan() {
         String sdt = txtSdt.getText();
         String sql = "select  TaiKhoan.id,TenTK,MatKhau from TaiKhoan join KhachHang on KhachHang.Id_TK=TaiKhoan.Id \n"
@@ -82,12 +83,12 @@ public class KhachHang extends javax.swing.JInternalFrame {
         ResultSet rs = JDBCHelper.query(sql);
         try {
             while (rs.next()) {
-               Object[] item = new Object[3];
+                Object[] item = new Object[3];
                 item[0] = rs.getString("Id");
                 item[1] = rs.getString("TenTK");
                 item[2] = rs.getString("MatKhau");
-                String kh=String.valueOf(khdao.selectById(item[0]+"").getId());
-                lblID.setText(kh+"");             
+                String kh = String.valueOf(khdao.selectById(item[0] + "").getId());
+                lblID.setText(kh + "");
                 txtTaiKhoan.setText(item[1] + "");
                 txtMatKhau.setText(item[2] + "");
             }
@@ -107,19 +108,19 @@ public class KhachHang extends javax.swing.JInternalFrame {
         }
 
     }
-    
-    void clearForm(){
+
+    void clearForm() {
         txtEmail.setText("");
         txtHoTen.setText("");
         txtMatKhau.setText("");
         txtSdt.setText("");
         txtTaiKhoan.setText("");
-        lblAnh.setText("");       
+        lblAnh.setText("");
+        txtTaiKhoan.setEditable(true);
+        txtMatKhau.setEditable(true);
     }
-    
-    
-     
-     void chonAnh() throws IOException {
+
+    void chonAnh() throws IOException {
         if (fileChoose.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             File file = fileChoose.getSelectedFile();
             XImage.save(file);
@@ -134,7 +135,7 @@ public class KhachHang extends javax.swing.JInternalFrame {
 
         }
     }
-     
+
     Model.TaiKhoan getFormTK() {
         Model.TaiKhoan tk = new Model.TaiKhoan();
         tk.setTenTK(txtTaiKhoan.getText());
@@ -202,8 +203,8 @@ public class KhachHang extends javax.swing.JInternalFrame {
         ttkh.setEmail(txtEmail.getText());
         return ttkh;
     }
-    
-       boolean CheckDL() {
+
+    boolean CheckDL() {
         // Check họ tên
         if (this.txtHoTen.getText().isEmpty()) {
             MsgBox.alert(this, "Vui lòng nhập họ và tên!");
@@ -441,16 +442,20 @@ public class KhachHang extends javax.swing.JInternalFrame {
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
         // TODO add your handling code here:
-         try {
-            Model.KhachHang kh = getFormKH1();
-            khdao.update(kh);
-            Model.TTKhachHang ttkh = getformTTKH1();
-            ttdao.update(ttkh);
-            MsgBox.alert(this, "update thành công!");
-            layTTKK();
-        } catch (Exception e) {
-            e.printStackTrace();
-            MsgBox.alert(this, " Update thất bại@@");
+        if (this.ValidateSua() == false) {
+            JOptionPane.showMessageDialog(this, "Cập nhật thất bại!", "Thông báo", JOptionPane.ERROR);
+        } else {
+            try {
+                Model.KhachHang kh = getFormKH1();
+                khdao.update(kh);
+                Model.TTKhachHang ttkh = getformTTKH1();
+                ttdao.update(ttkh);
+                MsgBox.alert(this, "Cập nhật thông tin thành công!");
+                layTTKK();
+            } catch (Exception e) {
+                e.printStackTrace();
+                MsgBox.alert(this, "Cập nhật thông tin thất bại!");
+            }
         }
     }//GEN-LAST:event_btnSuaActionPerformed
 
@@ -472,7 +477,7 @@ public class KhachHang extends javax.swing.JInternalFrame {
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         // TODO add your handling code here:
-         if (this.CheckDL() == true && this.checTrung() == true) {
+        if (this.CheckDL() == true && this.checTrung() == true) {
             try {
                 Model.TaiKhoan tk = getFormTK();
                 tkdao.insert(tk);
@@ -502,7 +507,7 @@ public class KhachHang extends javax.swing.JInternalFrame {
 
     private void tblKhachHangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblKhachHangMouseClicked
         // TODO add your handling code here:
-          int index;
+        int index;
         Model.KhachHang kh = new Model.KhachHang();
         index = tblKhachHang.getSelectedRow();
         txtHoTen.setText(tblKhachHang.getValueAt(index, 1).toString());
@@ -511,6 +516,9 @@ public class KhachHang extends javax.swing.JInternalFrame {
         txtEmail.setText(tblKhachHang.getValueAt(index, 3).toString());
 
         layTaiKhoan();
+        
+        txtTaiKhoan.setEditable(false);
+        txtMatKhau.setEditable(false);
     }//GEN-LAST:event_tblKhachHangMouseClicked
 
     private void btnLamMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLamMoiActionPerformed
@@ -540,4 +548,26 @@ public class KhachHang extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtSdt;
     private javax.swing.JTextField txtTaiKhoan;
     // End of variables declaration//GEN-END:variables
+
+    private boolean ValidateSua() {
+        String rgEmail = "^[a-zA-Z0-9.!#$%&’*+\\=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$";
+        String rgsdt = "^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$";
+        if (txtHoTen.getText().length() == 0) {
+            JOptionPane.showMessageDialog(this, "Họ tên không được để trống!", "Thông báo", JOptionPane.ERROR_MESSAGE);
+            return false;
+        } else if (txtSdt.getText().length() == 0) {
+            JOptionPane.showMessageDialog(this, "Họ tên không được để trống!", "Thông báo", JOptionPane.ERROR_MESSAGE);
+            return false;
+        } else if (txtEmail.getText().length() == 0) {
+            JOptionPane.showMessageDialog(this, "Họ tên không được để trống!", "Thông báo", JOptionPane.ERROR_MESSAGE);
+            return false;
+        } else if (!(txtSdt.getText().matches(rgsdt))) {
+            JOptionPane.showMessageDialog(this, "Số điện thoại không hợp lệ!", "Thông báo", JOptionPane.ERROR_MESSAGE);
+            return false;
+        } else if (!(txtEmail.getText().matches(rgEmail))) {
+            JOptionPane.showMessageDialog(this, "Email không hợp lệ!", "Thông báo", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
+    }
 }

@@ -196,7 +196,7 @@ public class TaiKhoanDAO extends BarberDAO<TaiKhoan, Object> {
     }
 
     public void updateTK(String tenTK) throws SQLException {
-        String sql = "UPDATE TaiKhoan SET TrangThai = 'Không hoạt động' WHERE TenTK = ?";
+        String sql = "UPDATE TaiKhoan SET TrangThai = N'Không hoạt động' WHERE TenTK = ?";
         JDBCHelper.update(sql, tenTK);
     }
 
@@ -213,5 +213,9 @@ public class TaiKhoanDAO extends BarberDAO<TaiKhoan, Object> {
     public void updateByTK(String tenTK, String matKhau, String Trangthai) throws SQLException {
         String sql = "UPDATE TaiKhoan set MatKhau=?,TrangThai=? where TenTK=?";
         JDBCHelper.update(sql, matKhau, Trangthai, tenTK);
+    }
+
+    public List<TaiKhoan> SelectTaiKhoan() {
+        return this.selectBySql("select * from TaiKhoan where TrangThai = N'Hoạt động'");
     }
 }

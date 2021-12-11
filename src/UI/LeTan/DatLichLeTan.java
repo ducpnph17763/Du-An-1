@@ -566,7 +566,6 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
     private void TaoHoaDon() {
         try {
             HoaDon hd = this.GetForm();
-            HoaDon hddb;
             List<HoaDon> list = hddao.SelectHoaDonByNgay(hd);
             if (list == null) {
                 this.hddao.insert(hd);
@@ -580,7 +579,7 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
             }
             for (HoaDon hoaDon : list) {
                 if (this.SoSanh(hoaDon.getGioHen(), hoaDon.getGioKetThuc(), hd.getGioHen()) == false) {
-                    JOptionPane.showMessageDialog(this, "Xin lỗi!/nLịch này đã có người đặt.");
+                    JOptionPane.showMessageDialog(this, "Xin lỗi!\nLịch này đã có người đặt.");
 
                 } else {
                     this.hddao.insert(hd);

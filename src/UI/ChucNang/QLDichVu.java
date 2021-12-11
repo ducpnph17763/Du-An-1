@@ -84,15 +84,31 @@ public class QLDichVu extends javax.swing.JInternalFrame {
         lblAnh.setIcon(image);
     }
     
-    Model.DichVu getForm() {
+   Model.DichVu getForm() {
         DichVu dv = new DichVu();
         index = 0;
-        String id = tblDichVu.getValueAt(index, 0).toString();
+        String id =  tblDichVu.getValueAt(index, 0).toString();
+        System.out.println("id để sửa:" + id);
+//        dv.setId(Integer.valueOf(lblID.getText()));
+        System.out.println("id" + dv.getId());
+        dv.setTenDV(txtTenDV.getText());
+        dv.setGiaTien(Integer.parseInt(txtGiaTien.getText()));
+        dv.setThoiGian(Integer.valueOf(txtThoiGian.getText()));
+        dv.setMoTa(txtGioiThieu.getText());
+        dv.setHinh(lblAnh.getToolTipText());
+        return dv;
+    }
+    
+    Model.DichVu getForm1() {
+        DichVu dv = new DichVu();
+        index = 0;
+        String id =  tblDichVu.getValueAt(index, 0).toString();
         System.out.println("id để sửa:" + id);
         dv.setId(Integer.valueOf(lblID.getText()));
         System.out.println("id" + dv.getId());
         dv.setTenDV(txtTenDV.getText());
         dv.setGiaTien(Integer.parseInt(txtGiaTien.getText()));
+        dv.setThoiGian(Integer.valueOf(txtThoiGian.getText()));
         dv.setMoTa(txtGioiThieu.getText());
         dv.setHinh(lblAnh.getToolTipText());
         return dv;
@@ -173,6 +189,8 @@ public class QLDichVu extends javax.swing.JInternalFrame {
         btnXoa = new javax.swing.JButton();
         btnChonAnh = new javax.swing.JButton();
         lblID = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        txtThoiGian = new javax.swing.JTextField();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -209,19 +227,19 @@ public class QLDichVu extends javax.swing.JInternalFrame {
         jPanel4.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(13, 52, -1, -1));
 
         jLabel8.setText("Giá tiền");
-        jPanel4.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(19, 119, -1, -1));
+        jPanel4.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, -1, -1));
 
         jLabel9.setText("Hình ảnh");
-        jPanel4.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(19, 187, -1, -1));
+        jPanel4.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, -1, -1));
 
         jLabel10.setText("Giới thiệu");
         jPanel4.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(19, 244, -1, -1));
 
         txtTenDV.setName("Tên dịch vụ"); // NOI18N
-        jPanel4.add(txtTenDV, new org.netbeans.lib.awtextra.AbsoluteConstraints(81, 49, 467, -1));
+        jPanel4.add(txtTenDV, new org.netbeans.lib.awtextra.AbsoluteConstraints(81, 49, 460, -1));
 
         txtGiaTien.setName("Giá tiền"); // NOI18N
-        jPanel4.add(txtGiaTien, new org.netbeans.lib.awtextra.AbsoluteConstraints(81, 116, 464, -1));
+        jPanel4.add(txtGiaTien, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 90, 464, -1));
 
         txtGioiThieu.setName("Giới thiệu"); // NOI18N
         jScrollPane2.setViewportView(txtGioiThieu);
@@ -289,10 +307,14 @@ public class QLDichVu extends javax.swing.JInternalFrame {
                 btnChonAnhActionPerformed(evt);
             }
         });
-        jPanel4.add(btnChonAnh, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 183, 90, -1));
+        jPanel4.add(btnChonAnh, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 150, 90, -1));
 
         lblID.setText("jLabel1");
         jPanel4.add(lblID, new org.netbeans.lib.awtextra.AbsoluteConstraints(1210, 50, -1, -1));
+
+        jLabel1.setText("Thời gian");
+        jPanel4.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, -1, -1));
+        jPanel4.add(txtThoiGian, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 200, 460, -1));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -348,11 +370,11 @@ public class QLDichVu extends javax.swing.JInternalFrame {
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         // TODO add your handling code here:
-        if (ValidateHelper.checkNullText(txtTenDV) && ValidateHelper.checkNullText(txtGiaTien) && ValidateHelper.checkNullGioiThieu(txtGioiThieu)) {
+       if (ValidateHelper.checkNullText(txtTenDV) && ValidateHelper.checkNullText(txtGiaTien) && ValidateHelper.checkNullGioiThieu(txtGioiThieu)) {
             if (ValidateHelper.checkTenDV(txtTenDV) && ValidateHelper.checkGiaTien(txtGiaTien) && ValidateHelper.checkGioiThieu(txtGioiThieu)) {
                 insert();
-                clearForm();
-                MsgBox.alert(this, "Thêm dịch vụ thành công!");
+                 MsgBox.alert(this, "Thêm dịch vụ thành công!");
+                clearForm();     
             }
         }
     }//GEN-LAST:event_btnThemActionPerformed
@@ -383,18 +405,19 @@ public class QLDichVu extends javax.swing.JInternalFrame {
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
         // TODO add your handling code here:
-        String index1 = (String) tblDichVu.getValueAt(index, 0);
+        int index1 =  tblDichVu.getSelectedRow();
+        String index2=tblDichVu.getValueAt(index1, 0).toString();
         if (ValidateHelper.checkNullText(txtTenDV) && ValidateHelper.checkNullText(txtGiaTien) && ValidateHelper.checkNullGioiThieu(txtGioiThieu)) {
             if (ValidateHelper.checkTenDV(txtTenDV) && ValidateHelper.checkGiaTien(txtGiaTien) && ValidateHelper.checkGioiThieu(txtGioiThieu)) {
                 try {
-                    
-                    dvdao.delete(index1);
+                    dvdao.delete(lblID.getText());
                     fillTable();
-                    clearForm();
                     MsgBox.alert(this, "Xoá thành công!");
+                    clearForm();              
                 } catch (Exception e) {
-                    MsgBox.alert(this, "dịch vụ đã tồn tại trong hoá đơn chi tiết!");
+                    MsgBox.alert(this, "Dịch vụ đã tồn tai trong hoá đơn chi tiết!");
                 }
+               
             }
         }
     }//GEN-LAST:event_btnXoaActionPerformed
@@ -409,6 +432,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnSua;
     private javax.swing.JButton btnThem;
     private javax.swing.JButton btnXoa;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -424,5 +448,6 @@ public class QLDichVu extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtGiaTien;
     private javax.swing.JTextPane txtGioiThieu;
     private javax.swing.JTextField txtTenDV;
+    private javax.swing.JTextField txtThoiGian;
     // End of variables declaration//GEN-END:variables
 }

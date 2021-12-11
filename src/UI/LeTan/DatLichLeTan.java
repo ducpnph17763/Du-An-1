@@ -159,6 +159,11 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
 
         btnLamMoi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/new.png"))); // NOI18N
         btnLamMoi.setText("Làm mới");
+        btnLamMoi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLamMoiActionPerformed(evt);
+            }
+        });
 
         btnThemDichVu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/insert.png"))); // NOI18N
         btnThemDichVu.setText("Thêm DV");
@@ -293,36 +298,38 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
 
     private void btnTimKHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKHActionPerformed
         // TODO add your handling code here:
-        String sdt ="[0-9]{10}";
-        if(txtSDT.getText().equals("")){
+        String sdt = "[0-9]{10}";
+        if (txtSDT.getText().equals("")) {
             MsgBox.alert(this, "Vui lòng nhập số điện thoại!");
             txtSDT.requestFocus();
             return;
-        }if(txtSDT.getText().matches(sdt)==false){
+        }
+        if (txtSDT.getText().matches(sdt) == false) {
             MsgBox.alert(this, "Số điện thoại không đúng định dạng");
             txtSDT.requestFocus();
-            return ;
-        }if(txtSDT.getText().matches(sdt)==true){
-            String sql ="select*from ThongTinKhachHang";
-        ResultSet rs=JDBCHelper.query(sql);
-        try {
-            while (rs.next()) {
-                Object[] item = new Object[1];
-                item[0] = rs.getInt("SoDienThoai");
-                int sdt1 =Integer.valueOf(item[0].toString());
-                int sdt2= Integer.valueOf(txtSDT.getText());
-                if(sdt1==sdt2){
-                    MsgBox.alert(this, "Đây là số điện thoại khách hàng");
-                    return;
-                }else{
-                    MsgBox.alert(this, "Số điện thoại không tồn tại!");
-                    return;
-                }                              
-            }
-        } catch (Exception e) {
-        }            
+            return;
         }
-        
+        if (txtSDT.getText().matches(sdt) == true) {
+            String sql = "select*from ThongTinKhachHang";
+            ResultSet rs = JDBCHelper.query(sql);
+            try {
+                while (rs.next()) {
+                    Object[] item = new Object[1];
+                    item[0] = rs.getInt("SoDienThoai");
+                    int sdt1 = Integer.valueOf(item[0].toString());
+                    int sdt2 = Integer.valueOf(txtSDT.getText());
+                    if (sdt1 == sdt2) {
+                        MsgBox.alert(this, "Đây là số điện thoại khách hàng");
+                        return;
+                    } else {
+                        MsgBox.alert(this, "Số điện thoại không tồn tại!");
+                        return;
+                    }
+                }
+            } catch (Exception e) {
+            }
+        }
+
     }//GEN-LAST:event_btnTimKHActionPerformed
 
     private void cboNgayDatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboNgayDatActionPerformed
@@ -362,6 +369,10 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
             this.TaoHoaDon();
         }
     }//GEN-LAST:event_btnTaoLichDatActionPerformed
+
+    private void btnLamMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLamMoiActionPerformed
+        this.ClearForm();
+    }//GEN-LAST:event_btnLamMoiActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnHuyDicVu;
@@ -563,31 +574,27 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
                 for (Model.DichVu l : ls) {
                     this.hddao.InsertHDCT(hdcuoi, l);
                 }
-                JOptionPane.showMessageDialog(this, "Bạn đã tạo lịch đặt thành công\nChọn nút đặt lịch để đặt cọc");
+                JOptionPane.showMessageDialog(this, "Bạn đã tạo lịch đặt thành công!");
+
                 return;
             }
             for (HoaDon hoaDon : list) {
                 if (this.SoSanh(hoaDon.getGioHen(), hoaDon.getGioKetThuc(), hd.getGioHen()) == false) {
-                    JOptionPane.showMessageDialog(this, "có rồi");
+                    JOptionPane.showMessageDialog(this, "Xin lỗi!/nLịch này đã có người đặt.");
+
                 } else {
                     this.hddao.insert(hd);
                     Model.HoaDon hdcuoi = hddao.selectHD_CuoiCung();
                     for (Model.DichVu l : ls) {
                         this.hddao.InsertHDCT(hdcuoi, l);
                     }
-                    JOptionPane.showMessageDialog(this, "Bạn đã tạo lịch đặt thành công\nChọn nút đặt lịch để đặt cọc");
+                    JOptionPane.showMessageDialog(this, "Bạn đã tạo lịch đặt thành công!");
+
                     return;
                 }
                 return;
             }
 
-//            if (this.SoSanh(hddb.getGioHen(), hddb.getGioKetThuc(), hd.getGioHen()) == false) {
-//                JOptionPane.showMessageDialog(this, "Lịch đã có người đặt!");
-//                return;
-//            }
-//            if (hd.getNgayHen().equals(hddb.getNgayHen()) && hd.getId_TC().equals(hddb.getId_TC()) && hd.getGioHen().equals(hddb.getGioHen())) {
-//                
-//            }
         } catch (ParseException ex) {
             Logger.getLogger(DatLichLeTan.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -636,6 +643,14 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
         } else {
             return true;
         }
+    }
+
+    private void ClearForm() {
+        txtSDT.setText("");
+        cboDicVu.setSelectedIndex(0);
+        cboNgayDat.setSelectedIndex(0);
+        cboThoiGian.setSelectedIndex(0);
+        cboThoCat.setSelectedIndex(0);
     }
 
 }

@@ -340,8 +340,10 @@ public class DatLichNguoiDung extends javax.swing.JInternalFrame {
     private HoaDon GetForm() throws ParseException {
         Model.HoaDon hd = new Model.HoaDon();
         int tongtien = 0;
+        int ThoiGian = 0;
         for (Model.DichVu l : ls) {
             tongtien += l.getGiaTien();
+            ThoiGian += l.getThoiGian();
         }
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         Date ngayTao = new Date();
@@ -360,6 +362,8 @@ public class DatLichNguoiDung extends javax.swing.JInternalFrame {
         } else {
             makh = kh.getId();
         }
+        Time tm = new Time(gioHen);
+        tm.CongThoiGian(ThoiGian);
         hd.setId(0);
         hd.setId_KH(makh);
         hd.setId_NV(null);
@@ -373,6 +377,7 @@ public class DatLichNguoiDung extends javax.swing.JInternalFrame {
         hd.setDanhGia("0");
         hd.setPhanHoi("Phản hồi");
         hd.setGioHen(gioHen);
+        hd.setGioKetThuc(tm.toString());
         return hd;
     }
 
@@ -425,20 +430,32 @@ public class DatLichNguoiDung extends javax.swing.JInternalFrame {
     private void TaoHoaDon() {
         try {
             HoaDon hd = this.GetForm();
-            HoaDon hddb = hddao.SelectHoaDonByGioHen(hd);
-            if (hddb == null) {
+            HoaDon hddb;
+            List<HoaDon> list = hddao.SelectHoaDonByNgay(hd);
+            if (list == null) {
                 this.hddao.insert(hd);
                 Model.HoaDon hdcuoi = hddao.selectHD_CuoiCung();
                 for (Model.DichVu l : ls) {
                     this.hddao.InsertHDCT(hdcuoi, l);
                 }
-                JOptionPane.showMessageDialog(this, "Bạn đã tạo lịch đặt thành công\nChọn nút đặt lịch để đặt cọc");
+                JOptionPane.showMessageDialog(this, "Bạn đã tạo lịch đặt thành công!");
                 return;
             }
-            if (hd.getNgayHen().equals(hddb.getNgayHen()) && hd.getId_TC().equals(hddb.getId_TC()) && hd.getGioHen().equals(hddb.getGioHen())) {
-                JOptionPane.showMessageDialog(this, "Lịch này đã có người đặt rồi!");
+            for (HoaDon hoaDon : list) {
+                if (this.SoSanh(hoaDon.getGioHen(), hoaDon.getGioKetThuc(), hd.getGioHen()) == false) {
+                    JOptionPane.showMessageDialog(this, "Xin lỗi!/nLịch này đã có người đặt.");
+                } else {
+                    this.hddao.insert(hd);
+                    Model.HoaDon hdcuoi = hddao.selectHD_CuoiCung();
+                    for (Model.DichVu l : ls) {
+                        this.hddao.InsertHDCT(hdcuoi, l);
+                    }
+                    JOptionPane.showMessageDialog(this, "Bạn đã tạo lịch đặt thành công!");
+                    return;
+                }
                 return;
             }
+
         } catch (ParseException ex) {
             Logger.getLogger(DatLichLeTan.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -456,6 +473,36 @@ public class DatLichNguoiDung extends javax.swing.JInternalFrame {
             }
         } else {
             MsgBox.alert(this, "Bạn chưa chọn dịch vụ để huỷ!");
+        }
+    }
+    
+    public boolean SoSanh(String bd, String kt, String chon) {
+        String giobd[] = bd.split(":");
+        int bdg = Integer.valueOf(giobd[0]);
+        int bdp = Integer.valueOf(giobd[1]);
+        String giokt[] = kt.split(":");
+        int ktg = Integer.valueOf(giokt[0]);
+        int ktp = Integer.valueOf(giokt[1]);
+        String chong[] = chon.split(":");
+        int chonh = Integer.valueOf(chong[0]);
+        int chonp = Integer.valueOf(chong[1]);
+
+        if (chonh > bdg && chonh < ktg) {
+            return false;
+        } else if (ktg == chonh) {
+            if (ktp > chonp) {
+                return false;
+            } else {
+                return true;
+            }
+        } else if (bdg == chonh) {
+            if (bdp <= chonp) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return true;
         }
     }
 

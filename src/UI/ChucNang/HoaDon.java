@@ -483,95 +483,200 @@ public class HoaDon extends javax.swing.JInternalFrame {
     public void xuatExcel() {
         int index = tblHoaDon.getSelectedRow();
         if (index >= 0) {
-            TTKhachHang listTT = qldao.selectById(khdao.selectKH(String.valueOf(tblHoaDon.getValueAt(index, 0))).getId());
-            ngay = hddao.selectById(String.valueOf(tblHoaDon.getValueAt(index, 0))).getNgayHen();
-            try {
-                XSSFWorkbook wb = new XSSFWorkbook();
-                XSSFSheet sheet = wb.createSheet("Hóa đơn");
-                XSSFRow row = null;
-                Cell cell = null;
-                row = sheet.createRow(3);
-                cell = row.createCell(0, CellType.STRING);
-                cell.setCellValue("Tên khách hàng: " + khdao.selectKH(String.valueOf(tblHoaDon.getValueAt(index, 0))).getHoTen());
-
-                cell = row.createCell(1, CellType.STRING);
-                cell.setCellValue("");
-
-                cell = row.createCell(2, CellType.STRING);
-                cell.setCellValue("");
-
-                //row4
-                row = sheet.createRow(4);
-                cell = row.createCell(0, CellType.STRING);
-                cell.setCellValue("Số điện thoại: " + listTT.getSdt());
-
-                cell = row.createCell(1, CellType.STRING);
-                cell.setCellValue("");
-
-                cell = row.createCell(2, CellType.STRING);
-                cell.setCellValue("");
-
-                //row5
-                row = sheet.createRow(5);
-                cell = row.createCell(0, CellType.STRING);
-                cell.setCellValue("Thợ cắt: " + String.valueOf(tblHoaDon.getValueAt(index, 3)));
-
-                cell = row.createCell(1, CellType.STRING);
-                cell.setCellValue("");
-
-                cell = row.createCell(2, CellType.STRING);
-                cell.setCellValue("");
-
-                //row6
-                row = sheet.createRow(6);
-                cell = row.createCell(0, CellType.STRING);
-                cell.setCellValue("Ngày thanh toán: " + ngay);
-
-                cell = row.createCell(1, CellType.STRING);
-                cell.setCellValue("");
-
-                cell = row.createCell(2, CellType.STRING);
-                cell.setCellValue("");
-
-                //row 7
-                row = sheet.createRow(7);
-                cell = row.createCell(0, CellType.STRING);
-                cell.setCellValue("Mã dịch vụ");
-
-                cell = row.createCell(1, CellType.STRING);
-                cell.setCellValue("Tên dịch vụ");
-
-                cell = row.createCell(2, CellType.STRING);
-                cell.setCellValue("Giá tiền");
-
-                for (int i = 0; i < tblHDCT.getRowCount(); i++) {
-                    row = sheet.createRow(8 + i);
+            String ma = String.valueOf(tblHoaDon.getValueAt(index, 1));
+            if (ma.equals("null")) {
+                String ten = JOptionPane.showInputDialog(null, "Nhập tên", "Barber", 3);
+                if (ten == null) {
+                    ten = "";
+                }
+                String sdt = JOptionPane.showInputDialog(null, "Nhập số điện thoại", "Barber", 3);
+                if (sdt == null) {
+                    sdt = "";
+                }
+                ngay = hddao.selectById(String.valueOf(tblHoaDon.getValueAt(index, 0))).getNgayHen();
+                try {
+                    XSSFWorkbook wb = new XSSFWorkbook();
+                    XSSFSheet sheet = wb.createSheet("Hóa đơn");
+                    XSSFRow row = null;
+                    Cell cell = null;
+                    row = sheet.createRow(3);
 
                     cell = row.createCell(0, CellType.STRING);
-                    cell.setCellValue(String.valueOf(tblHDCT.getValueAt(i, 0)));
+
+                    cell.setCellValue("Tên khách hàng: " + ten);
 
                     cell = row.createCell(1, CellType.STRING);
-                    cell.setCellValue(String.valueOf(tblHDCT.getValueAt(i, 1)));
+                    cell.setCellValue("");
 
                     cell = row.createCell(2, CellType.STRING);
-                    cell.setCellValue(String.valueOf(tblHDCT.getValueAt(i, 2)));
-                }
+                    cell.setCellValue("");
 
-                row = sheet.createRow(8 + tblHDCT.getRowCount());
-                cell = row.createCell(0, CellType.STRING);
-                cell.setCellValue("Tổng tiền: " + String.valueOf(tblHoaDon.getValueAt(index, 5)));
+                    //row4
+                    row = sheet.createRow(4);
+                    cell = row.createCell(0, CellType.STRING);
 
-                File f = new File("D://Hóa Đơn " + String.valueOf(tblHoaDon.getValueAt(index, 0)) + ".xlsx");
-                try {
-                    FileOutputStream fo = new FileOutputStream(f);
-                    wb.write(fo);
-                    fo.close();
+                    cell.setCellValue("Số điện thoại: " + sdt);
+
+                    cell = row.createCell(1, CellType.STRING);
+                    cell.setCellValue("");
+
+                    cell = row.createCell(2, CellType.STRING);
+                    cell.setCellValue("");
+
+                    //row5
+                    row = sheet.createRow(5);
+                    cell = row.createCell(0, CellType.STRING);
+                    cell.setCellValue("Thợ cắt: " + String.valueOf(tblHoaDon.getValueAt(index, 3)));
+
+                    cell = row.createCell(1, CellType.STRING);
+                    cell.setCellValue("");
+
+                    cell = row.createCell(2, CellType.STRING);
+                    cell.setCellValue("");
+
+                    //row6
+                    row = sheet.createRow(6);
+                    cell = row.createCell(0, CellType.STRING);
+                    cell.setCellValue("Ngày thanh toán: " + ngay);
+
+                    cell = row.createCell(1, CellType.STRING);
+                    cell.setCellValue("");
+
+                    cell = row.createCell(2, CellType.STRING);
+                    cell.setCellValue("");
+
+                    //row 7
+                    row = sheet.createRow(7);
+                    cell = row.createCell(0, CellType.STRING);
+                    cell.setCellValue("Mã dịch vụ");
+
+                    cell = row.createCell(1, CellType.STRING);
+                    cell.setCellValue("Tên dịch vụ");
+
+                    cell = row.createCell(2, CellType.STRING);
+                    cell.setCellValue("Giá tiền");
+
+                    for (int i = 0; i < tblHDCT.getRowCount(); i++) {
+                        row = sheet.createRow(8 + i);
+
+                        cell = row.createCell(0, CellType.STRING);
+                        cell.setCellValue(String.valueOf(tblHDCT.getValueAt(i, 0)));
+
+                        cell = row.createCell(1, CellType.STRING);
+                        cell.setCellValue(String.valueOf(tblHDCT.getValueAt(i, 1)));
+
+                        cell = row.createCell(2, CellType.STRING);
+                        cell.setCellValue(String.valueOf(tblHDCT.getValueAt(i, 2)));
+                    }
+
+                    row = sheet.createRow(8 + tblHDCT.getRowCount());
+                    cell = row.createCell(0, CellType.STRING);
+                    cell.setCellValue("Tổng tiền: " + String.valueOf(tblHoaDon.getValueAt(index, 5)));
+
+                    File f = new File("D://Hóa Đơn " + String.valueOf(tblHoaDon.getValueAt(index, 0)) + ".xlsx");
+                    try {
+                        FileOutputStream fo = new FileOutputStream(f);
+                        wb.write(fo);
+                        fo.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    JOptionPane.showMessageDialog(this, "Xuất thành công");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                JOptionPane.showMessageDialog(this, "Xuất thành công");
-            } catch (Exception e) {
-                e.printStackTrace();
+            } else {
+                TTKhachHang listTT = qldao.selectById(khdao.selectKH(String.valueOf(tblHoaDon.getValueAt(index, 0))).getId());
+                ngay = hddao.selectById(String.valueOf(tblHoaDon.getValueAt(index, 0))).getNgayHen();
+                try {
+                    XSSFWorkbook wb = new XSSFWorkbook();
+                    XSSFSheet sheet = wb.createSheet("Hóa đơn");
+                    XSSFRow row = null;
+                    Cell cell = null;
+                    row = sheet.createRow(3);
+
+                    cell = row.createCell(0, CellType.STRING);
+                    cell.setCellValue("Tên khách hàng: " + khdao.selectKH(String.valueOf(tblHoaDon.getValueAt(index, 0))).getHoTen());
+
+                    cell = row.createCell(1, CellType.STRING);
+                    cell.setCellValue("");
+
+                    cell = row.createCell(2, CellType.STRING);
+                    cell.setCellValue("");
+
+                    //row4
+                    row = sheet.createRow(4);
+                    cell = row.createCell(0, CellType.STRING);
+                    cell.setCellValue("Số điện thoại: " + listTT.getSdt());
+
+                    cell = row.createCell(1, CellType.STRING);
+                    cell.setCellValue("");
+
+                    cell = row.createCell(2, CellType.STRING);
+                    cell.setCellValue("");
+
+                    //row5
+                    row = sheet.createRow(5);
+                    cell = row.createCell(0, CellType.STRING);
+                    cell.setCellValue("Thợ cắt: " + String.valueOf(tblHoaDon.getValueAt(index, 3)));
+
+                    cell = row.createCell(1, CellType.STRING);
+                    cell.setCellValue("");
+
+                    cell = row.createCell(2, CellType.STRING);
+                    cell.setCellValue("");
+
+                    //row6
+                    row = sheet.createRow(6);
+                    cell = row.createCell(0, CellType.STRING);
+                    cell.setCellValue("Ngày thanh toán: " + ngay);
+
+                    cell = row.createCell(1, CellType.STRING);
+                    cell.setCellValue("");
+
+                    cell = row.createCell(2, CellType.STRING);
+                    cell.setCellValue("");
+
+                    //row 7
+                    row = sheet.createRow(7);
+                    cell = row.createCell(0, CellType.STRING);
+                    cell.setCellValue("Mã dịch vụ");
+
+                    cell = row.createCell(1, CellType.STRING);
+                    cell.setCellValue("Tên dịch vụ");
+
+                    cell = row.createCell(2, CellType.STRING);
+                    cell.setCellValue("Giá tiền");
+
+                    for (int i = 0; i < tblHDCT.getRowCount(); i++) {
+                        row = sheet.createRow(8 + i);
+
+                        cell = row.createCell(0, CellType.STRING);
+                        cell.setCellValue(String.valueOf(tblHDCT.getValueAt(i, 0)));
+
+                        cell = row.createCell(1, CellType.STRING);
+                        cell.setCellValue(String.valueOf(tblHDCT.getValueAt(i, 1)));
+
+                        cell = row.createCell(2, CellType.STRING);
+                        cell.setCellValue(String.valueOf(tblHDCT.getValueAt(i, 2)));
+                    }
+
+                    row = sheet.createRow(8 + tblHDCT.getRowCount());
+                    cell = row.createCell(0, CellType.STRING);
+                    cell.setCellValue("Tổng tiền: " + String.valueOf(tblHoaDon.getValueAt(index, 5)));
+
+                    File f = new File("D://Hóa Đơn " + String.valueOf(tblHoaDon.getValueAt(index, 0)) + ".xlsx");
+                    try {
+                        FileOutputStream fo = new FileOutputStream(f);
+                        wb.write(fo);
+                        fo.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    JOptionPane.showMessageDialog(this, "Xuất thành công");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         } else {
             JOptionPane.showMessageDialog(this, "Chọn hóa đơn cần xuất");

@@ -144,7 +144,7 @@ public class NhanVienDAO extends BarberDAO<NhanVien, Object> {
     }
 
     public void updateKHD(NhanVien entity) throws SQLException {
-        String sql = "UPDATE NhanVien SET TrangThai = 'Không hoạt động' WHERE Id = ?";
+        String sql = "UPDATE NhanVien SET TrangThai = N'Không hoạt động' WHERE Id = ?";
         JDBCHelper.update(sql, entity.getId());
     }
 

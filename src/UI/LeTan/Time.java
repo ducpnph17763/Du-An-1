@@ -1,5 +1,7 @@
 package UI.LeTan;
 
+import java.util.Calendar;
+
 /**
  *
  * @author DELL
@@ -19,7 +21,7 @@ public class Time {
         this.hour = hour;
     }
 
-    public Time(String str){
+    public Time(String str) {
         String ThoiGian[] = str.split(":");
         int gio = Integer.valueOf(ThoiGian[0]);
         int phut = Integer.valueOf(ThoiGian[1]);
@@ -34,6 +36,8 @@ public class Time {
     public void setMinute(int minute) {
         if (minute >= 0 && minute < 60) {
             this.minute = minute;
+        } else if (minute > 60) {
+            this.minute = minute - 60;
         } else {
             this.minute = 0;
         }
@@ -75,7 +79,13 @@ public class Time {
     public void CongThoiGian(int phut) {
         int a = phut;
         if (a < 60) {
+            if (a > 30) {
+                int b = a + this.minute - 60;
+            }
             this.setMinute(this.minute + phut);
+            if (this.minute >= 0) {
+                tangGio();
+            }
         } else if (a < 0) {
             this.setMinute(this.minute + 0);
         } else {
@@ -83,12 +93,15 @@ public class Time {
             tangGio();
             CongThoiGian(a);
         }
-
     }
 
     public void tangGio() {
         this.setHour(this.hour + 1);
     }
 
-  
+    public static void main(String[] args) {
+        Time t = new Time("10:30");
+        t.CongThoiGian(40);
+        System.out.println(t);
+    }
 }

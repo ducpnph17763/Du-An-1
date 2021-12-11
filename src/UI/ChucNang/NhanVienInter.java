@@ -681,12 +681,12 @@ public class NhanVienInter extends javax.swing.JInternalFrame {
             String tenTK = this.txtUser.getText();
             if (tenTK.equals(XAuth.user.getTenTK())) {
                 MsgBox.alert(this, "Bạn không được xoá chính bạn !");
-            } else if (MsgBox.confirm(this, "Dữ liệu khi xóa không thể khôi phục lại! Bạn thực sự muốn xoá nhân viên này!")) {
+            } else {
                 try {
                     NhanVien nv = this.getForm();
                     nv.setId((int) this.tblNV.getValueAt(this.index, 0));
-                    this.nvDAO.deleteNV(nv);
-                    this.tkDAO.deleteTK(tenTK);
+                    this.nvDAO.updateKHD(nv);
+                    this.tkDAO.updateTK(tenTK);
                     fillNhanVienHienTai();
                     this.clearForm();
                     MsgBox.alert(this, "Xoá thành công");
@@ -726,28 +726,6 @@ public class NhanVienInter extends javax.swing.JInternalFrame {
         this.edit();
     }
 
-    private void trangThai() throws SQLException {
-        this.index = this.tblNV.getSelectedRow();
-        if (this.index < 0) {
-            MsgBox.alert(this, "Bạn chưa chọn dòng nào trên table");
-        } else {
-            if (this.tblNV.getValueAt(this.index, 5).equals("Đang hoạt động")) {
-                NhanVien nv = new NhanVien();
-                nv.setId((int) this.tblNV.getValueAt(this.index, 0));
-                this.nvDAO.updateKHD(nv);
-                this.fillNhanVienCu();
-                MsgBox.alert(this, "Cập nhật trạng thái nhân viên thành công");
-            } else if (this.tblNV.getValueAt(this.index, 5).equals("Không hoạt động")) {
-                NhanVien nv = new NhanVien();
-                nv.setId((int) this.tblNV.getValueAt(this.index, 0));
-                this.nvDAO.updateHD(nv);
-                this.fillNhanVienHienTai();
-                MsgBox.alert(this, "Cập nhật trạng thái nhân viên thành công");
-            }
-        }
-
-    }
-
     private boolean checkT() {
         if (this.tkDAO.select(this.txtUser.getText()) != null) {
             MsgBox.alert(this, "Tên tài khoản đã tồn tại");
@@ -778,11 +756,9 @@ public class NhanVienInter extends javax.swing.JInternalFrame {
             if (txtEmail.getText().equals(nhanVien.getEmail()) && manv != (nhanVien.getId())) {
                 MsgBox.alert(this, "Email đã tồn tại");
                 return false;
-//                break;
             }
             if (txtPhone.getText().equals(nhanVien.getSdt()) && manv != (nhanVien.getId())) {
                 MsgBox.alert(this, "Sdt đã tồn tại");
-//                break;
                 return false;
             }
 

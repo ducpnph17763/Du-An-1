@@ -79,7 +79,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Image scaledImage = bufferedImage.getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        Image scaledImage = bufferedImage.getScaledInstance(270, 330, Image.SCALE_SMOOTH);
         ImageIcon image = new ImageIcon(scaledImage);
         lblAnh.setIcon(image);
     }
@@ -139,10 +139,8 @@ public class QLDichVu extends javax.swing.JInternalFrame {
     void clearForm() {
         DichVu dv = new DichVu();
         setForm(dv);
-        if (dv.getHinh() == null) {
-            setHinh("email.png");
-        }
         index = -1;
+        setHinh("Trắng.png");
         updateStatus();
     }
 

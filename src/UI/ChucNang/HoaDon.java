@@ -12,6 +12,7 @@ import Helper.JDBCHelper;
 import Helper.MsgBox;
 import Helper.XAuth;
 import Model.TTKhachHang;
+import UI.LeTan.HienThiThongTin;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.sql.ResultSet;
@@ -234,6 +235,9 @@ public class HoaDon extends javax.swing.JInternalFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblHoaDonMouseClicked(evt);
             }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tblHoaDonMousePressed(evt);
+            }
         });
         jScrollPane2.setViewportView(tblHoaDon);
 
@@ -428,7 +432,7 @@ public class HoaDon extends javax.swing.JInternalFrame {
             System.out.println("trạng thái thanh toán:" + TrangThaiTT);
             System.out.println("trạng thái:" + TrangThai);
 
-            if (TrangThai.equals("Chưa thanh toán")) {
+            if (TrangThai.equals("Chờ thanh toán")) {
                 System.out.println("row:" + row);
                 if (row >= 0) {
                     String sql1 = "select nhanVien.Id from NhanVien join TaiKhoan on NhanVien.Id_TK=TaiKhoan.Id where TaiKhoan.Id=" + maTK;
@@ -437,7 +441,7 @@ public class HoaDon extends javax.swing.JInternalFrame {
                         while (rs.next()) {
                             Object[] item = new Object[1];
                             item[0] = rs.getString("id");
-                            String sql = "update HoaDon set Id_NV=" + item[0] + ",TrangThaiTT=N'Đã đặt cọc', TrangThai=N'Đã thanh toán' where HoaDon.Id=" + mahd;
+                            String sql = "update HoaDon set Id_NV=" + item[0] + ",TrangThaiTT=N'Đã đặt cọc(đã xác nhận)', TrangThai=N'Đã thanh toán' where HoaDon.Id=" + mahd;
                             JDBCHelper.update(sql);
                         }
                     } catch (Exception e) {
@@ -479,6 +483,23 @@ public class HoaDon extends javax.swing.JInternalFrame {
         xuatExcel();
         System.out.println(tblHDCT.getRowCount());
     }//GEN-LAST:event_btnXuatActionPerformed
+
+    private void tblHoaDonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonMousePressed
+        // TODO add your handling code here:
+        if (evt.getClickCount() == 2) {
+            int index = tblHoaDon.getSelectedRow();
+            try {
+                String id_Hd = tblHoaDon.getValueAt(index, 0).toString();
+                String id_KH = tblHoaDon.getValueAt(index, 1).toString();
+                HienThiThongTin a = new HienThiThongTin(id_Hd, id_KH);
+                jDesktopPane1.add(a);
+                a.setLocation(((jDesktopPane1.getWidth() - a.getWidth()) / 2), ((jDesktopPane1.getHeight() - a.getHeight()) / 2));
+                a.show();
+            } catch (Exception e) {
+            }
+
+        }
+    }//GEN-LAST:event_tblHoaDonMousePressed
 
     public void xuatExcel() {
         int index = tblHoaDon.getSelectedRow();

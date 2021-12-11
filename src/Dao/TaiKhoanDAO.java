@@ -214,4 +214,8 @@ public class TaiKhoanDAO extends BarberDAO<TaiKhoan, Object> {
         String sql = "UPDATE TaiKhoan set MatKhau=?,TrangThai=? where TenTK=?";
         JDBCHelper.update(sql, matKhau, Trangthai, tenTK);
     }
+
+    public List<TaiKhoan> SelectTaiKhoan() {
+        return this.selectBySql("select * from TaiKhoan where TrangThai = N'Hoạt động'");
+    }
 }

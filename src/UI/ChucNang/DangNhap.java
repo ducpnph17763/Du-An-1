@@ -294,7 +294,7 @@ public class DangNhap extends javax.swing.JFrame {
     private void btnDangNhapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangNhapActionPerformed
         String tenTK = txtTK.getText();
         String pass = new String(txtPass.getPassword());
-        List<Model.TaiKhoan> list = dao.selectAll();
+        List<Model.TaiKhoan> list = dao.SelectTaiKhoan();
         for (int i = 0; i < list.size(); i++) {
             if (tenTK.equals(list.get(i).getTenTK())) {
                 count = 1;

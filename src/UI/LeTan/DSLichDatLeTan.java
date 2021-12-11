@@ -573,8 +573,6 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
     private void tblLichDatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLichDatMouseClicked
         // TODO add your handling code here:  
         LayTTBangCTLichDat1();
-
-
     }//GEN-LAST:event_tblLichDatMouseClicked
 
     private void tblCTLichDatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCTLichDatMouseClicked

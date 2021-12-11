@@ -54,7 +54,6 @@ public class DoiLich extends javax.swing.JInternalFrame {
 
     }
 
-
     private void fillComboThoCat() {
         DefaultComboBoxModel mol = (DefaultComboBoxModel) cboThoCat.getModel();
         mol.removeAllElements();
@@ -149,6 +148,23 @@ public class DoiLich extends javax.swing.JInternalFrame {
         lblGioHen = new javax.swing.JTextField();
 
         setClosable(true);
+        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameActivated(evt);
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+            }
+        });
 
         txtId_HD.setEditable(false);
 
@@ -372,7 +388,6 @@ public class DoiLich extends javax.swing.JInternalFrame {
         String chong[] = chon.split(":");
         int chonh = Integer.valueOf(chong[0]);
         int chonp = Integer.valueOf(chong[1]);
-
         if (chonh > bdg && chonh < ktg) {
             return false;
         } else if (ktg == chonh) {
@@ -413,17 +428,12 @@ public class DoiLich extends javax.swing.JInternalFrame {
                         item[2] = rs3.getString("GioHen");
                         int maTC = Integer.valueOf(item[0].toString());
                         String ngayHenHD = XDate.toString(hd.getNgayHen(), "yyyy-MM-dd");
-                        if (hd.getId_TC().equals(maTC) && ngayHenHD.equals(item[1].toString()) && hd.getGioHen().equals(item[2].toString())) {
-                           
-                            for (Model.HoaDon hoaDon : list) {
-                                if (this.SoSanh(hoaDon.getGioHen(), hoaDon.getGioKetThuc(), hd.getGioHen()) == false) {
-                                   MsgBox.alert(this, "Lịch này có người đặt rồi nhá!");
-                                    return;
-                                }
+                        for (Model.HoaDon hoaDon : list) {
+                            if (this.SoSanh(hoaDon.getGioHen(), hoaDon.getGioKetThuc(), hd.getGioHen()) == false) {
+                                MsgBox.alert(this, "Lịch này có người đặt rồi nhá!");
+                                return;
                             }
-
                         }
-
                     }
                     try {
                         String gioHen = (String) cboThoiGian.getSelectedItem();
@@ -1148,6 +1158,41 @@ public class DoiLich extends javax.swing.JInternalFrame {
             }
         }
     }//GEN-LAST:event_btnsuaActionPerformed
+
+    private void formInternalFrameActivated(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
+        String id = txtId_HD.getText();
+        HoaDonDAO hddao = new HoaDonDAO();
+        Model.HoaDon hd = hddao.selectById(id);
+        String sql = "select*from HoaDon where Id=" + id;
+        ResultSet rs = JDBCHelper.query(sql);
+        try {
+            while (rs.next()) {
+                Object[] item = new Object[14];
+                item[0] = rs.getInt("Id");
+                item[1] = rs.getInt("Id_KH");
+                item[2] = rs.getInt("Id_NV");
+                item[3] = rs.getInt("Id_TC");
+                item[4] = rs.getString("NgayHen");
+                item[5] = rs.getString("NgayTao");
+                item[6] = rs.getString("DatCoc");
+                item[7] = rs.getString("ThanhToan");
+                item[8] = rs.getString("DanhGia");
+                item[9] = rs.getString("PhanHoi");
+                item[10] = rs.getString("TrangThaiTT");
+                item[11] = rs.getString("TrangThai");
+                item[12] = rs.getString("GioHen");
+                item[13] = rs.getString("GioKT");
+                txtNgayHen.setText(item[4].toString());
+                lblGioHen.setText(item[12].toString());
+                txtGioKT.setText(item[13].toString());
+                txtMaTC.setText(item[3].toString());
+
+            }
+        } catch (Exception e) {
+        }
+        fillComboThoiGian();
+
+    }//GEN-LAST:event_formInternalFrameActivated
 
     public void KiemTra(HoaDon hd) {
 

@@ -24,6 +24,7 @@ public class HoaDonDAO extends BarberDAO<HoaDon, String> {
     String SELECT_BY_ID_SQL = "select * from HoaDon where Id=?";
     String Insert = "Insert into HoaDon(Id_KH,Id_NV,Id_TC,NgayHen,GioHen,GioKT,NgayTao,DatCoc,ThanhToan,TrangThaiTT,TrangThai,DanhGia,PhanHoi)"
             + "values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    String SELECT_ALL_SQL1 = "select * from HoaDon where Id not like ?";
 
     @Override
     public void insert(HoaDon entity) {
@@ -60,6 +61,10 @@ public class HoaDonDAO extends BarberDAO<HoaDon, String> {
             return null;
         }
         return list.get(0);
+    }
+
+    public List<Model.HoaDon> selectGioKT(String id) {
+        return this.selectBySql(SELECT_ALL_SQL1,id);
     }
 
     @Override

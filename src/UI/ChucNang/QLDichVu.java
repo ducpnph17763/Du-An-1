@@ -75,11 +75,11 @@ public class QLDichVu extends javax.swing.JInternalFrame {
     public void setHinh(String fileName) {
         BufferedImage bufferedImage = null;
         try {
-            bufferedImage = ImageIO.read(new File("src\\Image\\" + fileName));
+            bufferedImage = ImageIO.read(new File("logos\\" + fileName));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Image scaledImage = bufferedImage.getScaledInstance(lblAnh.getWidth(), lblAnh.getHeight(), Image.SCALE_SMOOTH);
+        Image scaledImage = bufferedImage.getScaledInstance(120, 120, Image.SCALE_SMOOTH);
         ImageIcon image = new ImageIcon(scaledImage);
         lblAnh.setIcon(image);
     }
@@ -87,7 +87,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
     Model.DichVu getForm() {
         DichVu dv = new DichVu();
         index = 0;
-        String id = (String) tblDichVu.getValueAt(index, 0);
+        String id =  tblDichVu.getValueAt(index, 0).toString();
         System.out.println("id để sửa:" + id);
         dv.setId(Integer.valueOf(lblID.getText()));
         System.out.println("id" + dv.getId());
@@ -101,7 +101,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
     void setForm(Model.DichVu dv) {
         lblID.setText(dv.getId() + "");
         txtTenDV.setText(dv.getTenDV());
-        txtGiaTien.setText(themPhay(dv.getGiaTien()));
+        txtGiaTien.setText(dv.getGiaTien()+"");
         System.out.println(dv.getGiaTien());
         txtGioiThieu.setText(dv.getMoTa());
         if (dv.getHinh() != null) {
@@ -377,7 +377,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
                     fillTable();
                     MsgBox.alert(this, "update thành công!");
                 } catch (Exception e) {
-                    System.out.println(e);
+                    e.printStackTrace();
                 }
             }
         }

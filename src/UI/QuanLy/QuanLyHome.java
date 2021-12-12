@@ -45,6 +45,7 @@ public class QuanLyHome extends javax.swing.JFrame {
 
     public void init() {
         this.SetAVT();
+        
     }
 
     public void SetAVT() {
@@ -444,6 +445,7 @@ public class QuanLyHome extends javax.swing.JFrame {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         jLabel2.setBackground(new java.awt.Color(17, 16, 99));
         jLabel2.setOpaque(true);
+        setResizable(false);
         QLDichVu dv = new QLDichVu();
         PNchinh.add(dv);
         dv.show();

@@ -38,9 +38,10 @@ public class DangNhap extends javax.swing.JFrame {
     public DangNhap() {
 //        super(parent, modal);
         initComponents();
-        this.addPlacehodelStyle(txtTK);
-        this.removePlacehodelStyle(txtPass);
+//        this.addPlacehodelStyle(txtTK);
+//        this.removePlacehodelStyle(txtPass);
         setLocationRelativeTo(null);
+        setResizable(false);
     }
 
     public void addPlacehodelStyle(JTextField textField) {
@@ -255,7 +256,7 @@ public class DangNhap extends javax.swing.JFrame {
         if (txtTK.getText().equals("Nhập tài khoản của bạn")) {
             txtTK.setText(null);
             txtTK.requestFocus();
-            removePlacehodelStyle(txtTK);
+//            removePlacehodelStyle(txtTK);
         }
     }//GEN-LAST:event_txtTKFocusGained
 
@@ -265,14 +266,14 @@ public class DangNhap extends javax.swing.JFrame {
             txtPass.setText(null);
             txtPass.requestFocus();
             txtPass.setEchoChar('*');
-            removePlacehodelStyle(txtTK);
+//            removePlacehodelStyle(txtTK);
         }
     }//GEN-LAST:event_txtPassFocusGained
 
     private void txtTKFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTKFocusLost
         // TODO add your handling code here:
         if (txtTK.getText().length() == 0) {
-            addPlacehodelStyle(txtTK);
+//            addPlacehodelStyle(txtTK);
             txtTK.setText("Nhập tài khoản của bạn");
         }
     }//GEN-LAST:event_txtTKFocusLost
@@ -280,7 +281,7 @@ public class DangNhap extends javax.swing.JFrame {
     private void txtPassFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPassFocusLost
         // TODO add your handling code here:
         if (String.valueOf(txtPass.getPassword()).length() == 0) {
-            addPlacehodelStyle(txtPass);
+//            addPlacehodelStyle(txtPass);
             txtPass.setText("Nhập mật khẩu của bạn");
             txtPass.setEchoChar('\u0000');
         }

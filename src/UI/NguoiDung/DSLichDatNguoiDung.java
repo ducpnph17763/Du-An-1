@@ -481,8 +481,8 @@ public class DSLichDatNguoiDung extends javax.swing.JInternalFrame {
         try {
             index = tblLichDat.getSelectedRow();
             String mahd = tblLichDat.getValueAt(index, 0).toString();
-            String TrangThaiTT = tblLichDat.getValueAt(index, 6).toString();
-            String TrangThai = tblLichDat.getValueAt(index, 7).toString();
+            String TrangThaiTT = tblLichDat.getValueAt(index, 5).toString();
+            String TrangThai = tblLichDat.getValueAt(index, 6).toString();
             if (TrangThaiTT.equals("Đã đặt cọc(chờ xác nhận)")) {
                 MsgBox.alert(this, "Lịch đặt đã đặt cọc rồi đang chờ xác nhận!");
                 return;
@@ -515,18 +515,22 @@ public class DSLichDatNguoiDung extends javax.swing.JInternalFrame {
                                 dc.setLocation(((jDesktopPane1.getWidth() - dc.getWidth()) / 2), ((jDesktopPane1.getHeight() - dc.getHeight()) / 2));
                                 dc.show();
                             }
-                        } else {
+                        }else {
                             DatCoc dc = new DatCoc(mahd);
                             jDesktopPane1.add(dc);
                             dc.setLocation(((jDesktopPane1.getWidth() - dc.getWidth()) / 2), ((jDesktopPane1.getHeight() - dc.getHeight()) / 2));
                             dc.show();
-                        }
+            }                       
                     }
+                    
                 } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
+            
         } catch (Exception e) {
-            MsgBox.alert(this, "Bạn chưa chọn hoá đơn!");
+            e.printStackTrace();
+            
         }
     }//GEN-LAST:event_btnDatCocActionPerformed
 

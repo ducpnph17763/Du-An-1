@@ -159,6 +159,23 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
         btnXacNhan = new javax.swing.JButton();
         btnDoiLich = new javax.swing.JButton();
 
+        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameActivated(evt);
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+            }
+        });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -262,8 +279,9 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
                             .addComponent(jLabel2))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
                         .addComponent(btnHuyLich, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 115, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 98, Short.MAX_VALUE)
                         .addComponent(btnDoiLich, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(105, 105, 105)
                         .addComponent(btnHuyDV, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -284,18 +302,22 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 334, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnXacNhan, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnHuyDV, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnDoiLich, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 11, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnHuyLich, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnThanhToan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(btnXacNhan, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnHuyDV, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnDoiLich, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 11, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnThanhToan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addContainerGap())))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(38, 38, 38)
+                        .addComponent(btnHuyLich, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())))
         );
 
@@ -336,6 +358,7 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
             String trangThai = tblLichDat.getValueAt(this.index, 7).toString();
             String trangThaiTT = tblLichDat.getValueAt(this.index, 6).toString();
             String datCoc = tblLichDat.getValueAt(this.index, 4).toString();
+            String thanhToan  =tblLichDat.getValueAt(this.index, 5).toString();
             String[] parts = datCoc.split(",");
             String chuoi1 = parts[0];
             String chuoi2=parts[1];
@@ -353,32 +376,29 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
                     } else if (trangThai.equals("Chưa thanh toán")) {
                         String cautruyvan1 = "delete from HoaDonChiTiet where Id_HD=" + mahd;
                         JDBCHelper.update(cautruyvan1);
-                        if (trangThaiTT.equals("Chưa đặt cọc")) {
-                            String sql = "update HoaDon set DatCoc=0,ThanhToan=0,TrangThai=N'Đã huỷ lịch' where Id=" + mahd;
-                            JDBCHelper.update(sql);
-                            layThongTinLichDat();
-                            DefaultTableModel mol = (DefaultTableModel) tblCTLichDat.getModel();
-                            mol.setRowCount(0);
-                            MsgBox.alert(this, "Hủy lịch thành công!");
-                        }
-                        else if (trangThaiTT.equals("Đã đặt cọc(đã xác nhận)")) {
+                        layThongTinLichDat();
+                        
+                       if (trangThaiTT.equals("Đã đặt cọc(đã xác nhận)")) {
                             String sql = "update HoaDon set ThanhToan=" + haichuoi + ",TrangThai=N'Đã huỷ lịch' where Id=" + mahd;
                             JDBCHelper.update(sql);
                             layThongTinLichDat();
                             DefaultTableModel mol = (DefaultTableModel) tblCTLichDat.getModel();
                             mol.setRowCount(0);
                             MsgBox.alert(this, "Hủy lịch thành công!");
-                        } else if (trangThaiTT.equals("Đã đặt cọc(chờ xác nhận)")) {
-                            TinhTien a = new TinhTien(mahd);
-                            jDesktopPane1.add(a);
-                            a.setLocation(((jDesktopPane1.getWidth() - a.getWidth()) / 2), ((jDesktopPane1.getHeight() - a.getHeight()) / 2));
-                            a.show();
+                        } else {
+                            String sql1 = "update HoaDon set TrangThai=N'Đã huỷ lịch',ThanhToan=0 where Id=" + mahd;
+                            JDBCHelper.update(sql1); 
+                            layThongTinLichDat();
+                            DefaultTableModel mol = (DefaultTableModel) tblCTLichDat.getModel();
+                            mol.setRowCount(0);
+                            MsgBox.alert(this, "Hủy lịch thành công!");
                         }
 
                     }
 
                 }
             }
+            
         } catch (Exception e) {
          e.printStackTrace();
         }
@@ -611,6 +631,11 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
         }
 
     }//GEN-LAST:event_btnDoiLichActionPerformed
+
+    private void formInternalFrameActivated(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
+        // TODO add your handling code here:
+       
+    }//GEN-LAST:event_formInternalFrameActivated
     public String themPhay(int tien) {
         double money = Double.valueOf(tien);
         return String.format("%,.0f", money);

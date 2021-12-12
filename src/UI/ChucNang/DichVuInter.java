@@ -59,7 +59,7 @@ public class DichVuInter extends javax.swing.JInternalFrame {
     }
 
     void edit() {
-        String madv = (String) tblDichVu.getValueAt(index, 0);
+        String madv =  tblDichVu.getValueAt(index, 0).toString();
         DichVu dv = dvdao.selectById(madv);
         setForm(dv);
 

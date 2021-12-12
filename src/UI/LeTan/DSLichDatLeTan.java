@@ -419,7 +419,6 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
                     String update = "update HoaDon set DatCoc=0,TrangThai=N'Đã huỷ lịch' where Id=" + mahd;
                     JDBCHelper.update(update);
                     layThongTinLichDat();
-
                     DefaultTableModel mol = (DefaultTableModel) tblCTLichDat.getModel();
                     mol.setRowCount(0);
                     MsgBox.alert(this, "Lịch này đã bị huỷ!");
@@ -428,7 +427,6 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
                     String update = "update HoaDon set DatCoc=" + tongTien + " where Id=" + mahd;
                     JDBCHelper.update(update);
                     layThongTinLichDat();
-
                 }
             }
         } catch (Exception e) {

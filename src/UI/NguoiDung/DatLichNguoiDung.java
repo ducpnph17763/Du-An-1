@@ -130,6 +130,11 @@ public class DatLichNguoiDung extends javax.swing.JInternalFrame {
 
         btnLamMoi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/new.png"))); // NOI18N
         btnLamMoi.setText("Làm mới");
+        btnLamMoi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLamMoiActionPerformed(evt);
+            }
+        });
 
         btnThemDichVu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/insert.png"))); // NOI18N
         btnThemDichVu.setText("Thêm DV");
@@ -243,6 +248,17 @@ public class DatLichNguoiDung extends javax.swing.JInternalFrame {
         this.HuyDichVu();
     }//GEN-LAST:event_btnHuyDichVuActionPerformed
 
+    private void btnLamMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLamMoiActionPerformed
+        // TODO add your handling code here:
+        ClearForm();
+    }//GEN-LAST:event_btnLamMoiActionPerformed
+    private void ClearForm() {
+
+        cboDichVu.setSelectedIndex(0);
+        cboNgayDat.setSelectedIndex(0);
+        cboThoiGian.setSelectedIndex(0);
+        cboThoCat.setSelectedIndex(0);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnHuyDichVu;

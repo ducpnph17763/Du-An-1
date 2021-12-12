@@ -378,7 +378,6 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
                     }
 
                 }
-
             }
         } catch (Exception e) {
          e.printStackTrace();

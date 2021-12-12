@@ -499,6 +499,16 @@ public class HoaDon extends javax.swing.JInternalFrame {
             }
 
         }
+        if(evt.getClickCount()==3){
+             int index = tblHoaDon.getSelectedRow();
+             try {
+                String TrangThaiTT =tblHoaDon.getValueAt(index, 7).toString();
+                if(TrangThaiTT.equals("")){
+                    
+                }
+            } catch (Exception e) {
+            }
+        }
     }//GEN-LAST:event_tblHoaDonMousePressed
 
     public void xuatExcel() {

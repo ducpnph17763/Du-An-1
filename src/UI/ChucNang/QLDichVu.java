@@ -54,7 +54,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
         List<Model.DichVu> list = dvdao.selectAll();
         for (DichVu dichVu : list) {
             Object[] row = {
-                dichVu.getId(), dichVu.getTenDV(), themPhay(dichVu.getGiaTien()), dichVu.getHinh(), dichVu.getMoTa()
+                dichVu.getId(), dichVu.getTenDV(),dichVu.getThoiGian(), themPhay(dichVu.getGiaTien()), dichVu.getHinh(), dichVu.getMoTa()
             };
             mol.addRow(row);
         }
@@ -72,16 +72,20 @@ public class QLDichVu extends javax.swing.JInternalFrame {
         }
     }
     
-    public void setHinh(String fileName) {
-        BufferedImage bufferedImage = null;
+    public void setHinh(String fileName){
         try {
-            bufferedImage = ImageIO.read(new File("logos\\" + fileName));
-        } catch (IOException e) {
-            e.printStackTrace();
+            BufferedImage bufferedImage = null;
+            try {
+                bufferedImage = ImageIO.read(new File("logos\\" + fileName));
+            } catch (IOException e) {
+
+            }
+            Image scaledImage = bufferedImage.getScaledInstance(270, 330, Image.SCALE_SMOOTH);
+            ImageIcon image = new ImageIcon(scaledImage);
+            lblAnh.setIcon(image);
+        } catch (Exception e) {
         }
-        Image scaledImage = bufferedImage.getScaledInstance(270, 330, Image.SCALE_SMOOTH);
-        ImageIcon image = new ImageIcon(scaledImage);
-        lblAnh.setIcon(image);
+
     }
     
    Model.DichVu getForm() {
@@ -120,6 +124,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
         txtGiaTien.setText(dv.getGiaTien() + "");
         System.out.println(dv.getGiaTien());
         txtGioiThieu.setText(dv.getMoTa());
+        txtThoiGian.setText(dv.getThoiGian()+"");
         if (dv.getHinh() != null) {
             lblAnh.setToolTipText(dv.getHinh());
             lblAnh.setIcon(XImage.read(dv.getHinh()));
@@ -140,7 +145,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
     }
     
     void update() {
-        DichVu dv = getForm();
+        DichVu dv = getForm1();
         dvdao.update(dv);
         fillTable();
     }
@@ -202,13 +207,13 @@ public class QLDichVu extends javax.swing.JInternalFrame {
 
         tblDichVu.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Mã dịch vụ", "Tên dịch vụ", "Giá tiền", "Hình ảnh", "Giới thiệu"
+                "Mã dịch vụ", "Tên dịch vụ", "Thời gian", "Giá tiền", "Hình ảnh", "Giới thiệu"
             }
         ));
         tblDichVu.addMouseListener(new java.awt.event.MouseAdapter() {

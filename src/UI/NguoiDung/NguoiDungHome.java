@@ -260,6 +260,7 @@ public class NguoiDungHome extends javax.swing.JFrame {
         DichVuInter dv = new DichVuInter();
         PNchinh.add(dv);
         dv.show();
+        setResizable(false);
         Model.TaiKhoan tk = XAuth.user;
         System.out.println(tk.getTenTK());
         if (tk == null) {

@@ -20,6 +20,7 @@ public class KhachHangHome extends javax.swing.JFrame {
     public KhachHangHome() {
 
         initComponents();
+//        setResizable(fal);
 
     }
 
@@ -192,6 +193,7 @@ public class KhachHangHome extends javax.swing.JFrame {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         jLabel2.setBackground(new java.awt.Color(17, 16, 99));
         jLabel2.setOpaque(true);
+        setResizable(false);
         DichVuInter dv = new DichVuInter();
         PNchinh.add(dv);
         dv.show();

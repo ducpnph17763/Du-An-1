@@ -38,6 +38,7 @@ public class LeTanHome extends javax.swing.JFrame {
 
     public void init() {
         this.SetAVT();
+//        setResizable(false);
     }
 
     public void SetAVT() {
@@ -373,6 +374,7 @@ public class LeTanHome extends javax.swing.JFrame {
         QLDichVu dv = new QLDichVu();
         PNchinh.add(dv);
         dv.show();
+        setResizable(false);
         try {
             Model.TaiKhoan tk = XAuth.user;
             if (tk == null) {

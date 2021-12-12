@@ -65,7 +65,7 @@ public class HoaDon extends javax.swing.JInternalFrame {
                 + "from HoaDon\n"
                 + "join KhachHang on KhachHang.Id=HoaDon.Id_KH\n"
                 + "Join NhanVien on NhanVien.Id=HoaDon.Id_TC\n"
-                + "where NhanVien.Id=HoaDon.Id_TC and (HoaDon.TrangThai=N'Đã thanh toán' or HoaDon.TrangThai=N'Chờ thanh toán') and HoaDon.id=" + id;
+                + "where NhanVien.Id=HoaDon.Id_TC and (HoaDon.TrangThai=N'Đã thanh toán' or HoaDon.TrangThai=N'Chờ thanh toán' or HoaDon.TrangThai=N'Đã huỷ lịch' ) and HoaDon.id=" + id;
         ResultSet rs = JDBCHelper.query(sql);
         DefaultTableModel model = (DefaultTableModel) tblHoaDon.getModel();
         model.setRowCount(0);
@@ -116,7 +116,7 @@ public class HoaDon extends javax.swing.JInternalFrame {
         String sql = "select HoaDon.Id,HoaDon.Id_KH,HoaDon.Id_TC,NhanVien.HoTen,HoaDon.NgayHen,HoaDon.ThanhToan,HoaDon.DanhGia,HoaDon.TrangThaiTT,HoaDon.TrangThai\n"
                 + "         from HoaDon join NhanVien on HoaDon.Id_TC=NhanVien.Id		\n"
                 + "         where  NhanVien.Id=HoaDon.Id_TC \n"
-                + "         and HoaDon.TrangThai LIKE N'Đã thanh toán'  or HoaDon.TrangThai like N'Chờ thanh toán'";
+                + "         and HoaDon.TrangThai LIKE N'Đã thanh toán'  or HoaDon.TrangThai like N'Chờ thanh toán' or HoaDon.TrangThai like N'Đã huỷ lịch'";
         ResultSet rs = JDBCHelper.query(sql);
         DefaultTableModel model = (DefaultTableModel) tblHoaDon.getModel();
         model.setRowCount(0);

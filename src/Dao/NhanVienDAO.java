@@ -104,7 +104,7 @@ public class NhanVienDAO extends BarberDAO<NhanVien, Object> {
     }
 
     public List<NhanVien> selectByThoCat() {
-        String sql = "select*from NhanVien where VaiTro=N'Thợ cắt'";
+        String sql = "select*from NhanVien where VaiTro=N'Thợ cắt' and TrangThai=N'Hoạt động'";
         return this.selectBySql(sql);
     }
 

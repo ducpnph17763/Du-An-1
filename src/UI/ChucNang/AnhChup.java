@@ -322,8 +322,8 @@ public class AnhChup extends javax.swing.JInternalFrame {
 
     private void btnLamMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLamMoiActionPerformed
         // TODO add your handling code here:
-        txtId.setText("");
-        setHinh("man-icon-1 (1).png");
+       txtId.setText("");
+       setHinh("Trắng.png");
         
           
     }//GEN-LAST:event_btnLamMoiActionPerformed

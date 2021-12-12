@@ -7,7 +7,13 @@ package UI.ChucNang;
 import Dao.DichVuDAO;
 import Helper.XImage;
 import Model.DichVu;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 import javax.swing.table.DefaultTableModel;
 
@@ -32,6 +38,7 @@ public class DichVuInter extends javax.swing.JInternalFrame {
 
     void init() {
         fillTable();
+        tblDichVu.setRowSelectionInterval(0, 0);
     }
 
     void fillTable() {
@@ -53,13 +60,13 @@ public class DichVuInter extends javax.swing.JInternalFrame {
         lblGioiThieu.setText(dv.getMoTa());
         if (dv.getHinh() != null) {
             lblAnhDichVu.setToolTipText(dv.getHinh());
-            lblAnhDichVu.setIcon(XImage.read(dv.getHinh()));
+            setHinh(dv.getHinh());
         }
 
     }
 
     void edit() {
-        String madv =  tblDichVu.getValueAt(index, 0).toString();
+        String madv = tblDichVu.getValueAt(index, 0).toString();
         DichVu dv = dvdao.selectById(madv);
         setForm(dv);
 
@@ -189,6 +196,21 @@ public class DichVuInter extends javax.swing.JInternalFrame {
         return String.format("%,.0f", money);
     }
 
+    public void setHinh(String fileName) {
+        try {
+            BufferedImage bufferedImage = null;
+            try {
+                bufferedImage = ImageIO.read(new File("logos\\" + fileName));
+            } catch (IOException e) {
+
+            }
+            Image scaledImage = bufferedImage.getScaledInstance(353, 480, Image.SCALE_SMOOTH);
+            ImageIcon image = new ImageIcon(scaledImage);
+            lblAnhDichVu.setIcon(image);
+        } catch (Exception e) {
+        }
+
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;

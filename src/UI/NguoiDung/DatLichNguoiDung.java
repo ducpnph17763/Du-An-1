@@ -459,7 +459,7 @@ public class DatLichNguoiDung extends javax.swing.JInternalFrame {
             }
             for (HoaDon hoaDon : list) {
                 if (this.SoSanh(hoaDon.getGioHen(), hoaDon.getGioKetThuc(), hd.getGioHen()) == false) {
-                    JOptionPane.showMessageDialog(this, "Xin lỗi!/nLịch này đã có người đặt.");
+                    JOptionPane.showMessageDialog(this, "Xin lỗi!\nLịch này đã có người đặt.");
                 } else {
                     this.hddao.insert(hd);
                     Model.HoaDon hdcuoi = hddao.selectHD_CuoiCung();

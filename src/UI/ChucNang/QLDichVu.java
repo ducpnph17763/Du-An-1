@@ -92,9 +92,6 @@ public class QLDichVu extends javax.swing.JInternalFrame {
         DichVu dv = new DichVu();
         index = 0;
         String id =  tblDichVu.getValueAt(index, 0).toString();
-        System.out.println("id để sửa:" + id);
-//        dv.setId(Integer.valueOf(lblID.getText()));
-        System.out.println("id" + dv.getId());
         dv.setTenDV(txtTenDV.getText());
         dv.setGiaTien(Integer.parseInt(txtGiaTien.getText()));
         dv.setThoiGian(Integer.valueOf(txtThoiGian.getText()));
@@ -107,9 +104,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
         DichVu dv = new DichVu();
         index = 0;
         String id =  tblDichVu.getValueAt(index, 0).toString();
-        System.out.println("id để sửa:" + id);
         dv.setId(Integer.valueOf(lblID.getText()));
-        System.out.println("id" + dv.getId());
         dv.setTenDV(txtTenDV.getText());
         dv.setGiaTien(Integer.parseInt(txtGiaTien.getText()));
         dv.setThoiGian(Integer.valueOf(txtThoiGian.getText()));
@@ -400,7 +395,7 @@ public class QLDichVu extends javax.swing.JInternalFrame {
                 try {
                     update();
                     fillTable();
-                    MsgBox.alert(this, "update thành công!");
+                    MsgBox.alert(this, "Sửa thành công!");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

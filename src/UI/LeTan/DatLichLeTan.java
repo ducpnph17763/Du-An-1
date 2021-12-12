@@ -487,7 +487,6 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
         String[] parts = ngayhen.split(",");
         String part = parts[1];
         Date NgayHen = sdf.parse(part);
-        System.out.println(sdf.format(NgayHen));
         String gioHen = (String) cboThoiGian.getSelectedItem();
         Time tm = new Time(gioHen);
         tm.CongThoiGian(ThoiGian);
@@ -525,7 +524,6 @@ public class DatLichLeTan extends javax.swing.JInternalFrame {
             fillTable1();
         } else {
             for (int i = 0; i < ls.size(); i++) {
-                System.out.println("dv:" + ls.get(i));
                 if (ls.get(i).equals(cbodv)) {
                     JOptionPane.showMessageDialog(this, "Dịch vụ này đã được thêm vào rồi!");
                     return;

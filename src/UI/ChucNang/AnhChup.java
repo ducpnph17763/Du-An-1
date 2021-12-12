@@ -212,7 +212,7 @@ public class AnhChup extends javax.swing.JInternalFrame {
         try {
             bufferedImage = ImageIO.read(new File("logos\\" + fileName));
         } catch (IOException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
         Image scaledImage = bufferedImage.getScaledInstance(120, 120, Image.SCALE_SMOOTH);
         ImageIcon image = new ImageIcon(scaledImage);
@@ -222,18 +222,14 @@ public class AnhChup extends javax.swing.JInternalFrame {
 
     
     
-    Anh getForm(){
-        Anh a=new Anh();
+    Anh getForm() {
+        Anh a = new Anh();
         a.setId(txtId.getText());
         a.setId_HD(Integer.valueOf(txtId_HD.getText()));
-        if(a.getAnh()==null){
-            a.setAnh("email.png");
-        }else if(a.getAnh()!=null){
-            a.setAnh(lblAnh.getToolTipText());
-        }
+        a.setAnh(lblAnh.getToolTipText());
         return a;
     }
-    
+
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         // TODO add your handling code here:
         try {            

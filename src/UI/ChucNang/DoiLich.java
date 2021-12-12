@@ -479,7 +479,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
 
                         //giờ hẹn tăng thêm 1 tiếng,giờ hẹn giờ kết thúc nhỏ hơn 10
                         if (gioHen2 == (gioHenDB + 1) && gioHenDB < 10 && gioKTDB < 10) {
-                            MsgBox.alert(this, "giờ hẹn tăng thêm 1 tiếng,giờ hẹn giờ kết thúc nhỏ hơn 10");
+                  
                             String sql = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,1)+1)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String id = txtId_HD.getText();
                             String sql2 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,1)+1)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + id;
@@ -493,7 +493,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
                         }
                         //giờ hẹn tăng thêm 2 tiếng,giờ hẹn nhỏ hơn  10 giờ kết thúc nhỏ hơn 10
                         if (gioHen2 == (gioHenDB + 2) && gioHenDB < 10 && gioKTDB < 10) {
-                            MsgBox.alert(this, "//giờ hẹn tăng thêm 2 tiếng,giờ hẹn nhỏ hơn  10 giờ kết thúc nhỏ hơn 10");
+                           
                             String sql = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,1)+2)))+CONVERT(nvarchar,right(GioHen,3)) ,Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String id = txtId_HD.getText();
                             String sql2 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,1)+2)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + id;
@@ -507,7 +507,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
 
                         //giờ hẹn tăng thêm 2 tiếng,giờ hẹn nhỏ hơn 10 và giờ kết thúc lớn hơn 10
                         if (gioHenDB < 10 && gioKTDB >= 10 && gioHen2 == (gioHenDB + 2)) {
-                            MsgBox.alert(this, "Giờ hẹn tăng thêm 2 tiếng,Giờ hẹn nhỏ hơn 10 và giơ kết thúc lớn hơn = 10");
+                           
                             String sql3 = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,1)+2)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String sql4 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,2)+2)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + txtId_HD.getText();
                             try {
@@ -520,7 +520,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
 
                         //giờ hẹn tăng thêm 2 tiếng,giờ hẹn lớn hơn = 10 và giờ kết thúc lớn hơn =10
                         if (gioHenDB >= 10 && gioKTDB >= 10 && gioHen2 == (gioHenDB + 2)) {
-                            MsgBox.alert(this, "giờ hẹn tăng thêm 2 tiếng,giờ hẹn lớn hơn= 10 và giờ kết thúc lớn hơn =10");
+                          
                             String sql3 = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,2)+2)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String sql4 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,2)+2)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + txtId_HD.getText();
                             try {
@@ -533,7 +533,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
 
                         //giờ hẹn tăng thêm 3 tiếng,giờ hẹn hỏ hơn 10 và giờ kết thúc nhỏ hơn 10
                         if (gioHen2 == (gioHenDB + 3) && gioHenDB < 10 && gioKTDB < 10) {
-                            MsgBox.alert(this, "giờ hẹn tăng thêm 3 tiếng,giờ hẹn hỏ hơn 10 và giờ kết thúc nhỏ hơn 10");
+                          
                             String sql = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,1)+3)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String id = txtId_HD.getText();
                             String sql2 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,1)+3)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + id;
@@ -547,7 +547,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
 
                         //giờ hẹn tăng thêm 3 tiếng,giờ hẹn nhỏ hơn 10 và giờ kết thúc lớn hơn bằng 10
                         if (gioHenDB < 10 && gioKTDB >= 10 && gioHen2 == (gioHenDB + 3)) {
-                            MsgBox.alert(this, "giờ hẹn tăng thêm 3 tiếng,giờ hẹn nhỏ hơn 10 và giờ kết thúc lớn hơn bằng 10");
+                          
                             String sql3 = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,1)+3)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String sql4 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,2)+3)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + txtId_HD.getText();
                             try {
@@ -560,7 +560,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
                         }
                         //giờ hẹn tăng thêm 3 tiếng,giờ hẹn lớn hơn=10 và giờ kết thúc lớn hơn=10
                         if (gioHenDB >= 10 && gioKTDB >= 10 && gioHen2 == (gioHenDB + 3)) {
-                            MsgBox.alert(this, "giờ hẹn tăng thêm 3 tiếng,giờ hẹn lớn hơn=10 và giờ kết thúc lớn hơn=10");
+                           
                             String sql3 = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,2)+3)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String sql4 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,2)+3)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + txtId_HD.getText();
                             try {
@@ -573,7 +573,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
 
                         //giờ hẹn tăng thêm 4 tiếng,giờ hẹn nhỏ hơn 10 và giờ kết thúc nhỏ hơn 10
                         if (gioHen2 == (gioHenDB + 4) && gioHenDB < 10 && gioKTDB < 10) {
-                            MsgBox.alert(this, "giờ hẹn tăng thêm 4 tiếng,giờ hẹn hỏ hơn 10 và giờ kết thúc nhỏ hơn 10");
+                           
                             String sql = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,1)+4)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String id = txtId_HD.getText();
                             String sql2 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,1)+4)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + id;
@@ -587,7 +587,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
 
                         //giờ hẹn tăng thêm 4 tiếng,giờ hẹn nhỏ hơn 10,giờ kết thúc lớn hơn 10
                         if (gioHenDB < 10 && gioKTDB >= 10 && gioHen2 == (gioHenDB + 4)) {
-                            MsgBox.alert(this, "giờ hẹn tăng thêm 4 tiếng,giờ hẹn nhỏ hơn 10,giờ kết thúc lớn hơn 10");
+                          
                             String sql3 = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,1)+4)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String sql4 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,2)+4)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + txtId_HD.getText();
                             try {
@@ -599,7 +599,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
                         }
                         //giờ hẹn tăng thêm 4 tiếng,giờ hẹn lớn hơn 10 và giờ kết thúc lớn hơn 10
                         if (gioHen2 == (gioHenDB + 4) && gioHenDB >= 10 && gioKTDB >= 10) {
-                            MsgBox.alert(this, "giờ hẹn tăng thêm 4 tiếng,giờ hẹn lớn hơn 10 và giờ kết thúc lớn hơn 10");
+                         
                             String sql = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,2)+4)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String id = txtId_HD.getText();
                             String sql2 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,2)+4)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + id;
@@ -613,7 +613,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
 
                         //giờ hẹn tăng thêm 5 tiếng,giờ hẹn nhỏ hơn 10 và giờ kết thúc nhỏ hơn 10
                         if (gioHen2 == (gioHenDB + 5) && gioHenDB < 10 && gioKTDB < 10) {
-                            MsgBox.alert(this, "giờ hẹn tăng thêm 5 tiếng,giờ hẹn hỏ hơn 10 và giờ kết thúc nhỏ hơn 10");
+                           
                             String sql = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,1)+5)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String id = txtId_HD.getText();
                             String sql2 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,1)+5)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + id;
@@ -627,7 +627,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
 
                         //giờ hẹn tăng thêm 5 tiếng,giờ hẹn nhỏ hơn 10 và giờ kết thúc lớn hơn 10
                         if (gioHenDB < 10 && gioKTDB >= 10 && gioHen2 == (gioHenDB + 4)) {
-                            MsgBox.alert(this, "giờ hẹn tăng thêm 5 tiếng,giờ hẹn nhỏ hơn 10,giờ kết thúc lớn hơn 10");
+                            
                             String sql3 = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,1)+5)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String sql4 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,2)+5)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + txtId_HD.getText();
                             try {
@@ -639,7 +639,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
                         }
                         //giờ hẹn tăng thêm 5 tiếng,giờ hẹn lớn hơn 10 và giờ kết thúc lớn hơn 10
                         if (gioHen2 == (gioHenDB + 5) && gioHenDB >= 10 && gioKTDB >= 10) {
-                            MsgBox.alert(this, "giờ hẹn tăng thêm 5 tiếng,giờ hẹn lớn hơn 10 và giờ kết thúc lớn hơn 10");
+                          
                             String sql = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,2)+5)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String id = txtId_HD.getText();
                             String sql2 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,2)+5)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + id;
@@ -654,7 +654,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
 
                         //giờ hẹn tăng thêm 6 tiếng,giờ hẹn nhỏ hơn 10 và giờ kết thúc nhỏ hơn 10
                         if (gioHen2 == (gioHenDB + 6) && gioHenDB < 10 && gioKTDB < 10) {
-                            MsgBox.alert(this, "giờ hẹn tăng thêm 6 tiếng,giờ hẹn hỏ hơn 10 và giờ kết thúc nhỏ hơn 10");
+                           
                             String sql = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,1)+6)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String id = txtId_HD.getText();
                             String sql2 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,1)+6)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + id;
@@ -668,7 +668,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
 
                         //giờ hẹn tăng thêm 6 tiếng,giờ hẹn nhỏ hơn 10 và giờ kết thúc lớn hơn 10
                         if (gioHenDB < 10 && gioKTDB >= 10 && gioHen2 == (gioHenDB + 6)) {
-                            MsgBox.alert(this, "giờ hẹn tăng thêm 6 tiếng,giờ hẹn nhỏ hơn 10,giờ kết thúc lớn hơn 10");
+                          
                             String sql3 = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,1)+6)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String sql4 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,2)+6)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + txtId_HD.getText();
                             try {
@@ -681,7 +681,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
                         }
                         //giờ hẹn tăng thêm 6 tiếng,giờ hẹn lớn hơn 10 và giờ kết thúc lớn hơn 10
                         if (gioHen2 == (gioHenDB + 6) && gioHenDB >= 10 && gioKTDB >= 10) {
-                            MsgBox.alert(this, "giờ hẹn tăng thêm 6 tiếng,giờ hẹn lớn hơn 10 và giờ kết thúc lớn hơn 10");
+                         
                             String sql = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,2)+6)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String id = txtId_HD.getText();
                             String sql2 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,2)+6)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + id;
@@ -696,7 +696,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
 
                         //giờ hẹn tăng thêm 7 tiếng,giờ hẹn nhỏ hơn 10 và giờ kết thúc nhỏ hơn 10
                         if (gioHen2 == (gioHenDB + 7) && gioHenDB < 10 && gioKTDB < 10) {
-                            MsgBox.alert(this, "giờ hẹn tăng thêm 7 tiếng,giờ hẹn hỏ hơn 10 và giờ kết thúc nhỏ hơn 10");
+                          
                             String sql = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,1)+7)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String id = txtId_HD.getText();
                             String sql2 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,1)+7)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + id;
@@ -710,7 +710,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
 
                         //giờ hẹn tăng thêm 7 tiếng,giờ hẹn nhỏ hơn 10 và giờ kết thúc lớn hơn 10
                         if (gioHenDB < 10 && gioKTDB >= 10 && gioHen2 == (gioHenDB + 7)) {
-                            MsgBox.alert(this, "giờ hẹn tăng thêm 7 tiếng,giờ hẹn nhỏ hơn 10,giờ kết thúc lớn hơn 10");
+                         
                             String sql3 = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,1)+7)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String sql4 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,2)+7)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + txtId_HD.getText();
                             try {
@@ -723,7 +723,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
                         }
                         //giờ hẹn tăng thêm 7 tiếng,giờ hẹn lớn hơn 10 và giờ kết thúc lớn hơn 10
                         if (gioHen2 == (gioHenDB + 7) && gioHenDB >= 10 && gioKTDB >= 10) {
-                            MsgBox.alert(this, "giờ hẹn tăng thêm 7 tiếng,giờ hẹn lớn hơn 10 và giờ kết thúc lớn hơn 10");
+                           
                             String sql = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,2)+7)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String id = txtId_HD.getText();
                             String sql2 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,2)+7)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + id;
@@ -738,7 +738,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
 
                         //giờ hẹn tăng thêm 8 tiếng,giờ hẹn nhỏ hơn 10 và giờ kết thúc nhỏ hơn 10
                         if (gioHen2 == (gioHenDB + 8) && gioHenDB < 10 && gioKTDB < 10) {
-                            MsgBox.alert(this, "giờ hẹn tăng thêm 8 tiếng,giờ hẹn hỏ hơn 10 và giờ kết thúc nhỏ hơn 10");
+                           
                             String sql = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,1)+8)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String id = txtId_HD.getText();
                             String sql2 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,1)+8)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + id;
@@ -752,7 +752,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
 
                         //giờ hẹn tăng thêm 8 tiếng,giờ hẹn nhỏ hơn 10 và giờ kết thúc lớn hơn 10
                         if (gioHenDB < 10 && gioKTDB >= 10 && gioHen2 == (gioHenDB + 8)) {
-                            MsgBox.alert(this, "giờ hẹn tăng thêm 8 tiếng,giờ hẹn nhỏ hơn 10,giờ kết thúc lớn hơn 10");
+                          
                             String sql3 = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,1)+8)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String sql4 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,2)+8)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + txtId_HD.getText();
                             try {
@@ -765,7 +765,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
                         }
                         //giờ hẹn tăng thêm 8 tiếng,giờ hẹn lớn hơn 10 và giờ kết thúc lớn hơn 10
                         if (gioHen2 == (gioHenDB + 8) && gioHenDB >= 10 && gioKTDB >= 10) {
-                            MsgBox.alert(this, "giờ hẹn tăng thêm 8 tiếng,giờ hẹn lớn hơn 10 và giờ kết thúc lớn hơn 10");
+                         
                             String sql = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,2)+8)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String id = txtId_HD.getText();
                             String sql2 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,2)+8)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + id;
@@ -793,7 +793,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
                         ////giờ hẹn giảm
                         //giờ hẹn giảm 1 tiếng,giờ hẹn giờ kết thúc nhỏ hơn 10
                         if (gioHen2 == (gioHenDB - 1) && gioHen2 < 10 && gioKTDB < 10 && gioHenDB >= 8) {
-                            MsgBox.alert(this, "giờ hẹn giảm 1 tiếng,giờ hẹn giờ kết thúc nhỏ hơn 10");
+                         
                             String sql = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,1)-1)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String id = txtId_HD.getText();
                             String sql2 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,1)-1)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + id;
@@ -807,7 +807,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
                         }
                         //giờ hẹn giảm 1 tiếng,giờ hẹn nhỏ hơn 10 và giờ kết thúc lớn hơn 10
                         if (gioHen2 == (gioHenDB - 1) && gioHenDB < 10 && gioKTDB >= 10 && gioHenDB >= 8) {
-                            MsgBox.alert(this, "//giờ hẹn  giảm 1 tiếng,giờ hẹn nhỏ hơn  10 giờ kết thúc nhỏ hơn 10");
+                           
                             String sql = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,1)-1)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String id = txtId_HD.getText();
                             String sql2 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,2)-1)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + id;
@@ -821,7 +821,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
 
                         //giờ hẹn giảm 1 tiếng,giờ hẹn và giờ kết thúc lớn hơn 10
                         if (gioHenDB >= 10 && gioKTDB >= 10 && gioHen2 == (gioHenDB - 1)) {
-                            MsgBox.alert(this, "giờ hẹn giảm thêm 1 tiếng,giờ hẹn lớn hơn= 10 và giờ kết thúc lớn hơn =10");
+                           
                             String sql3 = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,2)-1)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String sql4 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,2)-1)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + txtId_HD.getText();
                             try {
@@ -834,7 +834,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
 
                         //giờ hẹn giảm 2 tiếng,giờ hẹn nhỏ hơn  10 giờ kết thúc nhỏ hơn 10
                         if (gioHen2 == (gioHenDB - 2) && gioHenDB < 10 && gioKTDB < 10 && gioHenDB >= 8) {
-                            MsgBox.alert(this, "//giờ hẹn  giảm 2 tiếng,giờ hẹn nhỏ hơn  10 giờ kết thúc nhỏ hơn 10");
+                         
                             String sql = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,1)-2)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String id = txtId_HD.getText();
                             String sql2 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,1)-2)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + id;
@@ -848,7 +848,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
 
                         //giờ hẹn giảm thêm 2 tiếng,giờ hẹn nhỏ hơn 10 và giờ kết thúc lớn hơn 10
                         if (gioHenDB < 10 && gioKTDB >= 10 && gioHen2 == (gioHenDB - 2) && gioHenDB >= 8) {
-                            MsgBox.alert(this, "Giờ hẹn giảm thêm 2 tiếng,Giờ hẹn nhỏ hơn 10 và giơ kết thúc lớn hơn = 10");
+                           
                             String sql3 = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,1)-2)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String sql4 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,2)-2)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + txtId_HD.getText();
                             try {
@@ -861,7 +861,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
 
                         //giờ hẹn giảm thêm 2 tiếng,giờ hẹn lớn hơn = 10 và giờ kết thúc lớn hơn =10
                         if (gioHenDB >= 10 && gioKTDB >= 10 && gioHen2 == (gioHenDB - 2)) {
-                            MsgBox.alert(this, "giờ hẹn giảm thêm 2 tiếng,giờ hẹn lớn hơn= 10 và giờ kết thúc lớn hơn =10");
+                        
                             String sql3 = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,2)-2)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String sql4 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,2)-2)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + txtId_HD.getText();
                             try {
@@ -874,7 +874,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
 
                         //giờ hẹn giảm thêm 3 tiếng,giờ hẹn hỏ hơn 10 và giờ kết thúc nhỏ hơn 10
                         if (gioHen2 == (gioHenDB - 3) && gioHenDB < 10 && gioKTDB < 10 && gioHenDB >= 8) {
-                            MsgBox.alert(this, "giờ hẹn giảm thêm 3 tiếng,giờ hẹn hỏ hơn 10 và giờ kết thúc nhỏ hơn 10");
+                          
                             String sql = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,1)-3)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String id = txtId_HD.getText();
                             String sql2 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,1)-3)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + id;
@@ -888,7 +888,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
 
                         //giờ hẹn tăng thêm 3 tiếng,giờ hẹn nhỏ hơn 10 và giờ kết thúc lớn hơn bằng 10
                         if (gioHenDB < 10 && gioKTDB >= 10 && gioHen2 == (gioHenDB - 3) && gioHenDB >= 8) {
-                            MsgBox.alert(this, "giờ hẹn giảm thêm 3 tiếng,giờ hẹn nhỏ hơn 10 và giờ kết thúc lớn hơn bằng 10");
+                         
                             String sql3 = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,1)-3)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String sql4 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,2)-3)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + txtId_HD.getText();
                             try {
@@ -901,7 +901,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
                         }
                         //giờ hẹn giảm thêm 3 tiếng,giờ hẹn lớn hơn=10 và giờ kết thúc lớn hơn=10
                         if (gioHenDB >= 10 && gioKTDB >= 10 && gioHen2 == (gioHenDB - 3)) {
-                            MsgBox.alert(this, "giờ hẹn giảm thêm 3 tiếng,giờ hẹn lớn hơn=10 và giờ kết thúc lớn hơn=10");
+                          
                             String sql3 = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,2)-3)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String sql4 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,2)-3)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + txtId_HD.getText();
                             try {
@@ -914,7 +914,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
 
                         //giờ hẹn  giảm 4 tiếng,giờ hẹn nhỏ hơn 10 và giờ kết thúc nhỏ hơn 10
                         if (gioHen2 == (gioHenDB - 4) && gioHenDB < 10 && gioKTDB < 10 && gioHenDB >= 8) {
-                            MsgBox.alert(this, "giờ hẹn giảm thêm 4 tiếng,giờ hẹn hỏ hơn 10 và giờ kết thúc nhỏ hơn 10");
+                           
                             String sql = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,1)-4)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String id = txtId_HD.getText();
                             String sql2 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,1)-4)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + id;
@@ -928,7 +928,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
 
                         //giờ hẹn giảm thêm 4 tiếng,giờ hẹn nhỏ hơn 10,giờ kết thúc lớn hơn 10
                         if (gioHenDB < 10 && gioKTDB >= 10 && gioHen2 == (gioHenDB - 4) && gioHenDB >= 8) {
-                            MsgBox.alert(this, "giờ hẹn giảm thêm 4 tiếng,giờ hẹn nhỏ hơn 10,giờ kết thúc lớn hơn 10");
+                           
                             String sql3 = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,1)-4)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String sql4 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,2)-4)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + txtId_HD.getText();
                             try {
@@ -940,7 +940,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
                         }
                         //giờ hẹn giảm thêm 4 tiếng,giờ hẹn lớn hơn 10 và giờ kết thúc lớn hơn 10
                         if (gioHen2 == (gioHenDB - 4) && gioHenDB >= 10 && gioKTDB >= 10) {
-                            MsgBox.alert(this, "giờ hẹn giảm thêm 4 tiếng,giờ hẹn lớn hơn 10 và giờ kết thúc lớn hơn 10");
+                          
                             String sql = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,2)-4)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String id = txtId_HD.getText();
                             String sql2 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,2)-4)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + id;
@@ -954,7 +954,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
 
                         //giờ hẹn giảm thêm 5 tiếng,giờ hẹn nhỏ hơn 10 và giờ kết thúc nhỏ hơn 10
                         if (gioHen2 == (gioHenDB - 5) && gioHenDB < 10 && gioKTDB < 10 && gioHenDB >= 8) {
-                            MsgBox.alert(this, "giờ hẹn giảm thêm 5 tiếng,giờ hẹn hỏ hơn 10 và giờ kết thúc nhỏ hơn 10");
+                           
                             String sql = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,1)-5)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String id = txtId_HD.getText();
                             String sql2 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,1)-5)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + id;
@@ -968,7 +968,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
 
                         //giờ hẹn giảm thêm 5 tiếng,giờ hẹn nhỏ hơn 10 và giờ kết thúc lớn hơn 10
                         if (gioHenDB < 10 && gioKTDB >= 10 && gioHen2 == (gioHenDB - 5) && gioHenDB >= 8) {
-                            MsgBox.alert(this, "giờ hẹn giảm thêm 5 tiếng,giờ hẹn nhỏ hơn 10,giờ kết thúc lớn hơn 10");
+                          
                             String sql3 = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,1)-5)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String sql4 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,2)-5)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + txtId_HD.getText();
                             try {
@@ -980,7 +980,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
                         }
                         //giờ hẹn giảm thêm 5 tiếng,giờ hẹn lớn hơn 10 và giờ kết thúc lớn hơn 10
                         if (gioHen2 == (gioHenDB - 5) && gioHenDB >= 10 && gioKTDB >= 10) {
-                            MsgBox.alert(this, "giờ hẹn tăng thêm 5 tiếng,giờ hẹn lớn hơn 10 và giờ kết thúc lớn hơn 10");
+                           
                             String sql = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,2)-5)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String id = txtId_HD.getText();
                             String sql2 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,2)-5)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + id;
@@ -995,7 +995,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
 
                         //giờ hẹn giảm thêm 6 tiếng,giờ hẹn nhỏ hơn 10 và giờ kết thúc nhỏ hơn 10
                         if (gioHen2 == (gioHenDB - 6) && gioHenDB < 10 && gioKTDB < 10 && gioHenDB >= 8) {
-                            MsgBox.alert(this, "giờ hẹn giảm thêm 6 tiếng,giờ hẹn hỏ hơn 10 và giờ kết thúc nhỏ hơn 10");
+                           
                             String sql = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,1)-6)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String id = txtId_HD.getText();
                             String sql2 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,1)-6)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + id;
@@ -1009,7 +1009,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
 
                         //giờ hẹn giảm thêm 6 tiếng,giờ hẹn nhỏ hơn 10 và giờ kết thúc lớn hơn 10
                         if (gioHenDB < 10 && gioKTDB >= 10 && gioHen2 == (gioHenDB - 6) && gioHenDB >= 8) {
-                            MsgBox.alert(this, "giờ hẹn giảm thêm 6 tiếng,giờ hẹn nhỏ hơn 10,giờ kết thúc lớn hơn 10");
+                           
                             String sql3 = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,1)-6)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String sql4 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,2)-6)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + txtId_HD.getText();
                             try {
@@ -1022,7 +1022,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
                         }
                         //giờ hẹn giảm thêm 6 tiếng,giờ hẹn lớn hơn 10 và giờ kết thúc lớn hơn 10
                         if (gioHen2 == (gioHenDB - 6) && gioHenDB >= 10 && gioKTDB >= 10) {
-                            MsgBox.alert(this, "giờ hẹn giảm thêm 6 tiếng,giờ hẹn lớn hơn 10 và giờ kết thúc lớn hơn 10");
+                           
                             String sql = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,2)-6)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String id = txtId_HD.getText();
                             String sql2 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,2)-6)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + id;
@@ -1037,7 +1037,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
 
                         //giờ hẹn giảm thêm 7 tiếng,giờ hẹn nhỏ hơn 10 và giờ kết thúc nhỏ hơn 10
                         if (gioHen2 == (gioHenDB - 7) && gioHenDB < 10 && gioKTDB < 10 && gioHenDB >= 8) {
-                            MsgBox.alert(this, "giờ hẹn giảm thêm 7 tiếng,giờ hẹn hỏ hơn 10 và giờ kết thúc nhỏ hơn 10");
+                           
                             String sql = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,1)-7)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String id = txtId_HD.getText();
                             String sql2 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,1)-7)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + id;
@@ -1051,7 +1051,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
 
                         //giờ hẹn giảm thêm 7 tiếng,giờ hẹn nhỏ hơn 10 và giờ kết thúc lớn hơn 10
                         if (gioHenDB < 10 && gioKTDB >= 10 && gioHen2 == (gioHenDB - 7) && gioHenDB >= 8) {
-                            MsgBox.alert(this, "giờ hẹn giảm thêm 7 tiếng,giờ hẹn nhỏ hơn 10,giờ kết thúc lớn hơn 10");
+                           
                             String sql3 = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,1)-7)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String sql4 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,2)-7)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + txtId_HD.getText();
                             try {
@@ -1064,7 +1064,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
                         }
                         //giờ hẹn giảm thêm 7 tiếng,giờ hẹn lớn hơn 10 và giờ kết thúc lớn hơn 10
                         if (gioHen2 == (gioHenDB - 7) && gioHenDB >= 10 && gioKTDB >= 10) {
-                            MsgBox.alert(this, "giờ hẹn giảm thêm 7 tiếng,giờ hẹn lớn hơn 10 và giờ kết thúc lớn hơn 10");
+                           
                             String sql = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,2)-7)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String id = txtId_HD.getText();
                             String sql2 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,2)-7)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + id;
@@ -1079,7 +1079,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
 
                         //giờ hẹn giảm thêm 8 tiếng,giờ hẹn nhỏ hơn 10 và giờ kết thúc nhỏ hơn 10
                         if (gioHen2 == (gioHenDB - 8) && gioHenDB < 10 && gioKTDB < 10) {
-                            MsgBox.alert(this, "giờ hẹn giảm thêm 8 tiếng,giờ hẹn hỏ hơn 10 và giờ kết thúc nhỏ hơn 10");
+                           
                             String sql = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,1)-8)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String id = txtId_HD.getText();
                             String sql2 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,1)-8)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + id;
@@ -1093,7 +1093,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
 
                         //giờ hẹn giảm thêm 8 tiếng,giờ hẹn nhỏ hơn 10 và giờ kết thúc lớn hơn 10
                         if (gioHenDB < 10 && gioKTDB >= 10 && gioHen2 == (gioHenDB - 8) && gioHenDB >= 8) {
-                            MsgBox.alert(this, "giờ hẹn giảm thêm 8 tiếng,giờ hẹn nhỏ hơn 10,giờ kết thúc lớn hơn 10");
+                          
                             String sql3 = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,1)-8)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String sql4 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,2)-8)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + txtId_HD.getText();
                             try {
@@ -1106,7 +1106,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
                         }
                         //giờ hẹn giảm thêm 8 tiếng,giờ hẹn lớn hơn 10 và giờ kết thúc lớn hơn 10
                         if (gioHen2 == (gioHenDB - 8) && gioHenDB >= 10 && gioKTDB >= 10) {
-                            MsgBox.alert(this, "giờ hẹn giảm thêm 8 tiếng,giờ hẹn lớn hơn 10 và giờ kết thúc lớn hơn 10");
+                          
                             String sql = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,2)-8)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String id = txtId_HD.getText();
                             String sql2 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,2)-8)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + id;
@@ -1121,7 +1121,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
 
                         //giờ hẹn  tăng thêm 1 tiếng,giờ hẹn nhỏ hơn 10h và giờ kết thúc lớn hơn 10h
                         if (gioHenDB < 10 && gioKTDB >= 10 && gioHen2 == (gioHenDB + 1)) {
-                            MsgBox.alert(this, "Tăng 1 tiếng,Giờ hẹn nhỏ hơn 10 và giơ kết thúc lớn hơn = 10");
+                           
                             String sql3 = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,1)+1)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String sql4 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,2)+1)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + txtId_HD.getText();
                             try {
@@ -1135,7 +1135,7 @@ public class DoiLich extends javax.swing.JInternalFrame {
 
                         //giờ hẹn tăng thêm 1 tiếng,giờ hẹn và giờ kết thúc lớn hơn 10
                         if (gioHen2 == (gioHenDB + 1) && gioHenDB >= 10 && gioKTDB >= 10) {
-                            MsgBox.alert(this, "tăng 1 tiếng,Giờ hẹn lớn hơn =10 và tăng thêm 1 tiếng");
+                           
                             String sql = "update HoaDon set GioHen=convert(nvarchar,(CONVERT(int,left(GioHen,2)+1)))+CONVERT(nvarchar,right(GioHen,3)),Id_TC=" + hd.getId_TC() + ",NgayHen=N'" + XDate.toString(hd.getNgayHen(), "yyyy-MM-dd") + "' where Id=" + txtId_HD.getText();
                             String id = txtId_HD.getText();
                             String sql2 = "update HoaDon set GioKT=convert(nvarchar,(CONVERT(int,left(GioKT,2)+1)))+CONVERT(nvarchar,right(GioKT,3)) where Id =" + id;

@@ -47,15 +47,15 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
 
     void layThongTinLichDat() {
 
-        String sql = "select HoaDon.Id,HoaDon.NgayHen,HoaDon.Id_KH,HoaDon.Id_TC,HoaDon.DatCoc,\n"
+        String sql = "select HoaDon.Id,HoaDon.NgayHen,HoaDon.Id_KH,NhanVien.HoTen,HoaDon.DatCoc,\n"
                 + "           HoaDon.ThanhToan,HoaDon.TrangThaiTT,HoaDon.TrangThai\n"
                 + "           from HoaDon \n"
                 + "           join NhanVien on HoaDon.Id_TC=NhanVien.Id		\n"
                 + "           where  NhanVien.Id=HoaDon.Id_TC \n"
-                + "           and (HoaDon.TrangThai LIKE N'Chưa thanh toán' or HoaDon.TrangThai LIKE N'Đã huỷ lịch')";
+                + "           and HoaDon.TrangThai LIKE N'Chưa thanh toán' ";
         ResultSet rs = JDBCHelper.query(sql);
         Object[] row = new Object[]{
-            "Mã lịch đặt", "Mã khách hàng ", "Ngày hẹn", "Id Thợ cắt", "Đặt cọc", "Tổng tiền", "Trạng thái TT", "Trạng thái hoá đơn"
+            "Mã lịch đặt", "Mã khách hàng ", "Ngày hẹn", "Thợ cắt", "Đặt cọc", "Tổng tiền", "Trạng thái TT", "Trạng thái hoá đơn"
         };
         DefaultTableModel mol = new DefaultTableModel(row, 0);
         tblLichDat.setModel(mol);
@@ -65,7 +65,7 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
                 item[0] = rs.getInt("Id");
                 item[1] = rs.getString("Id_KH");
                 item[2] = rs.getString("NgayHen");
-                item[3] = rs.getString("Id_TC");
+                item[3] = rs.getString("HoTen");
                 item[4] = themPhay(rs.getInt("DatCoc"));
                 item[5] = themPhay(rs.getInt("ThanhToan"));
                 item[6] = rs.getString("TrangThaiTT");

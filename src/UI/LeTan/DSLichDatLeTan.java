@@ -421,15 +421,8 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
         int index = -1;
         int row = tblLichDat.getSelectedRow();
         if (row == -1 && index == -1) {
-            MsgBox.alert(this, "Bạn chưa chọn lịch đặt!");
+            MsgBox.alert(this, "Bạn chưa chọn lịch đặt và dịch vụ để huỷ!");
             System.out.println("index:" + row);
-        }
-        String TrangThaiHD = tblLichDat.getValueAt(row, 7).toString();
-        if (row >= 0) {
-            if (TrangThaiHD.equals("Đã huỷ lịch")) {
-                MsgBox.alert(this, "Lịch đã bị huỷ trước đó");
-                return;
-            }
         }
         try {
             index = tblCTLichDat.getSelectedRow();
@@ -447,7 +440,6 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
                             DefaultTableModel mol = (DefaultTableModel) tblCTLichDat.getModel();
                             mol.setRowCount(0);
                             MsgBox.alert(this, "Huỷ dịch vụ thành công!");
-
                         }
                     } catch (SQLException e) {
                         System.out.println(e);
@@ -471,8 +463,7 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
             }
         } catch (Exception e) {
             System.out.println("row:" + row);
-            System.out.println("index:" + index);
-            MsgBox.alert(this, "bạn chưa chọn chi tiết lịch đặt!");
+            System.out.println("index:" + index); 
         }
 
     }//GEN-LAST:event_btnHuyDVActionPerformed
@@ -504,7 +495,6 @@ public class DSLichDatLeTan extends javax.swing.JInternalFrame {
                 layThongTinLichDat();
             }
         } catch (SQLException e) {
-
         }
 
     }
